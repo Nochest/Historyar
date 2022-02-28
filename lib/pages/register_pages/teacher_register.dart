@@ -47,7 +47,7 @@ class _TeacherRegisterState extends State<TeacherRegister> {
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _passwordConfirmController = TextEditingController();
 
-  bool value = false;
+  bool value = false; 
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                   child: Padding(
                     padding: EdgeInsets.only(top: 24.0),
                     child: Text(
-                      'Welcome\nnew teacher!',
+                      'Bienvenido\nnuevo maestro!',
                       style: TextStyle(fontWeight: FontWeight.w700, color: _colorPalette.yellow, fontSize: 32.0),
                       textAlign: TextAlign.start,
                     ),
@@ -85,10 +85,10 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                       focus_full_name,
                       _fullNameController,
                       TextInputType.text,
-                      'Full Name',
+                      'Nombre completo',
                       '',
                       false,
-                      'Name',
+                      'Nombre completo',
                       name
                   ),
                 ),
@@ -98,10 +98,10 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                       focus_email,
                       _emailController,
                       TextInputType.text,
-                      'Email',
+                      'Correo electronico',
                       '',
                       false,
-                      'Email',
+                      'Correo electronico',
                       email
                   ),
                 ),
@@ -111,10 +111,10 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                       focus_mobile,
                       _mobileController,
                       TextInputType.phone,
-                      'Mobile Number',
+                      'Numero de celular',
                       '',
                       false,
-                      'Phone',
+                      'Numero de celular',
                       mobile
                   ),
                 ),
@@ -124,10 +124,10 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                       focus_password,
                       _passwordController,
                       TextInputType.text,
-                      'Password',
+                      'Contraseña',
                       '',
                       true,
-                      'Password',
+                      'Contraseña',
                       password
                   ),
                 ),
@@ -137,10 +137,10 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                       focus_password_confirm,
                       _passwordConfirmController,
                       TextInputType.text,
-                      'Confirm Password',
+                      'Ingrese nuevamente su contraeña',
                       '',
                       true,
-                      'Confirmed password',
+                      'Ingrese nuevamente su contraeña',
                       passwordConfirmed
                   ),
                 ),
@@ -157,29 +157,29 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                             }),
                         Text.rich(
                           TextSpan(
-                              text: 'I accept the ',
+                              text: 'Yo acepto los ',
                               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400, color: _colorPalette.text),
                               children: [
                                 TextSpan(
-                                    text: 'terms and conditions ',
+                                    text: 'terminos y condiciones ',
                                     style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: _colorPalette.yellow),
                                     recognizer: TapGestureRecognizer()..onTap = (){
-                                      _alert.createAlert(context, 'Terms and Conditions', lorem_ipsum.toString(), 'Close');
+                                      _alert.createAlert(context, 'Terminos y Condiciones', lorem_ipsum.toString(), 'Cerrar');
                                     }
                                 ),
                                 TextSpan(
-                                    text: 'of use\n and the ',
+                                    text: 'de \nuso y la ',
                                     style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400, color: _colorPalette.text),
                                     children: [
                                       TextSpan(
-                                          text: 'privacy and policies ',
+                                          text: 'privacidad y politicas ',
                                           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: _colorPalette.yellow),
                                           recognizer: TapGestureRecognizer()..onTap = (){
-                                            _alert.createAlert(context, 'Privacy and Policies', lorem_ipsum.toString(), 'Close');
+                                            _alert.createAlert(context, 'Privacidad y Politicas', lorem_ipsum.toString(), 'Cerrar');
                                           }
                                       ),
                                       TextSpan(
-                                          text: 'of this site',
+                                          text: 'de este sitio',
                                           style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400, color: _colorPalette.text))
                                     ]
                                 )
@@ -206,7 +206,7 @@ class _TeacherRegisterState extends State<TeacherRegister> {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(100.0)
           ),
-          child: Text('Continue', style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.bold)),
+          child: Text('Continuar', style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.bold)),
           onPressed: (){
             if(value && _fullNameController.text.isNotEmpty && _emailController.text.isNotEmpty && _mobileController.text.isNotEmpty &&
                 _passwordController.text.isNotEmpty && _passwordConfirmController.text.isNotEmpty &&

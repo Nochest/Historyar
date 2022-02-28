@@ -54,7 +54,7 @@ class _SignInState extends State<SignIn> {
                 child: Container(
                   width: double.infinity,
                   child: Text(
-                    'Login',
+                    'Iniciar sesión',
                     style: TextStyle(fontWeight: FontWeight.w700, color: _colorPalette.yellow, fontSize: 32.0),
                     textAlign: TextAlign.start,
                   ),
@@ -66,10 +66,10 @@ class _SignInState extends State<SignIn> {
                     focus_email,
                     _emailController,
                     TextInputType.emailAddress,
-                    'Email or Mobile',
+                    'Correo',
                     '',
                     false,
-                    'Email',
+                    'Correo ',
                     signIn
                 ),
               ),
@@ -79,10 +79,10 @@ class _SignInState extends State<SignIn> {
                     focus_password,
                     _passwordController,
                     TextInputType.text,
-                    'Password',
+                    'Contraseña',
                     '',
                     true,
-                    'Password',
+                    'Contraseña',
                     pass
                 ),
               ),
@@ -92,7 +92,7 @@ class _SignInState extends State<SignIn> {
                   alignment: Alignment.centerRight,
                   width: double.maxFinite,
                   child: TextButton(
-                    child: Text('Forgot my password?', style: TextStyle(color: _colorPalette.darkBlue, fontWeight: FontWeight.w400, fontSize: 16.0)),
+                    child: Text('Olvidaste tu contraseña?', style: TextStyle(color: _colorPalette.darkBlue, fontWeight: FontWeight.w400, fontSize: 16.0)),
                     onPressed: (){
                       //TODO: Password recover page
                     },
@@ -119,7 +119,7 @@ class _SignInState extends State<SignIn> {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(100.0)
           ),
-          child: Text('Login', style: TextStyle(color: _colorPalette.darkBlue, fontWeight: FontWeight.bold)),
+          child: Text('Iniciar sesión', style: TextStyle(color: _colorPalette.darkBlue, fontWeight: FontWeight.bold)),
           onPressed: (){
             if(_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty){
               Navigator.of(context).
@@ -141,9 +141,9 @@ class _SignInState extends State<SignIn> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Don\'t have an account?', style: TextStyle(color: _colorPalette.text, fontWeight: FontWeight.w400, fontSize: 16.0)),
+          Text('No tienes una cuenta?', style: TextStyle(color: _colorPalette.text, fontWeight: FontWeight.w400, fontSize: 16.0)),
           TextButton(
-            child: Text('Register Now', style: TextStyle(color: _colorPalette.darkBlue, fontWeight: FontWeight.w400, fontSize: 16.0)),
+            child: Text('Registrate ahora', style: TextStyle(color: _colorPalette.darkBlue, fontWeight: FontWeight.w400, fontSize: 16.0)),
             onPressed: () {
              createAlert(context);
             },
