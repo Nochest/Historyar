@@ -1,8 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
+import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:historyar_app/utils/color_palette.dart';
+import 'package:historyar_app/utils/data_picker.dart';
 import 'package:historyar_app/widgets/input_text.dart';
 
 class StudentRegister extends StatefulWidget {
@@ -27,35 +29,59 @@ class _StudentRegisterState extends State<StudentRegister> {
 
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
+  DataPicker _dataPicker = DataPicker();
   Alert  _alert = Alert();
 
-  bool name = false;
+  bool emailParent = false;
+  bool names = false;
+  bool surnames = false;
   bool email = false;
   bool password = false;
   bool passwordConfirmed = false;
+  bool birthDate = false;
 
-  FocusNode focus_full_name = FocusNode();
+  FocusNode focus_email_parent = FocusNode();
+  FocusNode focus_names = FocusNode();
+  FocusNode focus_surnames = FocusNode();
   FocusNode focus_email = FocusNode();
   FocusNode focus_password = FocusNode();
   FocusNode focus_password_confirm = FocusNode();
+  FocusNode focus_birth_date = FocusNode();
 
+  TextEditingController _emailParentController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _fullNameController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _surnameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _passwordConfirmController = TextEditingController();
+  TextEditingController _birthDateController = TextEditingController();
+
 
   bool value = false;
 
   @override
   Widget build(BuildContext context) {
 
-    focus_full_name.addListener(() {setState(() {});});
+    focus_email_parent.addListener(() {setState(() {});});
+    focus_names.addListener(() {setState(() {});});
+    focus_surnames.addListener(() {setState(() {});});
     focus_email.addListener(() {setState(() {});});
     focus_password.addListener(() {setState(() {});});
     focus_password_confirm.addListener(() {setState(() {});});
+    focus_birth_date.addListener(() {setState(() {});});
 
     return Scaffold(
       backgroundColor: _colorPalette.cream,
+      appBar: AppBar(
+        backgroundColor: _colorPalette.darkBlue,
+        title: Text('Regístrate!', style: TextStyle(fontWeight: FontWeight.w700)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute( builder: (BuildContext context) => SignIn()), (Route<dynamic> route) => false);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 32.0, horizontal: 24.0),
@@ -76,17 +102,47 @@ class _StudentRegisterState extends State<StudentRegister> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 40.0),
+                  padding: EdgeInsets.only(top: 24.0),
                   child: _inputText.defaultIText(
-                      focus_full_name,
-                      _fullNameController,
+                      focus_email_parent,
+                      _emailParentController,
                       TextInputType.text,
-                      'Nombre completo',
+                      'Correo electrónico apoderado',
                       '',
                       false,
-                      'Nombre completo',
-                      name
+                      'Correo electronico apoderado',
+                      emailParent
                   ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 40.0),
+                  child: _inputText.defaultIText(
+                      focus_names,
+                      _nameController,
+                      TextInputType.text,
+                      'Nombres',
+                      '',
+                      false,
+                      'Nombres',
+                      names
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 40.0),
+                  child: _inputText.defaultIText(
+                      focus_surnames,
+                      _surnameController,
+                      TextInputType.text,
+                      'Apellidos',
+                      '',
+                      false,
+                      'Apellidos',
+                      surnames
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 30.0, left: 30.0),
+                  child: _createFechaNac(context),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 24.0),
@@ -191,14 +247,14 @@ class _StudentRegisterState extends State<StudentRegister> {
           ),
           child: Text('Continuar', style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.bold)),
           onPressed: (){
-            if(value && _fullNameController.text.isNotEmpty && _emailController.text.isNotEmpty  &&
+            if(value && _nameController.text.isNotEmpty && _emailController.text.isNotEmpty  &&
                 _passwordController.text.isNotEmpty && _passwordConfirmController.text.isNotEmpty &&
                 ( _passwordController.text == _passwordConfirmController.text)){
               Navigator.of(context).
               push(MaterialPageRoute(builder: (BuildContext context) => HomeHolder()));
             }else{
               setState(() {
-                if(_fullNameController.text.isEmpty) name = true;
+                if(_nameController.text.isEmpty) names = true;
                 if(_emailController.text.isEmpty) email = true;
                 if(_passwordController.text.isEmpty) password = true;
                 if(_passwordConfirmController.text.isEmpty) passwordConfirmed = true;
@@ -208,6 +264,37 @@ class _StudentRegisterState extends State<StudentRegister> {
             }
           }
       ),
+    );
+  }
+
+  Widget _createFechaNac(BuildContext context){
+    return TextFormField(
+      controller: _birthDateController,
+      enableInteractiveSelection: false,
+      decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide(
+                color:  _colorPalette.darkBlue
+            )
+        ),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide(
+                color: _colorPalette.cream
+            )
+        ),
+        labelText: 'Fecha de nacimiento',
+        labelStyle: TextStyle(
+            color: _colorPalette.darkBlue
+        ),
+        suffixIcon: Icon(Icons.calendar_today, color: _colorPalette.darkBlue),
+      ),
+      onTap: (){
+        FocusScope.of(context).requestFocus(new FocusNode());
+        print("terrible");
+        _dataPicker.selectDate(context, _birthDateController);
+      },
     );
   }
 }

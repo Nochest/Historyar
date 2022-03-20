@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
+import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/input_text.dart';
@@ -60,6 +61,16 @@ class _TeacherRegisterState extends State<TeacherRegister> {
 
     return Scaffold(
       backgroundColor: _colorPalette.cream,
+      appBar: AppBar(
+        backgroundColor: _colorPalette.darkBlue,
+        title: Text('Regístrate!', style: TextStyle(fontWeight: FontWeight.w700)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute( builder: (BuildContext context) => SignIn()), (Route<dynamic> route) => false);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 32.0, horizontal: 24.0),

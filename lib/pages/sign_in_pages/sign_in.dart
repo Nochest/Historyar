@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
 import 'package:historyar_app/pages/register_pages/student_register.dart';
 import 'package:historyar_app/pages/register_pages/teacher_register.dart';
+import 'package:historyar_app/providers/user_provider.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/input_text.dart';
 
@@ -23,6 +24,8 @@ class _SignInState extends State<SignIn> {
 
   FocusNode focus_email = FocusNode();
   FocusNode focus_password = FocusNode();
+
+  var _usuarioProvider =  UsuarioProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -122,9 +125,14 @@ class _SignInState extends State<SignIn> {
           child: Text('Iniciar sesión', style: TextStyle(color: _colorPalette.darkBlue, fontWeight: FontWeight.bold)),
           onPressed: (){
             if(_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty){
+
+              _usuarioProvider.signIn(_emailController.text, _passwordController.text, context);
+    /*
               Navigator.of(context).
               pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => HomeHolder()),
                       (Route<dynamic> route) => false);
+
+     */
             }else{
               setState(() {
                 if(_emailController.text.isEmpty) signIn = true;
