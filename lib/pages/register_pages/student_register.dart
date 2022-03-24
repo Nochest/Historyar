@@ -1,8 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
+import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:historyar_app/utils/color_palette.dart';
+import 'package:historyar_app/utils/data_picker.dart';
 import 'package:historyar_app/widgets/input_text.dart';
 
 class StudentRegister extends StatefulWidget {
@@ -29,28 +31,44 @@ class _StudentRegisterState extends State<StudentRegister> {
 
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
+  DataPicker _dataPicker = DataPicker();
   Alert _alert = Alert();
 
-  bool name = false;
+  bool emailParent = false;
+  bool names = false;
+  bool surnames = false;
   bool email = false;
   bool password = false;
   bool passwordConfirmed = false;
+  bool birthDate = false;
 
-  FocusNode focus_full_name = FocusNode();
+  FocusNode focus_email_parent = FocusNode();
+  FocusNode focus_names = FocusNode();
+  FocusNode focus_surnames = FocusNode();
   FocusNode focus_email = FocusNode();
   FocusNode focus_password = FocusNode();
   FocusNode focus_password_confirm = FocusNode();
+  FocusNode focus_birth_date = FocusNode();
 
+  TextEditingController _emailParentController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _fullNameController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _surnameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _passwordConfirmController = TextEditingController();
+  TextEditingController _birthDateController = TextEditingController();
 
   bool value = false;
 
   @override
   Widget build(BuildContext context) {
-    focus_full_name.addListener(() {
+    focus_email_parent.addListener(() {
+      setState(() {});
+    });
+    focus_names.addListener(() {
+      setState(() {});
+    });
+    focus_surnames.addListener(() {
       setState(() {});
     });
     focus_email.addListener(() {
@@ -62,9 +80,25 @@ class _StudentRegisterState extends State<StudentRegister> {
     focus_password_confirm.addListener(() {
       setState(() {});
     });
+    focus_birth_date.addListener(() {
+      setState(() {});
+    });
 
     return Scaffold(
       backgroundColor: _colorPalette.cream,
+      appBar: AppBar(
+        backgroundColor: _colorPalette.darkBlue,
+        title:
+            Text('Regístrate!', style: TextStyle(fontWeight: FontWeight.w700)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (BuildContext context) => SignIn()),
+                (Route<dynamic> route) => false);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 32.0, horizontal: 24.0),
@@ -78,7 +112,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                   child: Padding(
                     padding: EdgeInsets.only(top: 24.0),
                     child: Text(
-                      'Welcome\nnew student!',
+                      'Bienvenido\nnuevo estudiante!',
                       style: TextStyle(
                           fontWeight: FontWeight.w700,
                           color: _colorPalette.yellow,
@@ -88,21 +122,56 @@ class _StudentRegisterState extends State<StudentRegister> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 40.0),
+                  padding: EdgeInsets.only(top: 24.0),
                   child: _inputText.defaultIText(
-                      focus_full_name,
-                      _fullNameController,
+                      focus_email_parent,
+                      _emailParentController,
                       TextInputType.text,
-                      'Full Name',
+                      'Correo electrónico apoderado',
                       '',
                       false,
-                      'Name',
-                      name),
+                      'Correo electronico apoderado',
+                      emailParent),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 40.0),
+                  child: _inputText.defaultIText(
+                      focus_names,
+                      _nameController,
+                      TextInputType.text,
+                      'Nombres',
+                      '',
+                      false,
+                      'Nombres',
+                      names),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 40.0),
+                  child: _inputText.defaultIText(
+                      focus_surnames,
+                      _surnameController,
+                      TextInputType.text,
+                      'Apellidos',
+                      '',
+                      false,
+                      'Apellidos',
+                      surnames),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 30.0, left: 30.0),
+                  child: _createFechaNac(context),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 24.0),
-                  child: _inputText.defaultIText(focus_email, _emailController,
-                      TextInputType.text, 'Email', '', false, 'Email', email),
+                  child: _inputText.defaultIText(
+                      focus_email,
+                      _emailController,
+                      TextInputType.text,
+                      'Correo electronico',
+                      '',
+                      false,
+                      'Correo electronico',
+                      email),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 24.0),
@@ -110,10 +179,10 @@ class _StudentRegisterState extends State<StudentRegister> {
                       focus_password,
                       _passwordController,
                       TextInputType.text,
-                      'Password',
+                      'Contraseña',
                       '',
                       true,
-                      'Password',
+                      'Contraseña',
                       password),
                 ),
                 Padding(
@@ -122,10 +191,10 @@ class _StudentRegisterState extends State<StudentRegister> {
                       focus_password_confirm,
                       _passwordConfirmController,
                       TextInputType.text,
-                      'Confirm Password',
+                      'Ingrese nuevamente su contraeña',
                       '',
                       true,
-                      'Confirmed password',
+                      'Ingrese nuevamente su contraeña',
                       passwordConfirmed),
                 ),
                 Padding(
@@ -141,14 +210,14 @@ class _StudentRegisterState extends State<StudentRegister> {
                             }),
                         Text.rich(
                           TextSpan(
-                              text: 'I accept the ',
+                              text: 'Yo acepto los ',
                               style: TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w400,
                                   color: _colorPalette.text),
                               children: [
                                 TextSpan(
-                                    text: 'terms and conditions ',
+                                    text: 'terminos y condiciones ',
                                     style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w600,
@@ -157,19 +226,19 @@ class _StudentRegisterState extends State<StudentRegister> {
                                       ..onTap = () {
                                         _alert.createAlert(
                                             context,
-                                            'Terms and Conditions',
+                                            'Terminos y Condiciones',
                                             lorem_ipsum.toString(),
-                                            'Close');
+                                            'Cerrar');
                                       }),
                                 TextSpan(
-                                    text: 'of use\n and the ',
+                                    text: 'de \nuso y la ',
                                     style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w400,
                                         color: _colorPalette.text),
                                     children: [
                                       TextSpan(
-                                          text: 'privacy and policies ',
+                                          text: 'privacidad y politicas ',
                                           style: TextStyle(
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.w600,
@@ -178,12 +247,12 @@ class _StudentRegisterState extends State<StudentRegister> {
                                             ..onTap = () {
                                               _alert.createAlert(
                                                   context,
-                                                  'Privacy and Policies',
+                                                  'Privacidad y Politicas',
                                                   lorem_ipsum.toString(),
-                                                  'Close');
+                                                  'Cerrar');
                                             }),
                                       TextSpan(
-                                          text: 'of this site',
+                                          text: 'de este sitio',
                                           style: TextStyle(
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.w400,
@@ -212,12 +281,12 @@ class _StudentRegisterState extends State<StudentRegister> {
           color: _colorPalette.lightBlue,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(100.0)),
-          child: Text('Continue',
+          child: Text('Continuar',
               style: TextStyle(
                   color: _colorPalette.yellow, fontWeight: FontWeight.bold)),
           onPressed: () {
             if (value &&
-                _fullNameController.text.isNotEmpty &&
+                _nameController.text.isNotEmpty &&
                 _emailController.text.isNotEmpty &&
                 _passwordController.text.isNotEmpty &&
                 _passwordConfirmController.text.isNotEmpty &&
@@ -226,7 +295,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                   builder: (BuildContext context) => HomeHolder()));
             } else {
               setState(() {
-                if (_fullNameController.text.isEmpty) name = true;
+                if (_nameController.text.isEmpty) names = true;
                 if (_emailController.text.isEmpty) email = true;
                 if (_passwordController.text.isEmpty) password = true;
                 if (_passwordConfirmController.text.isEmpty)
@@ -238,6 +307,29 @@ class _StudentRegisterState extends State<StudentRegister> {
               });
             }
           }),
+    );
+  }
+
+  Widget _createFechaNac(BuildContext context) {
+    return TextFormField(
+      controller: _birthDateController,
+      enableInteractiveSelection: false,
+      decoration: InputDecoration(
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide(color: _colorPalette.darkBlue)),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20.0),
+            borderSide: BorderSide(color: _colorPalette.cream)),
+        labelText: 'Fecha de nacimiento',
+        labelStyle: TextStyle(color: _colorPalette.darkBlue),
+        suffixIcon: Icon(Icons.calendar_today, color: _colorPalette.darkBlue),
+      ),
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+        print("terrible");
+        _dataPicker.selectDate(context, _birthDateController);
+      },
     );
   }
 }

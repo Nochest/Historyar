@@ -6,6 +6,7 @@ class ColorPalette {
   Color yellow = Color(0xfff2cb05);
   Color cream = Color(0xfff2e5d5);
   Color text = Color(0xff1d1d1b);
+  Color white = Color(0xffFFFFFF);
 
   Color error = Color(0xffDB380E);
   Color warning = Color(0xffFFC702);

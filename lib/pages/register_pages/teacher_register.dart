@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
+import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/input_text.dart';
@@ -71,6 +72,19 @@ class _TeacherRegisterState extends State<TeacherRegister> {
 
     return Scaffold(
       backgroundColor: _colorPalette.cream,
+      appBar: AppBar(
+        backgroundColor: _colorPalette.darkBlue,
+        title:
+            Text('Regístrate!', style: TextStyle(fontWeight: FontWeight.w700)),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (BuildContext context) => SignIn()),
+                (Route<dynamic> route) => false);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 32.0, horizontal: 24.0),
@@ -84,7 +98,7 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                   child: Padding(
                     padding: EdgeInsets.only(top: 24.0),
                     child: Text(
-                      'Welcome\nnew teacher!',
+                      'Bienvenido\nnuevo maestro!',
                       style: TextStyle(
                           fontWeight: FontWeight.w700,
                           color: _colorPalette.yellow,
@@ -99,16 +113,23 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                       focus_full_name,
                       _fullNameController,
                       TextInputType.text,
-                      'Full Name',
+                      'Nombre completo',
                       '',
                       false,
-                      'Name',
+                      'Nombre completo',
                       name),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 24.0),
-                  child: _inputText.defaultIText(focus_email, _emailController,
-                      TextInputType.text, 'Email', '', false, 'Email', email),
+                  child: _inputText.defaultIText(
+                      focus_email,
+                      _emailController,
+                      TextInputType.text,
+                      'Correo electronico',
+                      '',
+                      false,
+                      'Correo electronico',
+                      email),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 24.0),
@@ -116,10 +137,10 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                       focus_mobile,
                       _mobileController,
                       TextInputType.phone,
-                      'Mobile Number',
+                      'Numero de celular',
                       '',
                       false,
-                      'Phone',
+                      'Numero de celular',
                       mobile),
                 ),
                 Padding(
@@ -128,10 +149,10 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                       focus_password,
                       _passwordController,
                       TextInputType.text,
-                      'Password',
+                      'Contraseña',
                       '',
                       true,
-                      'Password',
+                      'Contraseña',
                       password),
                 ),
                 Padding(
@@ -140,10 +161,10 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                       focus_password_confirm,
                       _passwordConfirmController,
                       TextInputType.text,
-                      'Confirm Password',
+                      'Ingrese nuevamente su contraeña',
                       '',
                       true,
-                      'Confirmed password',
+                      'Ingrese nuevamente su contraeña',
                       passwordConfirmed),
                 ),
                 Padding(
@@ -159,14 +180,14 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                             }),
                         Text.rich(
                           TextSpan(
-                              text: 'I accept the ',
+                              text: 'Yo acepto los ',
                               style: TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w400,
                                   color: _colorPalette.text),
                               children: [
                                 TextSpan(
-                                    text: 'terms and conditions ',
+                                    text: 'terminos y condiciones ',
                                     style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w600,
@@ -175,19 +196,19 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                                       ..onTap = () {
                                         _alert.createAlert(
                                             context,
-                                            'Terms and Conditions',
+                                            'Terminos y Condiciones',
                                             lorem_ipsum.toString(),
-                                            'Close');
+                                            'Cerrar');
                                       }),
                                 TextSpan(
-                                    text: 'of use\n and the ',
+                                    text: 'de \nuso y la ',
                                     style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w400,
                                         color: _colorPalette.text),
                                     children: [
                                       TextSpan(
-                                          text: 'privacy and policies ',
+                                          text: 'privacidad y politicas ',
                                           style: TextStyle(
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.w600,
@@ -196,12 +217,12 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                                             ..onTap = () {
                                               _alert.createAlert(
                                                   context,
-                                                  'Privacy and Policies',
+                                                  'Privacidad y Politicas',
                                                   lorem_ipsum.toString(),
-                                                  'Close');
+                                                  'Cerrar');
                                             }),
                                       TextSpan(
-                                          text: 'of this site',
+                                          text: 'de este sitio',
                                           style: TextStyle(
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.w400,
@@ -230,7 +251,7 @@ class _TeacherRegisterState extends State<TeacherRegister> {
           color: _colorPalette.lightBlue,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(100.0)),
-          child: Text('Continue',
+          child: Text('Continuar',
               style: TextStyle(
                   color: _colorPalette.yellow, fontWeight: FontWeight.bold)),
           onPressed: () {
