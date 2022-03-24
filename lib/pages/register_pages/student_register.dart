@@ -12,9 +12,11 @@ class StudentRegister extends StatefulWidget {
 
 class _StudentRegisterState extends State<StudentRegister> {
   final snackBar = SnackBar(content: Text('Password must match'));
-  final privacy = SnackBar(content: Text('You mus accept terms and conditions'));
+  final privacy =
+      SnackBar(content: Text('You mus accept terms and conditions'));
 
-  String lorem_ipsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do '
+  String lorem_ipsum =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do '
       'eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, '
       'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. '
       'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
@@ -27,7 +29,7 @@ class _StudentRegisterState extends State<StudentRegister> {
 
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
-  Alert  _alert = Alert();
+  Alert _alert = Alert();
 
   bool name = false;
   bool email = false;
@@ -48,11 +50,18 @@ class _StudentRegisterState extends State<StudentRegister> {
 
   @override
   Widget build(BuildContext context) {
-
-    focus_full_name.addListener(() {setState(() {});});
-    focus_email.addListener(() {setState(() {});});
-    focus_password.addListener(() {setState(() {});});
-    focus_password_confirm.addListener(() {setState(() {});});
+    focus_full_name.addListener(() {
+      setState(() {});
+    });
+    focus_email.addListener(() {
+      setState(() {});
+    });
+    focus_password.addListener(() {
+      setState(() {});
+    });
+    focus_password_confirm.addListener(() {
+      setState(() {});
+    });
 
     return Scaffold(
       backgroundColor: _colorPalette.cream,
@@ -70,7 +79,10 @@ class _StudentRegisterState extends State<StudentRegister> {
                     padding: EdgeInsets.only(top: 24.0),
                     child: Text(
                       'Welcome\nnew student!',
-                      style: TextStyle(fontWeight: FontWeight.w700, color: _colorPalette.yellow, fontSize: 32.0),
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: _colorPalette.yellow,
+                          fontSize: 32.0),
                       textAlign: TextAlign.start,
                     ),
                   ),
@@ -85,21 +97,12 @@ class _StudentRegisterState extends State<StudentRegister> {
                       '',
                       false,
                       'Name',
-                      name
-                  ),
+                      name),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 24.0),
-                  child: _inputText.defaultIText(
-                      focus_email,
-                      _emailController,
-                      TextInputType.text,
-                      'Email',
-                      '',
-                      false,
-                      'Email',
-                      email
-                  ),
+                  child: _inputText.defaultIText(focus_email, _emailController,
+                      TextInputType.text, 'Email', '', false, 'Email', email),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 24.0),
@@ -111,8 +114,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                       '',
                       true,
                       'Password',
-                      password
-                  ),
+                      password),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 24.0),
@@ -124,8 +126,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                       '',
                       true,
                       'Confirmed password',
-                      passwordConfirmed
-                  ),
+                      passwordConfirmed),
                 ),
                 Padding(
                     padding: EdgeInsets.only(top: 20.0),
@@ -133,46 +134,68 @@ class _StudentRegisterState extends State<StudentRegister> {
                       children: [
                         Checkbox(
                             value: this.value,
-                            onChanged: (bool value){
+                            onChanged: (value) {
                               setState(() {
-                                this.value = value;
+                                this.value = value!;
                               });
                             }),
                         Text.rich(
                           TextSpan(
                               text: 'I accept the ',
-                              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400, color: _colorPalette.text),
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: _colorPalette.text),
                               children: [
                                 TextSpan(
                                     text: 'terms and conditions ',
-                                    style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: _colorPalette.yellow),
-                                    recognizer: TapGestureRecognizer()..onTap = (){
-                                      _alert.createAlert(context, 'Terms and Conditions', lorem_ipsum.toString(), 'Close');
-                                    }
-                                ),
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: _colorPalette.yellow),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        _alert.createAlert(
+                                            context,
+                                            'Terms and Conditions',
+                                            lorem_ipsum.toString(),
+                                            'Close');
+                                      }),
                                 TextSpan(
                                     text: 'of use\n and the ',
-                                    style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400, color: _colorPalette.text),
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.w400,
+                                        color: _colorPalette.text),
                                     children: [
                                       TextSpan(
                                           text: 'privacy and policies ',
-                                          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: _colorPalette.yellow),
-                                          recognizer: TapGestureRecognizer()..onTap = (){
-                                            _alert.createAlert(context, 'Privacy and Policies', lorem_ipsum.toString(), 'Close');
-                                          }
-                                      ),
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: _colorPalette.yellow),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              _alert.createAlert(
+                                                  context,
+                                                  'Privacy and Policies',
+                                                  lorem_ipsum.toString(),
+                                                  'Close');
+                                            }),
                                       TextSpan(
                                           text: 'of this site',
-                                          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400, color: _colorPalette.text))
-                                    ]
-                                )
-                              ]
-                          ),
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w400,
+                                              color: _colorPalette.text))
+                                    ])
+                              ]),
                         )
                       ],
-                    )
-                ),
-                Padding(padding: EdgeInsets.only(top: 22.0, bottom: 40.0), child: _registerButton(context)),
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(top: 22.0, bottom: 40.0),
+                    child: _registerButton(context)),
               ],
             ),
           ),
@@ -180,34 +203,41 @@ class _StudentRegisterState extends State<StudentRegister> {
       ),
     );
   }
-  Widget _registerButton(BuildContext context){
+
+  Widget _registerButton(BuildContext context) {
     return Center(
       child: MaterialButton(
           height: 48.0,
           minWidth: 170.0,
           color: _colorPalette.lightBlue,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(100.0)
-          ),
-          child: Text('Continue', style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.bold)),
-          onPressed: (){
-            if(value && _fullNameController.text.isNotEmpty && _emailController.text.isNotEmpty  &&
-                _passwordController.text.isNotEmpty && _passwordConfirmController.text.isNotEmpty &&
-                ( _passwordController.text == _passwordConfirmController.text)){
-              Navigator.of(context).
-              push(MaterialPageRoute(builder: (BuildContext context) => HomeHolder()));
-            }else{
+              borderRadius: BorderRadius.circular(100.0)),
+          child: Text('Continue',
+              style: TextStyle(
+                  color: _colorPalette.yellow, fontWeight: FontWeight.bold)),
+          onPressed: () {
+            if (value &&
+                _fullNameController.text.isNotEmpty &&
+                _emailController.text.isNotEmpty &&
+                _passwordController.text.isNotEmpty &&
+                _passwordConfirmController.text.isNotEmpty &&
+                (_passwordController.text == _passwordConfirmController.text)) {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => HomeHolder()));
+            } else {
               setState(() {
-                if(_fullNameController.text.isEmpty) name = true;
-                if(_emailController.text.isEmpty) email = true;
-                if(_passwordController.text.isEmpty) password = true;
-                if(_passwordConfirmController.text.isEmpty) passwordConfirmed = true;
-                if( _passwordController.text != _passwordConfirmController.text) ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                if(this.value == false) ScaffoldMessenger.of(context).showSnackBar(privacy);
+                if (_fullNameController.text.isEmpty) name = true;
+                if (_emailController.text.isEmpty) email = true;
+                if (_passwordController.text.isEmpty) password = true;
+                if (_passwordConfirmController.text.isEmpty)
+                  passwordConfirmed = true;
+                if (_passwordController.text != _passwordConfirmController.text)
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                if (this.value == false)
+                  ScaffoldMessenger.of(context).showSnackBar(privacy);
               });
             }
-          }
-      ),
+          }),
     );
   }
 }
