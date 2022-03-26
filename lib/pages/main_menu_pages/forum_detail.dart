@@ -5,17 +5,17 @@ import 'package:historyar_app/widgets/button_app_bar.dart';
 
 class ForumDetail extends StatefulWidget {
   final String title;
-  const ForumDetail({Key key, this.title}):super(key: key);
+  const ForumDetail({Key? key, required this.title}) : super(key: key);
   @override
   _ForumDetailState createState() => _ForumDetailState();
 }
 
 class _ForumDetailState extends State<ForumDetail> {
-
   ColorPalette _colorPalette = ColorPalette();
   TextEditingController _controller = TextEditingController();
 
-  String lorem = 'It is a long established fact that a reader will be distracted '
+  String lorem =
+      'It is a long established fact that a reader will be distracted '
       'by the readable content of a page when looking at its layout. The point of using Lorem '
       'Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using '
       'Content here, content here, making it look like readable English. Many desktop publishing '
@@ -23,7 +23,8 @@ class _ForumDetailState extends State<ForumDetail> {
       'will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, '
       'sometimes on purpose (injected humour and the like).';
 
-  String lorem_reply = 'It is a long established fact that a reader will be distracted '
+  String lorem_reply =
+      'It is a long established fact that a reader will be distracted '
       'by the readable content of a page when looking at its layout. The point of using Lorem ';
   @override
   Widget build(BuildContext context) {
@@ -40,27 +41,53 @@ class _ForumDetailState extends State<ForumDetail> {
                     height: 48.0,
                     decoration: BoxDecoration(
                         color: _colorPalette.lightBlue,
-                        border: Border.all(color: _colorPalette.yellow, width: 2.0),
-                        borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.0))
-                    ),
+                        border:
+                            Border.all(color: _colorPalette.yellow, width: 2.0),
+                        borderRadius: BorderRadius.vertical(
+                            bottom: Radius.circular(25.0))),
                     child: Center(
-                      child: Text(widget.title, style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w700, fontSize: 24.0)),
+                      child: Text(widget.title,
+                          style: TextStyle(
+                              color: _colorPalette.yellow,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24.0)),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 24.0),
-                    child: Container(
-                      width: double.maxFinite,
-                      decoration: BoxDecoration(
-                        color: _colorPalette.white,
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(color: _colorPalette.yellow, width: 2.0)
-                      ),
-                      child: Padding(
-                          padding: EdgeInsets.all(16.0),
-                          child: Text(lorem, style: TextStyle(fontSize: 12.0, color: _colorPalette.text), textAlign: TextAlign.justify)
-                      ),
-                    )
+                      padding: EdgeInsets.only(top: 24.0),
+                      child: Container(
+                        width: double.maxFinite,
+                        decoration: BoxDecoration(
+                            color: _colorPalette.white,
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                                color: _colorPalette.yellow, width: 2.0)),
+                        child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Text(lorem,
+                                style: TextStyle(
+                                    fontSize: 12.0, color: _colorPalette.text),
+                                textAlign: TextAlign.justify)),
+                      )),
+                  Container(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                        padding: EdgeInsets.only(top: 24.0),
+                        child: Container(
+                          width: 280.0,
+                          decoration: BoxDecoration(
+                              color: _colorPalette.white,
+                              borderRadius: BorderRadius.circular(10.0),
+                              border: Border.all(
+                                  color: _colorPalette.yellow, width: 2.0)),
+                          child: Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Text(lorem_reply,
+                                  style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: _colorPalette.text),
+                                  textAlign: TextAlign.justify)),
+                        )),
                   ),
                   Container(
                     alignment: Alignment.topRight,
@@ -71,14 +98,16 @@ class _ForumDetailState extends State<ForumDetail> {
                           decoration: BoxDecoration(
                               color: _colorPalette.white,
                               borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all(color: _colorPalette.yellow, width: 2.0)
-                          ),
+                              border: Border.all(
+                                  color: _colorPalette.yellow, width: 2.0)),
                           child: Padding(
                               padding: EdgeInsets.all(16.0),
-                              child: Text(lorem_reply, style: TextStyle(fontSize: 12.0, color: _colorPalette.text), textAlign: TextAlign.justify)
-                          ),
-                        )
-                    ),
+                              child: Text(lorem_reply,
+                                  style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: _colorPalette.text),
+                                  textAlign: TextAlign.justify)),
+                        )),
                   ),
                   Container(
                     alignment: Alignment.topRight,
@@ -89,32 +118,16 @@ class _ForumDetailState extends State<ForumDetail> {
                           decoration: BoxDecoration(
                               color: _colorPalette.white,
                               borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all(color: _colorPalette.yellow, width: 2.0)
-                          ),
+                              border: Border.all(
+                                  color: _colorPalette.yellow, width: 2.0)),
                           child: Padding(
                               padding: EdgeInsets.all(16.0),
-                              child: Text(lorem_reply, style: TextStyle(fontSize: 12.0, color: _colorPalette.text), textAlign: TextAlign.justify)
-                          ),
-                        )
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                        padding: EdgeInsets.only(top: 24.0),
-                        child: Container(
-                          width: 280.0,
-                          decoration: BoxDecoration(
-                              color: _colorPalette.white,
-                              borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all(color: _colorPalette.yellow, width: 2.0)
-                          ),
-                          child: Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Text(lorem_reply, style: TextStyle(fontSize: 12.0, color: _colorPalette.text), textAlign: TextAlign.justify)
-                          ),
-                        )
-                    ),
+                              child: Text(lorem_reply,
+                                  style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: _colorPalette.text),
+                                  textAlign: TextAlign.justify)),
+                        )),
                   ),
                   Padding(
                     padding: EdgeInsets.only(top: 16.0),
@@ -123,20 +136,17 @@ class _ForumDetailState extends State<ForumDetail> {
                   Padding(
                     padding: EdgeInsets.only(top: 8.0),
                     child: Row(
-                      children: [
-                        Spacer(),
-                        _commentButton(context)
-                      ],
+                      children: [Spacer(), _commentButton(context)],
                     ),
                   ),
                 ],
-              )
-          ),
+              )),
         ),
       ),
       floatingActionButton: historyarButtonApp(context, false),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: historyarBottomAppBar(context, false, false, true, false),
+      bottomNavigationBar:
+          historyarBottomAppBar(context, false, false, true, false),
     );
   }
 
@@ -145,9 +155,7 @@ class _ForumDetailState extends State<ForumDetail> {
       width: double.maxFinite,
       height: 104.0,
       decoration: BoxDecoration(
-          color: Colors.white70,
-          borderRadius: BorderRadius.circular(5.0)
-      ),
+          color: Colors.white70, borderRadius: BorderRadius.circular(5.0)),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: TextFormField(
@@ -159,15 +167,17 @@ class _ForumDetailState extends State<ForumDetail> {
           decoration: InputDecoration(
               border: InputBorder.none,
               hintText: 'Insert comment',
-              hintStyle: TextStyle(fontSize: 16.0, color: _colorPalette.yellow, fontWeight: FontWeight.w400)
-          ),
+              hintStyle: TextStyle(
+                  fontSize: 16.0,
+                  color: _colorPalette.yellow,
+                  fontWeight: FontWeight.w400)),
           cursorColor: _colorPalette.lightBlue,
-
         ),
       ),
     );
   }
-  Widget _commentButton(BuildContext context){
+
+  Widget _commentButton(BuildContext context) {
     return Center(
       child: MaterialButton(
           height: 32.0,
@@ -175,13 +185,15 @@ class _ForumDetailState extends State<ForumDetail> {
           color: _colorPalette.darkBlue,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(100.0),
-              side: BorderSide(color: _colorPalette.yellow)
-          ),
-          child: Text('Comment', style: TextStyle( fontSize: 14.0, color: _colorPalette.yellow, fontWeight: FontWeight.w600)),
-          onPressed: (){
+              side: BorderSide(color: _colorPalette.yellow)),
+          child: Text('Comment',
+              style: TextStyle(
+                  fontSize: 14.0,
+                  color: _colorPalette.yellow,
+                  fontWeight: FontWeight.w600)),
+          onPressed: () {
             //TODO: Push comment
-          }
-      ),
+          }),
     );
   }
 }

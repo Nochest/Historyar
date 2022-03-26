@@ -17,7 +17,7 @@ class _StudentRegisterState extends State<StudentRegister> {
   final privacy =
       SnackBar(content: Text('You mus accept terms and conditions'));
 
-  String lorem_ipsum =
+  var lorem_ipsum =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do '
       'eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, '
       'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. '
@@ -31,7 +31,7 @@ class _StudentRegisterState extends State<StudentRegister> {
 
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
-  DataPicker _dataPicker = DataPicker();
+  var dataPicker = DataPicker();
   Alert _alert = Alert();
 
   bool emailParent = false;
@@ -48,7 +48,6 @@ class _StudentRegisterState extends State<StudentRegister> {
   FocusNode focus_email = FocusNode();
   FocusNode focus_password = FocusNode();
   FocusNode focus_password_confirm = FocusNode();
-  FocusNode focus_birth_date = FocusNode();
 
   TextEditingController _emailParentController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
@@ -59,7 +58,7 @@ class _StudentRegisterState extends State<StudentRegister> {
   TextEditingController _birthDateController = TextEditingController();
 
   bool value = false;
-
+  var selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
     focus_email_parent.addListener(() {
@@ -78,9 +77,6 @@ class _StudentRegisterState extends State<StudentRegister> {
       setState(() {});
     });
     focus_password_confirm.addListener(() {
-      setState(() {});
-    });
-    focus_birth_date.addListener(() {
       setState(() {});
     });
 
@@ -202,10 +198,10 @@ class _StudentRegisterState extends State<StudentRegister> {
                     child: Row(
                       children: [
                         Checkbox(
-                            value: this.value,
-                            onChanged: (value) {
+                            value: value,
+                            onChanged: (m) {
                               setState(() {
-                                this.value = value!;
+                                value = m!;
                               });
                             }),
                         Text.rich(
@@ -312,24 +308,25 @@ class _StudentRegisterState extends State<StudentRegister> {
 
   Widget _createFechaNac(BuildContext context) {
     return TextFormField(
-      controller: _birthDateController,
-      enableInteractiveSelection: false,
-      decoration: InputDecoration(
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide(color: _colorPalette.darkBlue)),
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20.0),
-            borderSide: BorderSide(color: _colorPalette.cream)),
-        labelText: 'Fecha de nacimiento',
-        labelStyle: TextStyle(color: _colorPalette.darkBlue),
-        suffixIcon: Icon(Icons.calendar_today, color: _colorPalette.darkBlue),
-      ),
-      onTap: () {
-        FocusScope.of(context).requestFocus(new FocusNode());
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode());
         print("terrible");
-        _dataPicker.selectDate(context, _birthDateController);
+
+        await _selectDate(context);
       },
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
   }
 }
