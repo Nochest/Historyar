@@ -2,9 +2,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
 import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
+import 'package:historyar_app/providers/user_provider.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/input_text.dart';
+import 'package:intl/intl.dart';
 
 class TeacherRegister extends StatefulWidget {
   @override
@@ -31,30 +33,45 @@ class _TeacherRegisterState extends State<TeacherRegister> {
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
   Alert _alert = Alert();
+  var _usuarioProvider =  UsuarioProvider();
 
-  bool name = false;
+  bool names = false;
+  bool surnames = false;
   bool email = false;
   bool mobile = false;
+  bool school = false;
   bool password = false;
   bool passwordConfirmed = false;
+  bool birthDate = false;
 
-  FocusNode focus_full_name = FocusNode();
+  DateFormat formatter = DateFormat('yyyy-MM-dd');
+
+  FocusNode focus_names = FocusNode();
+  FocusNode focus_surnames = FocusNode();
   FocusNode focus_email = FocusNode();
   FocusNode focus_mobile = FocusNode();
+  FocusNode focus_school = FocusNode();
   FocusNode focus_password = FocusNode();
   FocusNode focus_password_confirm = FocusNode();
 
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _fullNameController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _surnameController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
+  TextEditingController _schoolController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _passwordConfirmController = TextEditingController();
+  TextEditingController _birthDateController = TextEditingController();
 
   bool value = false;
+  var selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    focus_full_name.addListener(() {
+    focus_names.addListener(() {
+      setState(() {});
+    });
+    focus_surnames.addListener(() {
       setState(() {});
     });
     focus_email.addListener(() {
@@ -87,7 +104,7 @@ class _TeacherRegisterState extends State<TeacherRegister> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 32.0, horizontal: 24.0),
+          padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 24.0),
           child: Container(
             alignment: Alignment.center,
             child: Column(
@@ -110,14 +127,30 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                 Padding(
                   padding: EdgeInsets.only(top: 40.0),
                   child: _inputText.defaultIText(
-                      focus_full_name,
-                      _fullNameController,
+                      focus_names,
+                      _nameController,
                       TextInputType.text,
-                      'Nombre completo',
+                      'Nombres',
                       '',
                       false,
-                      'Nombre completo',
-                      name),
+                      'Nombres',
+                      names),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 40.0),
+                  child: _inputText.defaultIText(
+                      focus_surnames,
+                      _surnameController,
+                      TextInputType.text,
+                      'Apellidos',
+                      '',
+                      false,
+                      'Apellidos',
+                      surnames),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(right: 30.0, left: 30.0),
+                  child: _createFechaNac(context),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 24.0),
@@ -125,10 +158,10 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                       focus_email,
                       _emailController,
                       TextInputType.text,
-                      'Correo electronico',
+                      'Correo electrónico',
                       '',
                       false,
-                      'Correo electronico',
+                      'Correo electrónico',
                       email),
                 ),
                 Padding(
@@ -137,11 +170,23 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                       focus_mobile,
                       _mobileController,
                       TextInputType.phone,
-                      'Numero de celular',
+                      'Número de celular',
                       '',
                       false,
-                      'Numero de celular',
+                      'Número de celular',
                       mobile),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 24.0),
+                  child: _inputText.defaultIText(
+                      focus_school,
+                      _schoolController,
+                      TextInputType.text,
+                      'Institución Educativa',
+                      '',
+                      false,
+                      'Institución Educativa',
+                      school),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 24.0),
@@ -256,19 +301,27 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                   color: _colorPalette.yellow, fontWeight: FontWeight.bold)),
           onPressed: () {
             if (value &&
-                _fullNameController.text.isNotEmpty &&
+                _nameController.text.isNotEmpty &&
+                _surnameController.text.isNotEmpty &&
                 _emailController.text.isNotEmpty &&
+                _birthDateController.text.isNotEmpty &&
                 _mobileController.text.isNotEmpty &&
+                _schoolController.text.isNotEmpty &&
                 _passwordController.text.isNotEmpty &&
                 _passwordConfirmController.text.isNotEmpty &&
                 (_passwordController.text == _passwordConfirmController.text)) {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => HomeHolder()));
+                  _usuarioProvider.registerDocente(_mobileController.text, _schoolController.text, _nameController.text, _surnameController.text
+                      , _emailController.text, _passwordController.text, _birthDateController.text, context);
+              //Navigator.of(context).push(MaterialPageRoute(
+                //  builder: (BuildContext context) => HomeHolder()));
             } else {
               setState(() {
-                if (_fullNameController.text.isEmpty) name = true;
+                if (_nameController.text.isEmpty) names = true;
+                if (_surnameController.text.isEmpty) surnames = true;
+                if (_birthDateController.text.isEmpty) birthDate = true;
                 if (_emailController.text.isEmpty) email = true;
                 if (_mobileController.text.isEmpty) mobile = true;
+                if (_schoolController.text.isEmpty) school = true;
                 if (_passwordController.text.isEmpty) password = true;
                 if (_passwordConfirmController.text.isEmpty)
                   passwordConfirmed = true;
@@ -281,4 +334,32 @@ class _TeacherRegisterState extends State<TeacherRegister> {
           }),
     );
   }
+
+  Widget _createFechaNac(BuildContext context) {
+    return TextFormField(
+      controller: _birthDateController,
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode());
+        print("terrible");
+
+        await _selectDate(context);
+      },
+    );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        _birthDateController.text = formatter.format(picked);
+      });
+    }
+  }
+
+
 }

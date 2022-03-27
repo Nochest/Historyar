@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
 import 'package:historyar_app/pages/register_pages/student_register.dart';
 import 'package:historyar_app/pages/register_pages/teacher_register.dart';
+import 'package:historyar_app/pages/sign_in_pages/forget_password.dart';
 import 'package:historyar_app/providers/user_provider.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/input_text.dart';
@@ -98,6 +99,10 @@ class _SignInState extends State<SignIn> {
                     child: Text('Olvidaste tu contraseña?', style: TextStyle(color: _colorPalette.darkBlue, fontWeight: FontWeight.w400, fontSize: 16.0)),
                     onPressed: (){
                       //TODO: Password recover page
+
+                      Navigator.of(context).
+                      pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => ForgetPassword()),
+                              (Route<dynamic> route) => false);
                     },
                   ),
                 ),

@@ -2,12 +2,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
 import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
+import 'package:historyar_app/providers/user_provider.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/utils/data_picker.dart';
 import 'package:historyar_app/widgets/input_text.dart';
 
-class StudentRegister extends StatefulWidget {
+import 'package:intl/intl.dart';class StudentRegister extends StatefulWidget {
   @override
   _StudentRegisterState createState() => _StudentRegisterState();
 }
@@ -33,6 +34,7 @@ class _StudentRegisterState extends State<StudentRegister> {
   InputText _inputText = InputText();
   var dataPicker = DataPicker();
   Alert _alert = Alert();
+  var _usuarioProvider =  UsuarioProvider();
 
   bool emailParent = false;
   bool names = false;
@@ -41,6 +43,8 @@ class _StudentRegisterState extends State<StudentRegister> {
   bool password = false;
   bool passwordConfirmed = false;
   bool birthDate = false;
+
+  DateFormat formatter = DateFormat('yyyy-MM-dd');
 
   FocusNode focus_email_parent = FocusNode();
   FocusNode focus_names = FocusNode();
@@ -97,7 +101,7 @@ class _StudentRegisterState extends State<StudentRegister> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 32.0, horizontal: 24.0),
+          padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 24.0),
           child: Container(
             alignment: Alignment.center,
             child: Column(
@@ -163,10 +167,10 @@ class _StudentRegisterState extends State<StudentRegister> {
                       focus_email,
                       _emailController,
                       TextInputType.text,
-                      'Correo electronico',
+                      'Correo electrónico',
                       '',
                       false,
-                      'Correo electronico',
+                      'Correo electrónico',
                       email),
                 ),
                 Padding(
@@ -257,7 +261,8 @@ class _StudentRegisterState extends State<StudentRegister> {
                               ]),
                         )
                       ],
-                    )),
+                    )
+                ),
                 Padding(
                     padding: EdgeInsets.only(top: 22.0, bottom: 40.0),
                     child: _registerButton(context)),
@@ -282,16 +287,24 @@ class _StudentRegisterState extends State<StudentRegister> {
                   color: _colorPalette.yellow, fontWeight: FontWeight.bold)),
           onPressed: () {
             if (value &&
+                _emailParentController.text.isNotEmpty &&
                 _nameController.text.isNotEmpty &&
+                _surnameController.text.isNotEmpty &&
+                _birthDateController.text.isNotEmpty &&
                 _emailController.text.isNotEmpty &&
                 _passwordController.text.isNotEmpty &&
                 _passwordConfirmController.text.isNotEmpty &&
                 (_passwordController.text == _passwordConfirmController.text)) {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => HomeHolder()));
+                    _usuarioProvider.registerAlumno(_emailParentController.text, _nameController.text, _surnameController.text, _emailController.text,
+                        _passwordController.text, _birthDateController.text, context);
+             //Navigator.of(context).pushReplacement(MaterialPageRoute(
+               //   builder: (BuildContext context) => SignIn()));
             } else {
               setState(() {
+                if (_emailParentController.text.isEmpty) emailParent = true;
                 if (_nameController.text.isEmpty) names = true;
+                if (_surnameController.text.isEmpty) surnames = true;
+                if (_birthDateController.text.isEmpty) birthDate = true;
                 if (_emailController.text.isEmpty) email = true;
                 if (_passwordController.text.isEmpty) password = true;
                 if (_passwordConfirmController.text.isEmpty)
@@ -308,6 +321,7 @@ class _StudentRegisterState extends State<StudentRegister> {
 
   Widget _createFechaNac(BuildContext context) {
     return TextFormField(
+      controller: _birthDateController,
       onTap: () async {
         FocusScope.of(context).requestFocus(FocusNode());
         print("terrible");
@@ -326,6 +340,7 @@ class _StudentRegisterState extends State<StudentRegister> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
+        _birthDateController.text = formatter.format(picked);
       });
     }
   }
