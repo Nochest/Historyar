@@ -8,7 +8,9 @@ import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/utils/data_picker.dart';
 import 'package:historyar_app/widgets/input_text.dart';
 
-import 'package:intl/intl.dart';class StudentRegister extends StatefulWidget {
+import 'package:intl/intl.dart';
+
+class StudentRegister extends StatefulWidget {
   @override
   _StudentRegisterState createState() => _StudentRegisterState();
 }
@@ -32,9 +34,8 @@ class _StudentRegisterState extends State<StudentRegister> {
 
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
-  var dataPicker = DataPicker();
   Alert _alert = Alert();
-  var _usuarioProvider =  UsuarioProvider();
+  var _usuarioProvider = UsuarioProvider();
 
   bool emailParent = false;
   bool names = false;
@@ -261,8 +262,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                               ]),
                         )
                       ],
-                    )
-                ),
+                    )),
                 Padding(
                     padding: EdgeInsets.only(top: 22.0, bottom: 40.0),
                     child: _registerButton(context)),
@@ -295,10 +295,16 @@ class _StudentRegisterState extends State<StudentRegister> {
                 _passwordController.text.isNotEmpty &&
                 _passwordConfirmController.text.isNotEmpty &&
                 (_passwordController.text == _passwordConfirmController.text)) {
-                    _usuarioProvider.registerAlumno(_emailParentController.text, _nameController.text, _surnameController.text, _emailController.text,
-                        _passwordController.text, _birthDateController.text, context);
-             //Navigator.of(context).pushReplacement(MaterialPageRoute(
-               //   builder: (BuildContext context) => SignIn()));
+              _usuarioProvider.registerAlumno(
+                  _emailParentController.text,
+                  _nameController.text,
+                  _surnameController.text,
+                  _emailController.text,
+                  _passwordController.text,
+                  _birthDateController.text,
+                  context);
+              //Navigator.of(context).pushReplacement(MaterialPageRoute(
+              //   builder: (BuildContext context) => SignIn()));
             } else {
               setState(() {
                 if (_emailParentController.text.isEmpty) emailParent = true;

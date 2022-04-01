@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:historyar_app/helpers/theme.dart';
 import 'package:historyar_app/pages/sign_in_pages/splash.dart';
 
 void main() {
@@ -7,7 +8,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -17,11 +17,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Historyar',
-      theme: ThemeData(
-
-      ),
+      theme: AppTheme().themeDataLight,
       home: Splash(),
     );
   }
 }
-
