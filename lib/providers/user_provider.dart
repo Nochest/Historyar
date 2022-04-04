@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:historyar_app/helpers/constant_helpers.dart';
+import 'package:historyar_app/model/user.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
+import 'package:historyar_app/pages/main_menu_pages/profile_page.dart';
 import 'package:historyar_app/pages/register_pages/success_register.dart';
 import 'package:historyar_app/pages/sign_in_pages/success_reset.dart';
 import 'package:historyar_app/utils/alert.dart';
@@ -15,7 +17,6 @@ class UsuarioProvider {
   Alert _alert = Alert();
 
   signIn(String email, String password, BuildContext context) async {
-
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map data = {
       'email': email,
@@ -33,24 +34,12 @@ class UsuarioProvider {
     if (response.statusCode == 200) {
       jsonData = json.decode(response.body);
       if (jsonData != null) {
-        sharedPreferences.setInt("id", jsonData['id']);
-        sharedPreferences.setString("nombres", jsonData['nombres']);
-        sharedPreferences.setString("email", jsonData['email']);
-        sharedPreferences.setString("token", jsonData['password']);
-
-        sharedPreferences.setInt("tipoUsuario", jsonData['tipoUsuario']);
-
-        if (sharedPreferences.getInt("tipoUsuario") == 1) {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (BuildContext context) => HomeHolder()),
-              (Route<dynamic> route) => false);
-        } else {
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (BuildContext context) => HomeHolder()),
-              (Route<dynamic> route) => false);
-        }
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    HomeHolder(
+                        id: jsonData['id'], type: jsonData['tipoUsuario'])),
+                (Route<dynamic> route) => false);
       }
     } else {
       _alert.createAlert(context, 'Credenciales inválidas',
@@ -58,8 +47,7 @@ class UsuarioProvider {
     }
   }
 
-  registerDocente(
-      String celular,
+  registerDocente(String celular,
       String institucionEducativa,
       String nombres,
       String apellidos,
@@ -67,7 +55,6 @@ class UsuarioProvider {
       String password,
       String fechaNacimiento,
       BuildContext context) async {
-
     Map data = {
       'celular': celular,
       'institucionEducativa': institucionEducativa,
@@ -86,22 +73,22 @@ class UsuarioProvider {
 
     print(response.statusCode);
 
-    if(response.statusCode == 201) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute( builder: (BuildContext context) => SuccessRegister()), (Route<dynamic> route) => false);
+    if (response.statusCode == 201) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+          builder: (BuildContext context) => SuccessRegister()), (
+          Route<dynamic> route) => false);
     }
 
     return 0;
   }
 
-  registerAlumno(
-      String emailApoderado,
+  registerAlumno(String emailApoderado,
       String nombres,
       String apellidos,
       String email,
       String password,
       String fechaNacimiento,
       BuildContext context) async {
-
     Map data = {
       'emailApoderado': emailApoderado,
       'nombres': nombres,
@@ -117,17 +104,17 @@ class UsuarioProvider {
         headers: {"Content-Type": "application/json"},
         body: bodyRequest);
 
-    if(response.statusCode == 201) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute( builder: (BuildContext context) => SuccessRegister()), (Route<dynamic> route) => false);
+    if (response.statusCode == 201) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+          builder: (BuildContext context) => SuccessRegister()), (
+          Route<dynamic> route) => false);
     }
 
     return 0;
   }
 
-  recuperarCuenta(
-      String email,
-      BuildContext context) async{
-
+  recuperarCuenta(String email,
+      BuildContext context) async {
     Map data = {
       'email': email
     };
@@ -140,10 +127,183 @@ class UsuarioProvider {
 
     print(response.statusCode);
 
-    if(response.statusCode == 200) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute( builder: (BuildContext context) => SuccessReset()), (Route<dynamic> route) => false);
-    }else{
-      _alert.createAlert(context, "Algo salió mal", "No se ha encontrado el correo.", "aceptar");
+    if (response.statusCode == 200) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+          builder: (BuildContext context) => SuccessReset()), (
+          Route<dynamic> route) => false);
+    } else {
+      _alert.createAlert(
+          context, "Algo salió mal", "No se ha encontrado el correo.",
+          "aceptar");
     }
   }
+
+  Future<Usuario?> getUser(int id) async {
+    var response = await http.get(
+        Uri.parse("${Constants.URL}/api/usuarios/${id}"));
+
+    var jsonData = json.decode(response.body);
+
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      Usuario usuario = Usuario(
+          jsonData["id"],
+          jsonData["nombres"],
+          jsonData["apellidos"],
+          "",
+          jsonData["email"],
+          "",
+          jsonData["fechaNacimiento"],
+          jsonData["tipoUsuario"],
+          "",
+          "",
+          false,
+          false);
+
+      return usuario;
+    } else {
+      return null;
+    }
+  }
+
+  Future<Usuario?> getUserByType(int id, int type) async {
+
+    var aux = "";
+
+    if(type == Constants.ALUMNO_USUARIO)
+      aux = "alumno";
+    else
+      aux = "docente";
+
+    var response = await http.get(
+        Uri.parse("${Constants.URL}/api/usuarios/${aux}/${id}"));
+
+    var jsonData = json.decode(response.body);
+    //var userData = json.decode(jsonData["usuario"]);
+
+    print("csmr");
+    print(jsonData["usuario"]);
+    print(jsonData["usuario"]["nombres"]);
+
+    print(response.statusCode);
+    print(id);
+    print(type);
+
+    if (response.statusCode == 200 && type == Constants.DOCENTE_USUARIO) {
+
+      Usuario usuario = Usuario(
+          id = jsonData["id"],
+          jsonData["usuario"]["nombres"],
+          jsonData["usuario"]["apellidos"],
+          jsonData["celular"],
+          jsonData["usuario"]["email"],
+          "",
+          jsonData["usuario"]["fechaNacimiento"],
+          jsonData["usuario"]["tipoUsuario"],
+          "",
+          jsonData["institucionEducativa"],
+          jsonData["celularVisible"],
+          jsonData["emailVisible"]);
+
+      return usuario;
+    } else if(response.statusCode == 200 && type == Constants.ALUMNO_USUARIO){
+      Usuario usuario = Usuario(
+          id = jsonData["id"],
+          jsonData["usuario"]["nombres"],
+          jsonData["usuario"]["apellidos"],
+          "",
+          jsonData["usuario"]["email"],
+          jsonData["correoApoderado"],
+          jsonData["usuario"]["fechaNacimiento"],
+          jsonData["usuario"]["tipoUsuario"],
+          "",
+          "",
+          false,
+          false);
+
+      return usuario;
+    }
+    else {
+      return null;
+    }
+  }
+
+  actualizarEstudiante(
+      int id,
+      int type,
+      String nombres,
+      String apellidos,
+      String email,
+      String fechaNacimiento,
+      BuildContext context) async {
+
+    Map data = {
+      'nombres': nombres,
+      'apellidos': apellidos,
+      'email': email,
+      'fechaNacimiento': fechaNacimiento
+    };
+    var bodyRequest = json.encode(data);
+
+    var response = await http.put(
+        Uri.parse("${Constants.URL}/api/alumnos/editar/${id}"),
+        headers: {"Content-Type": "application/json"},
+        body: bodyRequest);
+
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+          builder: (BuildContext context) => Profile(id: id, type: type)), (
+          Route<dynamic> route) => false);
+    } else {
+      _alert.createAlert(
+          context, "Algo salió mal", "No se ha podido actualizar.",
+          "aceptar");
+    }
+  }
+
+  actualizarDocente(
+      int id,
+      int type,
+      String celular,
+      String institucionEducativa,
+      String nombres,
+      String apellidos,
+      String email,
+      String fechaNacimiento,
+      bool celularVisible,
+      bool emailVisible,
+      BuildContext context) async {
+    Map data = {
+      'celular': celular,
+      'institucionEducativa': institucionEducativa,
+      'nombres': nombres,
+      'apellidos': apellidos,
+      'email': email,
+      'fechaNacimiento': fechaNacimiento,
+      'celularVisible':  celularVisible,
+      'emailVisible': emailVisible
+    };
+    var bodyRequest = json.encode(data);
+
+    var response = await http.put(
+        Uri.parse("${Constants.URL}/api/docentes/editar/${id}"),
+        headers: {"Content-Type": "application/json"},
+        body: bodyRequest);
+
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+          builder: (BuildContext context) => Profile(id: id, type: type)), (
+          Route<dynamic> route) => false);
+    } else {
+      _alert.createAlert(
+          context, "Algo salió mal", "No se ha podido actualizar.",
+          "aceptar");
+    }
+  }
+
 }

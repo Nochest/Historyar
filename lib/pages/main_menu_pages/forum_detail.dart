@@ -4,8 +4,18 @@ import 'package:historyar_app/widgets/app_bar.dart';
 import 'package:historyar_app/widgets/button_app_bar.dart';
 
 class ForumDetail extends StatefulWidget {
+
+  final int id;
+  final int type;
   final String title;
-  const ForumDetail({Key? key, required this.title}) : super(key: key);
+
+  const ForumDetail({
+    Key? key,
+    required this.title,
+    required this.id,
+    required this.type
+  }) : super(key: key);
+
   @override
   _ForumDetailState createState() => _ForumDetailState();
 }
@@ -146,7 +156,7 @@ class _ForumDetailState extends State<ForumDetail> {
       floatingActionButton: historyarButtonApp(context, false),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar:
-          historyarBottomAppBar(context, false, false, true, false),
+          historyarBottomAppBar(context, false, false, true, false, widget.id, widget.type),
     );
   }
 
