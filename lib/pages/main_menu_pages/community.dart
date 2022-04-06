@@ -7,6 +7,16 @@ import 'package:historyar_app/widgets/button_app_bar.dart';
 import 'package:historyar_app/widgets/card.dart';
 
 class Community extends StatefulWidget {
+
+  final int id;
+  final int type;
+
+  const Community({
+    required this.id,
+    required this.type,
+    Key? key
+  }) : super(key: key);
+
   @override
   _CommunityState createState() => _CommunityState();
 }
@@ -78,7 +88,7 @@ class _CommunityState extends State<Community> {
                     onTap: (){
                       Navigator.of(context).
                       pushAndRemoveUntil(MaterialPageRoute(
-                          builder: (BuildContext context) => ForumDetail(title: rowList[0].title)), (Route<dynamic> route) => true);
+                          builder: (BuildContext context) => ForumDetail(title: rowList[0].title, id: widget.id, type: widget.type,)), (Route<dynamic> route) => true);
                     },
                   ),
                 ),
@@ -118,7 +128,7 @@ class _CommunityState extends State<Community> {
       ),
       floatingActionButton: historyarButtonApp(context, false),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: historyarBottomAppBar(context, false, false, true, false),
+      bottomNavigationBar: historyarBottomAppBar(context, false, false, true, false, widget.id, widget.type),
     );
   }
 }
