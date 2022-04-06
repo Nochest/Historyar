@@ -155,7 +155,7 @@ class _ForumDetailState extends State<ForumDetail> {
       width: double.maxFinite,
       height: 104.0,
       decoration: BoxDecoration(
-          color: Colors.white70, borderRadius: BorderRadius.circular(5.0)),
+          color: Colors.white, borderRadius: BorderRadius.circular(5.0)),
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: TextFormField(
