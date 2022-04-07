@@ -11,7 +11,7 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Timer(
-        Duration(seconds: 3),
+        Duration(seconds: 20),
         () => Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (BuildContext context) => SignIn())));
     return Container(
@@ -25,7 +25,6 @@ class Splash extends StatelessWidget {
             Image(
               image: AssetImage('assets/splash/historyar_name.png'),
               width: double.maxFinite,
-              height: 300,
               fit: BoxFit.fill,
             ),
           ],
