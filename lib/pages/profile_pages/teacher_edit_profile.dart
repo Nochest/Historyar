@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:historyar_app/model/user.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
 import 'package:historyar_app/pages/main_menu_pages/profile_page.dart';
 import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
@@ -12,21 +15,25 @@ import 'package:historyar_app/widgets/input_text.dart';
 import 'package:intl/intl.dart';
 
 class TeacherEditProfile extends StatefulWidget {
-
   final int id;
   final int type;
 
-  const TeacherEditProfile({
-    required this.id,
-    required this.type,
-    Key? key
-  }) : super(key: key);
+  const TeacherEditProfile({required this.id, required this.type, Key? key})
+      : super(key: key);
 
   @override
   _TeacherEditProfile createState() => _TeacherEditProfile();
 }
 
 class _TeacherEditProfile extends State<TeacherEditProfile> {
+  final focusName = FocusNode();
+  final focussurName = FocusNode();
+  final focusEmail = FocusNode();
+  final focusPhone = FocusNode();
+  final focusSchool = FocusNode();
+
+  Usuario? user;
+  bool isLoading = true;
 
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
@@ -44,12 +51,6 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
 
   DateFormat formatter = DateFormat('yyyy-MM-dd');
 
-  FocusNode focus_names = FocusNode();
-  FocusNode focus_surnames = FocusNode();
-  FocusNode focus_email = FocusNode();
-  FocusNode focus_mobile = FocusNode();
-  FocusNode focus_school = FocusNode();
-
   TextEditingController _emailController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _surnameController = TextEditingController();
@@ -58,58 +59,65 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
   TextEditingController _birthDateController = TextEditingController();
 
   var selectedDate = DateTime.now();
+
+  getData() async {
+    user = await _usuarioProvider.getUserByType(widget.id, widget.type);
+    _emailController.text = user!.email;
+    _nameController.text = user!.nombres;
+    _surnameController.text = user!.apellidos;
+    _birthDateController.text = user!.fechaNacimiento;
+    _schoolController.text = user!.institucionEducativa;
+    _mobileController.text = user!.celular;
+    celularVisible = user!.celularVisible;
+    emailVisible = user!.emailVisible;
+    celularVisible = user!.celularVisible;
+    emailVisible = user!.emailVisible;
+
+    selectedDate = DateTime.parse(user!.fechaNacimiento);
+  }
+
+  @override
+  void initState() {
+    getData();
+    inspect(user);
+    isLoading = false;
+    setState(() {});
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    focus_names.addListener(() {
-      setState(() {});
-    });
-    focus_surnames.addListener(() {
-      setState(() {});
-    });
-    focus_email.addListener(() {
-      setState(() {});
-    });
-    focus_mobile.addListener(() {
-      setState(() {});
-    });
+    Future.delayed(const Duration(milliseconds: 500))
+        .then((_) => setState(() {}));
+
+    focusName.addListener(() => setState(() {}));
+    focussurName.addListener(() => setState(() {}));
+    focusEmail.addListener(() => setState(() {}));
+    focusPhone.addListener(() => setState(() {}));
+    focusSchool.addListener(() => setState(() {}));
 
     return Scaffold(
       backgroundColor: _colorPalette.cream,
       appBar: AppBar(
         backgroundColor: _colorPalette.darkBlue,
-        title:
-        Text('Actualizar Datos', style: TextStyle(fontWeight: FontWeight.w700)),
+        title: Text('Actualizar Datos',
+            style: TextStyle(fontWeight: FontWeight.w700)),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (BuildContext context) => Profile(id: widget.id, type: widget.type)),
-                    (Route<dynamic> route) => false);
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        Profile(id: widget.id, type: widget.type)),
+                (Route<dynamic> route) => false);
           },
         ),
       ),
-      body: FutureBuilder(
-        future: _usuarioProvider.getUserByType(widget.id, widget.type),
-
-        builder: (BuildContext context, AsyncSnapshot snapshot){
-
-          if(snapshot.data == null){
-            return Center(child: CircularProgressIndicator());
-          } else {
-
-            print(snapshot.data);
-            _emailController.text = snapshot.data.email;
-            _nameController.text = snapshot.data.nombres;
-            _surnameController.text = snapshot.data.apellidos;
-            _birthDateController.text = snapshot.data.fechaNacimiento;
-            _schoolController.text = snapshot.data.institucionEducativa;
-            _mobileController.text = snapshot.data.celular;
-            celularVisible = snapshot.data.celularVisible;
-            emailVisible = snapshot.data.emailVisible;
-
-            selectedDate = DateTime.parse(snapshot.data.fechaNacimiento);
-
-            return SingleChildScrollView(
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 24.0),
                 child: Container(
@@ -120,7 +128,7 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
                       Padding(
                         padding: EdgeInsets.only(top: 40.0),
                         child: _inputText.defaultIText(
-                            focus_names,
+                            focusName,
                             _nameController,
                             TextInputType.text,
                             'Nombres',
@@ -132,7 +140,7 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
                       Padding(
                         padding: EdgeInsets.only(top: 40.0),
                         child: _inputText.defaultIText(
-                            focus_surnames,
+                            focussurName,
                             _surnameController,
                             TextInputType.text,
                             'Apellidos',
@@ -142,13 +150,13 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
                             surnames),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(right: 30.0, left: 30.0),
+                        padding: EdgeInsets.only(top: 24),
                         child: _createFechaNac(context),
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 24.0),
                         child: _inputText.defaultIText(
-                            focus_email,
+                            focusEmail,
                             _emailController,
                             TextInputType.text,
                             'Correo electrónico',
@@ -160,7 +168,7 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
                       Padding(
                         padding: EdgeInsets.only(top: 24.0),
                         child: _inputText.defaultIText(
-                            focus_mobile,
+                            focusPhone,
                             _mobileController,
                             TextInputType.phone,
                             'Número de celular',
@@ -172,7 +180,7 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
                       Padding(
                         padding: EdgeInsets.only(top: 24.0),
                         child: _inputText.defaultIText(
-                            focus_school,
+                            focusSchool,
                             _schoolController,
                             TextInputType.text,
                             'Institución Educativa',
@@ -186,33 +194,31 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
                           child: Row(
                             children: <Widget>[
                               Checkbox(
-                                  value: celularVisible, 
-                                  onChanged: (newValue){
-                                    setState((){
-                                      celularVisible = newValue!;
-                                    });
-                                  },
+                                value: celularVisible,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    celularVisible = newValue!;
+                                  });
+                                },
                               ),
                               Text("Celular Visible para otros usuarios")
                             ],
-                          )
-                      ),
+                          )),
                       Padding(
                           padding: EdgeInsets.only(top: 24.0),
                           child: Row(
                             children: <Widget>[
                               Checkbox(
                                 value: emailVisible,
-                                onChanged: (newValue){
-                                  setState((){
+                                onChanged: (newValue) {
+                                  setState(() {
                                     emailVisible = newValue!;
                                   });
                                 },
                               ),
                               Text("Correo Visible para otros usuarios")
                             ],
-                          )
-                      ),
+                          )),
                       Padding(
                           padding: EdgeInsets.only(top: 22.0, bottom: 40.0),
                           child: _registerButton(context)),
@@ -220,10 +226,7 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
                   ),
                 ),
               ),
-            );
-          }
-        },
-      ),
+            ),
     );
   }
 
@@ -257,8 +260,6 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
                   celularVisible,
                   emailVisible,
                   context);
-              //Navigator.of(context).pushReplacement(MaterialPageRoute(
-              //   builder: (BuildContext context) => SignIn()));
             } else {
               setState(() {
                 if (_nameController.text.isEmpty) names = true;
