@@ -41,9 +41,18 @@ class UsuarioProvider {
                         id: jsonData['id'], type: jsonData['tipoUsuario'])),
                 (Route<dynamic> route) => false);
       }
-    } else {
+    } else if(response.statusCode == 403) {
+      _alert.createAlert(context, 'Cuenta no verificada',
+          'El usuario se encuentra registrado, pero no se ha verificado', 'Aceptar');
+    } else if(response.statusCode == 401) {
+      _alert.createAlert(context, 'Cuenta no disponible',
+          'El usuario ha eliminado su cuenta.', 'Aceptar');
+    } else if(response.statusCode == 404) {
       _alert.createAlert(context, 'Credenciales inválidas',
           'El usuario o contraseña ingresados son incorrectos', 'Aceptar');
+    } else {
+      _alert.createAlert(context, 'Algo salió mal',
+          'No se pudo procesar la solicitud, intente más tarde.', 'Aceptar');
     }
   }
 
@@ -181,14 +190,6 @@ class UsuarioProvider {
 
     var jsonData = json.decode(response.body);
     //var userData = json.decode(jsonData["usuario"]);
-
-    print("csmr");
-    print(jsonData["usuario"]);
-    print(jsonData["usuario"]["nombres"]);
-
-    print(response.statusCode);
-    print(id);
-    print(type);
 
     if (response.statusCode == 200 && type == Constants.DOCENTE_USUARIO) {
 
