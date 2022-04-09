@@ -1,9 +1,11 @@
 class ForumHolder {
+  final int id;
   final String imagUrl;
   final String title;
   final String description;
 
   ForumHolder({
+    required this.id,
     required this.imagUrl,
     required this.title,
     required this.description,
@@ -11,6 +13,7 @@ class ForumHolder {
 }
 
 //For rows and columns with card images
+/*
 final rowList = [
   ForumHolder(
     imagUrl:
@@ -31,3 +34,4 @@ final rowList = [
     description: 'Respuestas: 1',
   )
 ];
+*/
