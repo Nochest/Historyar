@@ -5,6 +5,7 @@ import 'package:historyar_app/model/user.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
 import 'package:historyar_app/pages/main_menu_pages/profile_page.dart';
 import 'package:historyar_app/pages/register_pages/success_register.dart';
+import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
 import 'package:historyar_app/pages/sign_in_pages/success_reset.dart';
 import 'package:historyar_app/utils/alert.dart';
 
@@ -305,6 +306,47 @@ class UsuarioProvider {
           context, "Algo salió mal", "No se ha podido actualizar.",
           "aceptar");
     }
+  }
+
+  borrarCuenta(
+      int id,
+      String password,
+      BuildContext context) async {
+
+    var response = await http.get(
+        Uri.parse("${Constants.URL}/api/usuarios/${id}"));
+
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+
+      if(jsonData["password"] == password){
+
+        var response2 = await http.put(
+            Uri.parse("${Constants.URL}/api/usuarios/eliminar-status/${id}"));
+
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+            builder: (BuildContext context) => SignIn()), (
+            Route<dynamic> route) => false);
+      } else {
+        _alert.createAlert(
+            context, "Contraseña Inválida", "La contraseña ingresada no es válida.",
+            "aceptar");
+      }
+    } else {
+      _alert.createAlert(
+          context, "Algo salió mal", "No se ha podido actualizar.",
+          "aceptar");
+    }
+
+  }
+
+  revisarContrasenia(
+      int id,
+      BuildContext context
+      ) async {
+
   }
 
 }
