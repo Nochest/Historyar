@@ -164,6 +164,12 @@ class _CommunityState extends State<Community> {
                                           onTap: (){
                                             //TODO: Go to journey detail passing data
 
+                                            Navigator.of(context).
+                                            pushAndRemoveUntil(MaterialPageRoute(
+                                                builder: (BuildContext context) =>
+                                                    ForumDetail(title: snapshot.data[i].title, id: snapshot.data[i].id, description: snapshot.data[i].description,
+                                                        type: widget.type, userId: widget.id)),
+                                                    (Route<dynamic> route) => true);
                                           },
                                         );
                                       }

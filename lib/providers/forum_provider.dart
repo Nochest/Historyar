@@ -173,7 +173,7 @@ class ForumProvider {
       int userId,
       BuildContext context) async {
     var response = await http.delete(
-        Uri.parse("${Constants.URL}/api/publicaciones/${id}"));
+        Uri.parse("${Constants.URL}/api/publicaciones/eliminar/${id}"));
 
     print(response.statusCode);
 
