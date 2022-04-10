@@ -11,7 +11,7 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Timer(
-        Duration(seconds: 5),
+        Duration(seconds: 3),
         () => Navigator.of(context).pushReplacement(
             MaterialPageRoute(builder: (BuildContext context) => SignIn())));
     return Container(
@@ -20,14 +20,10 @@ class Splash extends StatelessWidget {
       color: _colors.lightBlue,
       child: Padding(
         padding: const EdgeInsets.only(top: 48),
-        child: Column(
-          children: [
-            Image(
-              image: AssetImage('assets/splash/historyar_name.png'),
-              width: double.maxFinite,
-              fit: BoxFit.fill,
-            ),
-          ],
+        child: Image(
+          image: AssetImage('assets/logo.png'),
+          height: 300,
+          width: 300,
         ),
       ),
     );
