@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:historyar_app/model/forum_holder.dart';
+import 'package:historyar_app/pages/forum_pages/forum_creation.dart';
 import 'package:historyar_app/pages/forum_pages/forum_detail.dart';
+import 'package:historyar_app/pages/forum_pages/my_forums.dart';
 import 'package:historyar_app/providers/forum_provider.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/app_bar.dart';
@@ -81,6 +83,10 @@ class _CommunityState extends State<Community> {
                                 ),
                                 onTap: (){
                                   //TODO: Go to my notes
+
+                                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                                      builder: (BuildContext context) => ForumCreation(id: widget.id, type: widget.type)), (
+                                      Route<dynamic> route) => false);
                                 },
                               ),
                             ),
@@ -108,6 +114,10 @@ class _CommunityState extends State<Community> {
                                 ),
                                 onTap: (){
                                   //TODO: Go to my notes
+
+                                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                                      builder: (BuildContext context) => MyForums(id: widget.id, type: widget.type)), (
+                                      Route<dynamic> route) => false);
                                 },
                               ),
                             ),

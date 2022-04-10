@@ -39,7 +39,7 @@ class _ForumDetailState extends State<ForumDetail> {
     return Scaffold(
       backgroundColor: _colorPalette.cream,
       body: FutureBuilder(
-        future: _forumProvider.getCommments(widget.id),
+        future: _forumProvider.getCommments(widget.id, widget.userId),
 
         builder: (BuildContext context, AsyncSnapshot snapshot){
           if(snapshot.data == null){

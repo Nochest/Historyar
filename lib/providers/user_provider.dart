@@ -342,11 +342,4 @@ class UsuarioProvider {
 
   }
 
-  revisarContrasenia(
-      int id,
-      BuildContext context
-      ) async {
-
-  }
-
 }
