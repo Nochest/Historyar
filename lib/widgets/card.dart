@@ -34,7 +34,7 @@ class _VerticalCardItemState extends State<VerticalCardItem> {
                 borderRadius: BorderRadius.circular(10.0),
                 child: FadeInImage.assetNetwork(
                   image: widget.foros[widget.id].imagUrl,
-                  placeholder: 'assets/04_Login.png',
+                  placeholder: 'assets/1872.jpg',
                   width: double.maxFinite,
                   fit: BoxFit.fitWidth,
                 ),

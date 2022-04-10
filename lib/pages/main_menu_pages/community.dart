@@ -72,9 +72,36 @@ class _CommunityState extends State<Community> {
                                     padding: EdgeInsets.symmetric(horizontal: 24.0),
                                     child: Row(
                                       children: [
+                                        Icon(Icons.add, color: _colorPalette.yellow, size: 24.0,),
+                                        SizedBox(width: 20.0),
+                                        Text('Crear Publicación', style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w700, fontSize: 24.0))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                onTap: (){
+                                  //TODO: Go to my notes
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 24.0),
+                              child: GestureDetector(
+                                child: Container(
+                                  width: double.maxFinite,
+                                  height: 48.0,
+                                  decoration: BoxDecoration(
+                                    color: _colorPalette.lightBlue,
+                                    border: Border.all(color: _colorPalette.yellow, width: 2.0),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child:Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 24.0),
+                                    child: Row(
+                                      children: [
                                         Icon(Icons.notes_sharp, color: _colorPalette.yellow, size: 24.0,),
                                         SizedBox(width: 20.0),
-                                        Text('Mis anotaciones', style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w700, fontSize: 24.0))
+                                        Text('Mis publicaciones', style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w700, fontSize: 24.0))
                                       ],
                                     ),
                                   ),
@@ -98,7 +125,10 @@ class _CommunityState extends State<Community> {
                                 onTap: (){
                                   Navigator.of(context).
                                   pushAndRemoveUntil(MaterialPageRoute(
-                                      builder: (BuildContext context) => ForumDetail(title: snapshot.data[0].title, id: snapshot.data[0].id, type: widget.type,)), (Route<dynamic> route) => true);
+                                      builder: (BuildContext context) =>
+                                          ForumDetail(title: snapshot.data[0].title, id: snapshot.data[0].id, description: snapshot.data[0].description,
+                                              type: widget.type, userId: widget.id)),
+                                          (Route<dynamic> route) => true);
                                 },
                               ),
                             ),

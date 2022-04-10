@@ -1,3 +1,5 @@
+import 'package:historyar_app/model/comment.dart';
+
 class ForumHolder {
   final int id;
   final String imagUrl;
@@ -8,7 +10,7 @@ class ForumHolder {
     required this.id,
     required this.imagUrl,
     required this.title,
-    required this.description,
+    required this.description
   });
 }
 
