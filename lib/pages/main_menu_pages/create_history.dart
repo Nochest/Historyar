@@ -119,7 +119,7 @@ class _CreateHistoryState extends State<CreateHistory> {
 
     this.arSessionManager!.onInitialize(
           showFeaturePoints: false,
-          showPlanes: false,
+          showPlanes: true,
           customPlaneTexturePath: "Images/triangle.png",
           showWorldOrigin: false,
           handlePans: true,
