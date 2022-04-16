@@ -2,6 +2,7 @@
 
 import 'package:historyar_app/helpers/constant_helpers.dart';
 import 'package:historyar_app/model/story.dart';
+import 'package:historyar_app/pages/story_pages/my_stories.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -69,6 +70,31 @@ class StoryProvider {
     } else {
       return "hola";
     }
+  }
+
+
+  deleteHistoria(int id,
+      int historiaId,
+      int type,
+      BuildContext context) async {
+    print(historiaId);
+
+    var response = await http.delete(
+        Uri.parse("${Constants.URL}/api/historias/eliminar/${historiaId}"));
+
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => MyStories(id: id, type: type))
+      );
+    } else{
+      _alert.createAlert(
+          context, "Algo salió mal", "No se ha podido eliminar la historia.",
+          "Aceptar");
+    }
+
+    return 0;
   }
 
 }

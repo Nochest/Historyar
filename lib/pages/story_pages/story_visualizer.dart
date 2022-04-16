@@ -59,15 +59,7 @@ class _StoryVisualizerState extends State<StoryVisualizer> {
         title: Text(
           'Mi Historia',
           style: TextStyle(color: _colorPalette.yellow),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (BuildContext context) => StoryDetail(id: widget.id, historiaId: widget.historiaId, type: widget.type)),
-                    (Route<dynamic> route) => false);
-          },
-        ),
+        )
       ),
       backgroundColor: _colorPalette.cream,
       body: SingleChildScrollView(

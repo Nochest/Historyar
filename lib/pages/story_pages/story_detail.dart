@@ -38,15 +38,7 @@ class _StoryDetailState extends State<StoryDetail> {
         title: Text(
           'Mi Historia',
           style: TextStyle(color: _colorPalette.yellow),
-        ),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (BuildContext context) => MyStories(id: widget.id, type: widget.type)),
-                    (Route<dynamic> route) => false);
-          },
-        ),
+        )
       ),
       backgroundColor: _colorPalette.cream,
       body: FutureBuilder(
@@ -62,10 +54,11 @@ class _StoryDetailState extends State<StoryDetail> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushAndRemoveUntil(
+                        Navigator.of(context).push(
                             MaterialPageRoute(builder: (BuildContext context) => StoryVisualizer(id: widget.id, historiaId: widget.historiaId,
-                                url:  snapshot.data!.url, type: widget.type)),
-                                (Route<dynamic> route) => false);
+                                url:  snapshot.data!.url, type: widget.type)
+                            )
+                        );
                       }, // Image tapped
                       child: Image.asset(
                         'assets/video.png',
@@ -83,16 +76,6 @@ class _StoryDetailState extends State<StoryDetail> {
                               fontSize: 24.0,
                               fontWeight: FontWeight.w700),
                           textAlign: TextAlign.left,
-                        ),
-                        TextButton(
-                          onPressed: () {
-
-                          },
-                          child: Text('Editar',
-                              style: TextStyle(
-                                  color: _colorPalette.lightBlue,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w500)),
                         ),
                       ],
                     ),

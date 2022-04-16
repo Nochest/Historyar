@@ -20,6 +20,8 @@ class ForumProvider {
 
     var jsonData = json.decode(response.body);
 
+    print(response.statusCode);
+
     List<ForumHolder> foros = [];
 
     for(var aux in jsonData) {
@@ -127,9 +129,9 @@ class ForumProvider {
         body: bodyRequest);
 
     if (response.statusCode == 201) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-          builder: (BuildContext context) => Community(id: usuarioId, type: type)), (
-          Route<dynamic> route) => false);
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => Community(id: usuarioId, type: type))
+          );
     } else {
       _alert.createAlert(
           context, "Algo salió mal", "No se ha podido publicar.",
@@ -178,10 +180,10 @@ class ForumProvider {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+      Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) =>
-              MyForums(id: userId, type: type)), (
-          Route<dynamic> route) => false);
+              MyForums(id: userId, type: type)
+      ));
     } else {
       _alert.createAlert(
           context, "Algo salió mal", "No se ha podido borrar.",
@@ -210,9 +212,9 @@ class ForumProvider {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-          builder: (BuildContext context) => MyForums(id: usuarioId, type: type)), (
-          Route<dynamic> route) => false);
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => MyForums(id: usuarioId, type: type))
+          );
     } else {
       _alert.createAlert(
           context, "Algo salió mal", "No se ha podido editar.",

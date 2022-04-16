@@ -107,9 +107,11 @@ class _ProfileState extends State<Profile> {
                               fontWeight: FontWeight.w700),
                         ),
                         onTap: () {
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(builder: (BuildContext context) => MyStories(id: widget.id, type: widget.type)),
-                                  (Route<dynamic> route) => false);
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder:
+                                  (BuildContext context) => MyStories(id: widget.id, type: widget.type)
+                              )
+                          );
                         },
                       ),
                     ),

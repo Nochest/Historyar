@@ -37,58 +37,71 @@ class _MyForumsState extends State<MyForums> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: _colorPalette.cream,
-      appBar: AppBar(
-        backgroundColor: _colorPalette.darkBlue,
-        title:
-        Text('Mis Publicaciones', style: TextStyle(fontWeight: FontWeight.w700)),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (BuildContext context) => Community(id: widget.id, type: widget.type)),
-                    (Route<dynamic> route) => false);
-          },
-        ),
-      ),
-      body: Container(
-        child: FutureBuilder(
-          future: _foroProvider.getByUserId(widget.id, widget.type),
-          builder: (BuildContext context, AsyncSnapshot snapshot){
-            if(snapshot.data == null) {
-              return Center(child: CircularProgressIndicator());
-            } else {
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int i){
-                  return Column(
-                      children:[
-                        Divider(color: Colors.black),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10.0, left: 10.0),
-                          child: ListTile(
-                            title: Text(snapshot.data[i].title,
-                                style: TextStyle(
-                                    fontSize: 20.0,
-                                    color: _colorPalette.darkBlue),
-                                textAlign: TextAlign.justify),
-                            subtitle: Text(snapshot.data[i].description,
-                                style: TextStyle(
-                                    fontSize: 15.0,
-                                    color: _colorPalette.text),
-                                textAlign: TextAlign.justify),
-                            onTap: () {
-                                createAlert(context, snapshot.data[i].id);
-                            },
-                          )
-                        ),
-                      ]
-                  );
-                },
+    return WillPopScope(
+      onWillPop: () async {
+
+        Navigator.of(context).push(
+          MaterialPageRoute(builder:
+              (BuildContext context) => Community(id: widget.id, type: widget.type)
+          ),
+        );
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: _colorPalette.cream,
+        appBar: AppBar(
+          backgroundColor: _colorPalette.darkBlue,
+          title:
+          Text('Mis Publicaciones', style: TextStyle(fontWeight: FontWeight.w700)),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder:
+                      (BuildContext context) => Community(id: widget.id, type: widget.type)
+                  ),
               );
-            }
-          },
+            },
+          ),
+        ),
+        body: Container(
+          child: FutureBuilder(
+            future: _foroProvider.getByUserId(widget.id, widget.type),
+            builder: (BuildContext context, AsyncSnapshot snapshot){
+              if(snapshot.data == null) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int i){
+                    return Column(
+                        children:[
+                          Divider(color: Colors.black),
+                          Padding(
+                            padding: EdgeInsets.only(right: 10.0, left: 10.0),
+                            child: ListTile(
+                              title: Text(snapshot.data[i].title,
+                                  style: TextStyle(
+                                      fontSize: 20.0,
+                                      color: _colorPalette.darkBlue),
+                                  textAlign: TextAlign.justify),
+                              subtitle: Text(snapshot.data[i].description,
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: _colorPalette.text),
+                                  textAlign: TextAlign.justify),
+                              onTap: () {
+                                  createAlert(context, snapshot.data[i].id);
+                              },
+                            )
+                          ),
+                        ]
+                    );
+                  },
+                );
+              }
+            },
+          ),
         ),
       ),
     );
@@ -137,8 +150,10 @@ class _MyForumsState extends State<MyForums> {
         child: Text("Editar", style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w600)),
         onPressed: (){
           Navigator.of(context).
-          pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => ForumEdit(id: id, type: widget.type, userId: widget.id)),
-                  (Route<dynamic> route) => true);
+          push(MaterialPageRoute(
+              builder: (BuildContext context) => ForumEdit(id: id, type: widget.type, userId: widget.id)
+            )
+          );
         }
     );
   }

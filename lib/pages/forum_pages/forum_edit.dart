@@ -84,15 +84,7 @@ class _ForumEditState extends State<ForumEdit> {
       appBar: AppBar(
         backgroundColor: _colorPalette.darkBlue,
         title:
-        Text('Editar Publicación', style: TextStyle(fontWeight: FontWeight.w700)),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (BuildContext context) => MyForums(id: widget.id, type: widget.type)),
-                    (Route<dynamic> route) => false);
-          },
-        ),
+        Text('Editar Publicación', style: TextStyle(fontWeight: FontWeight.w700))
       ),
       body: isLoading
           ? Center(

@@ -84,9 +84,11 @@ class _CommunityState extends State<Community> {
                                 onTap: (){
                                   //TODO: Go to my notes
 
-                                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                                      builder: (BuildContext context) => ForumCreation(id: widget.id, type: widget.type)), (
-                                      Route<dynamic> route) => false);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder:
+                                          (BuildContext context) => ForumCreation(id: widget.id, type: widget.type)
+                                    )
+                                  );
                                 },
                               ),
                             ),
@@ -115,9 +117,11 @@ class _CommunityState extends State<Community> {
                                 onTap: (){
                                   //TODO: Go to my notes
 
-                                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-                                      builder: (BuildContext context) => MyForums(id: widget.id, type: widget.type)), (
-                                      Route<dynamic> route) => false);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder:
+                                          (BuildContext context) => MyForums(id: widget.id, type: widget.type)
+                                    )
+                                  );
                                 },
                               ),
                             ),
@@ -134,11 +138,12 @@ class _CommunityState extends State<Community> {
                                 child: VerticalCardItem(0, snapshot.data),
                                 onTap: (){
                                   Navigator.of(context).
-                                  pushAndRemoveUntil(MaterialPageRoute(
+                                  push(MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           ForumDetail(title: snapshot.data[0].title, id: snapshot.data[0].id, description: snapshot.data[0].description,
-                                              type: widget.type, userId: widget.id)),
-                                          (Route<dynamic> route) => true);
+                                              type: widget.type, userId: widget.id)
+                                    )
+                                  );
                                 },
                               ),
                             ),
@@ -165,11 +170,12 @@ class _CommunityState extends State<Community> {
                                             //TODO: Go to journey detail passing data
 
                                             Navigator.of(context).
-                                            pushAndRemoveUntil(MaterialPageRoute(
+                                            push(MaterialPageRoute(
                                                 builder: (BuildContext context) =>
                                                     ForumDetail(title: snapshot.data[i].title, id: snapshot.data[i].id, description: snapshot.data[i].description,
-                                                        type: widget.type, userId: widget.id)),
-                                                    (Route<dynamic> route) => true);
+                                                        type: widget.type, userId: widget.id)
+                                              )
+                                            );
                                           },
                                         );
                                       }

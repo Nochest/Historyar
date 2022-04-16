@@ -32,28 +32,20 @@ class _MyStoriesState extends State<MyStories> {
       appBar: AppBar(
         backgroundColor: _colorPalette.darkBlue,
         title:
-        Text('Mis Historias', style: TextStyle(fontWeight: FontWeight.w700)),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (BuildContext context) => Profile(id: widget.id, type: widget.type)),
-                    (Route<dynamic> route) => false);
-          },
-        ),
+        Text('Mis Historias', style: TextStyle(fontWeight: FontWeight.w700))
       ),
       body: Container(
         child: FutureBuilder(
           future: _storyProvider.getByUserId(widget.id, widget.type),
-          builder: (BuildContext context, AsyncSnapshot snapshot){
-            if(snapshot.data == null) {
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.data == null) {
               return Center(child: CircularProgressIndicator());
             } else {
               return ListView.builder(
                 itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int i){
+                itemBuilder: (BuildContext context, int i) {
                   return Column(
-                      children:[
+                      children: [
                         Divider(color: Colors.black),
                         Padding(
                             padding: EdgeInsets.only(right: 10.0, left: 10.0),
@@ -68,11 +60,21 @@ class _MyStoriesState extends State<MyStories> {
                                       fontSize: 15.0,
                                       color: _colorPalette.text),
                                   textAlign: TextAlign.justify),
+                              trailing: IconButton(
+                                  onPressed: () {
+                                    createAlert(context, snapshot.data[i].id);
+                                  }, icon: Icon(Icons.delete)
+                              ),
                               onTap: () {
                                 //createAlert(context, snapshot.data[i].id);
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(builder: (BuildContext context) => StoryDetail(id: widget.id, historiaId: snapshot.data[i].id, type: widget.type)),
-                                        (Route<dynamic> route) => false);
+                                Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            StoryDetail(id: widget.id,
+                                                historiaId: snapshot.data[i].id,
+                                                type: widget.type)
+                                    )
+                                );
                               },
                             )
                         ),
@@ -85,7 +87,57 @@ class _MyStoriesState extends State<MyStories> {
         ),
       ),
     );
+  }
 
-
+  void createAlert(BuildContext context, int historiaId) {
+    showDialog(
+        barrierColor: _colorPalette.lightBlue.withOpacity(0.6),
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: _colorPalette.cream,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+            title: Padding(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Center(child: Text('Opciones', style: TextStyle(color: _colorPalette.darkBlue,fontWeight: FontWeight.w700, fontSize: 24.0)))),
+            content: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text('Elija la opción', style: TextStyle(color: _colorPalette.text,fontWeight: FontWeight.w400, fontSize: 14.0), textAlign: TextAlign.justify),
+                  SizedBox(height: 24.0),
+                  MaterialButton(
+                      height: 36.0,
+                      minWidth: 126.0,
+                      color: _colorPalette.lightBlue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100.0)
+                      ),
+                      child: Text("Cancelar", style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w600)),
+                      onPressed: (){
+                        Navigator.of(context).pop();
+                      }
+                  ),
+                  SizedBox(height: 8.0),
+                  MaterialButton(
+                      height: 36.0,
+                      minWidth: 126.0,
+                      color: _colorPalette.lightBlue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100.0)
+                      ),
+                      child: Text("Eliminar", style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w600)),
+                      onPressed: (){
+                        _storyProvider.deleteHistoria(widget.id, historiaId, widget.type, context);
+                      }
+                  )
+                ],
+              ),
+            ),
+          );
+        }
+    );
   }
 }

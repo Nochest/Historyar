@@ -144,7 +144,7 @@ class UsuarioProvider {
     } else {
       _alert.createAlert(
           context, "Algo salió mal", "No se ha encontrado el correo.",
-          "aceptar");
+          "Aceptar");
     }
   }
 
@@ -256,9 +256,9 @@ class UsuarioProvider {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-          builder: (BuildContext context) => Profile(id: id, type: type)), (
-          Route<dynamic> route) => false);
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => Profile(id: id, type: type))
+          );
     } else {
       _alert.createAlert(
           context, "Algo salió mal", "No se ha podido actualizar.",
@@ -298,9 +298,9 @@ class UsuarioProvider {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
-          builder: (BuildContext context) => Profile(id: id, type: type)), (
-          Route<dynamic> route) => false);
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => Profile(id: id, type: type))
+          );
     } else {
       _alert.createAlert(
           context, "Algo salió mal", "No se ha podido actualizar.",
