@@ -34,7 +34,7 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
   Alert _alert = Alert();
-  var _usuarioProvider = UsuarioProvider();
+  var _usuarioProvider = UserProvider();
 
   bool names = false;
   bool surnames = false;

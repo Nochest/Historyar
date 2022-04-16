@@ -37,6 +37,15 @@ class _ForumDetailState extends State<ForumDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          backgroundColor: _colorPalette.lightBlue,
+          centerTitle: true,
+          elevation: 0,
+          title: Text(
+            widget.title,
+            style: TextStyle(color: _colorPalette.yellow),
+          ),
+        ),
       backgroundColor: _colorPalette.cream,
       body: FutureBuilder(
         future: _forumProvider.getCommments(widget.id, widget.userId),
@@ -51,23 +60,6 @@ class _ForumDetailState extends State<ForumDetail> {
                     padding: EdgeInsets.symmetric(horizontal: 24.0),
                     child: Column(
                       children: [
-                        Container(
-                          width: double.maxFinite,
-                          height: 48.0,
-                          decoration: BoxDecoration(
-                              color: _colorPalette.lightBlue,
-                              border:
-                              Border.all(color: _colorPalette.yellow, width: 2.0),
-                              borderRadius: BorderRadius.vertical(
-                                  bottom: Radius.circular(25.0))),
-                          child: Center(
-                            child: Text(widget.title,
-                                style: TextStyle(
-                                    color: _colorPalette.yellow,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 24.0)),
-                          ),
-                        ),
                         Padding(
                             padding: EdgeInsets.only(top: 24.0),
                             child: Container(
@@ -154,11 +146,7 @@ class _ForumDetailState extends State<ForumDetail> {
             );
           }
         },
-      ),
-      floatingActionButton: historyarButtonApp(context, false),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar:
-          historyarBottomAppBar(context, false, false, true, false, widget.userId, widget.type),
+      )
     );
   }
 

@@ -23,7 +23,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  var _usuarioProvider = UsuarioProvider();
+  var _usuarioProvider = UserProvider();
 
   InputText _inputText = InputText();
   ColorPalette _colorPalette = ColorPalette();

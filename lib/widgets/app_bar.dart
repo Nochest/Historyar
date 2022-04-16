@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:historyar_app/pages/main_menu_pages/community.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
+import 'package:historyar_app/pages/main_menu_pages/lounge_page.dart';
 import 'package:historyar_app/pages/main_menu_pages/profile_page.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 
@@ -39,7 +40,10 @@ Widget historyarBottomAppBar( BuildContext context, bool b1, bool b2, bool b3, b
                   GestureDetector(
                     child: Icon(Icons.meeting_room_rounded, color: b2? _colorPalette.yellow : _colorPalette.info, size: 32.0),
                     onTap: (){
-                      //TODO: go to salas
+                      Navigator.push(
+                          context,
+                          PageRouteBuilder(pageBuilder: (context, animation1, animation2) => Lounge(id: id, type: type), transitionDuration: Duration.zero)
+                      );
                     },
                   ),
                   Center(child: Text('Salas', style: TextStyle(color: b2? _colorPalette.yellow : _colorPalette.info, fontWeight: FontWeight.w700, fontSize: 11.0)))

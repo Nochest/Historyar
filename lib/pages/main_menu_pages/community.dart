@@ -33,6 +33,15 @@ class _CommunityState extends State<Community> {
   @override
   Widget build(BuildContext context) {
       return Scaffold(
+        appBar: AppBar(
+          backgroundColor: _colorPalette.lightBlue,
+          centerTitle: true,
+          elevation: 0,
+          title: Text(
+            'Comunidad',
+            style: TextStyle(color: _colorPalette.yellow),
+          ),
+        ),
         backgroundColor: _colorPalette.cream,
         body: FutureBuilder(
           future: _forumProvider.getAll(widget.type),
@@ -41,26 +50,14 @@ class _CommunityState extends State<Community> {
             if(snapshot.data == null){
               return Center(child: CircularProgressIndicator());
             } else {
-              return SafeArea(
-                child: SingleChildScrollView(
+              return SingleChildScrollView(
                   child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 24.0),
                       child: Column(
                           children: [
-                            Container(
-                              width: double.maxFinite,
-                              height: 48.0,
-                              decoration: BoxDecoration(
-                                  color: _colorPalette.lightBlue,
-                                  border: Border.all(color: _colorPalette.yellow, width: 2.0),
-                                  borderRadius: BorderRadius.vertical(bottom: Radius.circular(25.0))
-                              ),
-                              child: Center(
-                                child: Text('Comunidad', style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w700, fontSize: 24.0)),
-                              ),
-                            ),
+                            const SizedBox(height: 15),
                             Padding(
-                              padding: EdgeInsets.only(top: 24.0),
+                              padding: EdgeInsets.only(top: 15.0),
                               child: GestureDetector(
                                 child: Container(
                                   width: double.maxFinite,
@@ -186,8 +183,8 @@ class _CommunityState extends State<Community> {
                           ]
                       )
                   ),
-                ),
-              );
+                );
+
             }
           },
         ),

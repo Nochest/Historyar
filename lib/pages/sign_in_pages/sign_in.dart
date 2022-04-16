@@ -26,7 +26,7 @@ class _SignInState extends State<SignIn> {
   FocusNode focus_email = FocusNode();
   FocusNode focus_password = FocusNode();
 
-  var _usuarioProvider =  UsuarioProvider();
+  var _usuarioProvider =  UserProvider();
 
   @override
   Widget build(BuildContext context) {

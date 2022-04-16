@@ -14,7 +14,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UsuarioProvider {
+class UserProvider {
   Alert _alert = Alert();
 
   signIn(String email, String password, BuildContext context) async {

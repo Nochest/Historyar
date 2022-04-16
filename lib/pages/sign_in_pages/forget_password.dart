@@ -18,7 +18,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
   Alert _alert = Alert();
-  var _usuarioProvider = UsuarioProvider();
+  var _usuarioProvider = UserProvider();
 
   bool email = false;
   FocusNode focus_email = FocusNode();
