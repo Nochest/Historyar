@@ -4,6 +4,7 @@ import 'package:historyar_app/model/user.dart';
 import 'package:historyar_app/pages/profile_pages/student_edit_profile.dart';
 import 'package:historyar_app/pages/profile_pages/teacher_edit_profile.dart';
 import 'package:historyar_app/pages/register_pages/teacher_register.dart';
+import 'package:historyar_app/pages/story_pages/my_stories.dart';
 import 'package:historyar_app/providers/user_provider.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/app_bar.dart';
@@ -105,6 +106,13 @@ class _ProfileState extends State<Profile> {
                               fontSize: 24.0,
                               fontWeight: FontWeight.w700),
                         ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                              MaterialPageRoute(builder:
+                                  (BuildContext context) => MyStories(id: widget.id, type: widget.type)
+                              )
+                          );
+                        },
                       ),
                     ),
                     const SizedBox(height: 24),

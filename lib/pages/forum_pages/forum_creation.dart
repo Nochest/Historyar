@@ -57,15 +57,7 @@ class _ForumCreationState extends State<ForumCreation> {
       appBar: AppBar(
         backgroundColor: _colorPalette.darkBlue,
         title:
-        Text('Nueva Publicación', style: TextStyle(fontWeight: FontWeight.w700)),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (BuildContext context) => Community(id: widget.id, type: widget.type)),
-                    (Route<dynamic> route) => false);
-          },
-        ),
+        Text('Nueva Publicación', style: TextStyle(fontWeight: FontWeight.w700))
       ),
       body: SingleChildScrollView(
         child: Padding(
