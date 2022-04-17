@@ -5,7 +5,7 @@ class Sala {
   final String codigo;
   final String password;
   final String fechaCreacion;
-  final String fechaFin;
+  final String? fechaFin;
 
   Sala(this.id, this.titulo, this.descripcion,
       this.codigo, this.password, this.fechaCreacion, this.fechaFin);

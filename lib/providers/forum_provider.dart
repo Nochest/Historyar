@@ -18,9 +18,9 @@ class ForumProvider {
     var response = await http.get(
         Uri.parse("${Constants.URL}/api/publicaciones"));
 
-    var jsonData = json.decode(response.body);
-
-    print(response.statusCode);
+    var jsonData = json.decode(
+        Utf8Decoder().convert(response.bodyBytes).toString()
+    );
 
     List<ForumHolder> foros = [];
 
@@ -45,7 +45,9 @@ class ForumProvider {
     print("0");
     print(response.statusCode);
 
-    var jsonData = json.decode(response.body);
+    var jsonData = json.decode(
+        Utf8Decoder().convert(response.bodyBytes).toString()
+    );
 
     if(response.statusCode == 200){
       ForumHolder foro = ForumHolder(id: jsonData["id"],
@@ -64,7 +66,9 @@ class ForumProvider {
     var response = await http.get(
         Uri.parse("${Constants.URL}/api/comentarios/publicacion/${id}"));
 
-    var jsonData = json.decode(response.body);
+    var jsonData = json.decode(
+        Utf8Decoder().convert(response.bodyBytes).toString()
+    );
 
     List<Comment> comentarios = [];
 
@@ -92,7 +96,9 @@ class ForumProvider {
     print(response.statusCode);
     print(id);
 
-    var jsonData = json.decode(response.body);
+    var jsonData = json.decode(
+        Utf8Decoder().convert(response.bodyBytes).toString()
+    );
 
     List<ForumHolder> foros = [];
 
@@ -125,7 +131,7 @@ class ForumProvider {
 
     var response = await http.post(
         Uri.parse("${Constants.URL}/api/publicaciones/crear"),
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json;  charset=UTF-8"},
         body: bodyRequest);
 
     if (response.statusCode == 201) {

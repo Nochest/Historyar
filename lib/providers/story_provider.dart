@@ -17,7 +17,9 @@ class StoryProvider {
     print(response.statusCode);
     print(id);
 
-    var jsonData = json.decode(response.body);
+    var jsonData = json.decode(
+        Utf8Decoder().convert(response.bodyBytes).toString()
+    );
 
     List<Historia> historias = [];
 
@@ -37,7 +39,9 @@ class StoryProvider {
     var response = await http.get(
         Uri.parse("${Constants.URL}/api/historias/${id}"));
 
-    var jsonData = json.decode(response.body);
+    var jsonData = json.decode(
+        Utf8Decoder().convert(response.bodyBytes).toString()
+    );
 
     print(response.statusCode);
 

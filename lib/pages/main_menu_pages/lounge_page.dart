@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:historyar_app/model/lounge.dart';
+import 'package:historyar_app/pages/lounge_pages/lounge_creation.dart';
+import 'package:historyar_app/pages/lounge_pages/my_lounges.dart';
 import 'package:historyar_app/providers/lounge_provider.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/app_bar.dart';
@@ -36,7 +38,7 @@ class _LoungeState extends State<Lounge> {
       ),
       backgroundColor: _colorPalette.cream,
       body: FutureBuilder(
-        future: _salaProvider.getAll(widget.id, widget.type),
+        future: _salaProvider.getByUserId(widget.id, widget.type),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
@@ -62,7 +64,7 @@ class _LoungeState extends State<Lounge> {
                           color: _colorPalette.yellow,
                         ),
                         title: Text(
-                          'Mis Salas',
+                          'Ingresar a Sala',
                           style: TextStyle(
                               color: _colorPalette.yellow,
                               fontSize: 24.0,
@@ -70,6 +72,36 @@ class _LoungeState extends State<Lounge> {
                         ),
                         onTap: () {
 
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: _colorPalette.lightBlue,
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(
+                          color: _colorPalette.yellow,
+                          width: 2.0,
+                        ),
+                      ),
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.event_note,
+                          color: _colorPalette.yellow,
+                        ),
+                        title: Text(
+                          'Mis Salas',
+                          style: TextStyle(
+                              color: _colorPalette.yellow,
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.w700),
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder:
+                                  (BuildContext context) => MyLounges(id: widget.id, type: widget.type)
+                          ));
                         },
                       ),
                     ),
@@ -96,34 +128,10 @@ class _LoungeState extends State<Lounge> {
                               fontWeight: FontWeight.w700),
                         ),
                         onTap: () {
-
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: _colorPalette.lightBlue,
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: _colorPalette.yellow,
-                          width: 2.0,
-                        ),
-                      ),
-                      child: ListTile(
-                        leading: Icon(
-                          Icons.event_note,
-                          color: _colorPalette.yellow,
-                        ),
-                        title: Text(
-                          'Mis Historias',
-                          style: TextStyle(
-                              color: _colorPalette.yellow,
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        onTap: () {
-
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder:
+                                  (BuildContext context) => LoungeCreation(id: widget.id, type: widget.type)
+                          ));
                         },
                       ),
                     ),
@@ -138,16 +146,7 @@ class _LoungeState extends State<Lounge> {
                               fontSize: 24.0,
                               fontWeight: FontWeight.w700),
                           textAlign: TextAlign.left,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                          },
-                          child: Text('Editar',
-                              style: TextStyle(
-                                  color: _colorPalette.lightBlue,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w500)),
-                        ),
+                        )
                       ],
                     ),
                     Padding(

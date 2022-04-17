@@ -1,6 +1,9 @@
 import 'package:historyar_app/helpers/constant_helpers.dart';
+import 'package:historyar_app/model/attendance.dart';
 import 'package:historyar_app/model/lounge.dart';
+import 'package:historyar_app/model/quiz.dart';
 import 'package:historyar_app/model/story.dart';
+import 'package:historyar_app/pages/lounge_pages/lounge_detail.dart';
 import 'package:historyar_app/pages/main_menu_pages/lounge_page.dart';
 import 'package:historyar_app/pages/story_pages/my_stories.dart';
 import 'package:historyar_app/utils/alert.dart';
@@ -10,37 +13,33 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoungeProvider {
+class QuizProvider {
   Alert _alert = Alert();
 
-  Future<List<Sala>> getByUserId(int id, int type) async {
+  Future<Cuestionario?> getQuizByLoungeId(int id) async {
     var response = await http.get(
-        Uri.parse("${Constants.URL}/api/salas/usuario/${id}"));
+        Uri.parse("${Constants.URL}/api/cuestionarios/sala/${id}"));
 
     var jsonData = json.decode(
         Utf8Decoder().convert(response.bodyBytes).toString()
     );
 
-    List<Sala> salas = [];
+    if (response.statusCode == 200) {
+      Cuestionario cuestionario = Cuestionario(
+          jsonData["id"],
+          jsonData["tema"],
+          jsonData["descripcion"]);
 
-    for (var aux in jsonData) {
-      Sala sala = Sala(aux["id"],
-          aux["titulo"],
-          aux["descripcion"],
-          aux["codigo"],
-          aux["password"],
-          aux["fechaCreacion"],
-          aux["fechaFin"]);
-
-      salas.add(sala);
+      return cuestionario;
+    } else {
+      return null;
     }
-
-    return salas;
   }
 
   crear(String titulo,
       String descripcion,
-      String password,
+      int salaId,
+      String salaName,
       int usuarioId,
       int type,
       BuildContext context) async{
@@ -51,17 +50,15 @@ class LoungeProvider {
     Map data = {
       'titulo': titulo,
       'descripcion': descripcion,
-      'password': password,
-      'fechaCreacion': formatter.format(date),
-      'usuario' : {
-        'id' : usuarioId
+      'sala' : {
+        'id' : salaId
       }
     };
 
     var bodyRequest = json.encode(data);
 
     var response = await http.post(
-        Uri.parse("${Constants.URL}/api/salas/crear"),
+        Uri.parse("${Constants.URL}/api/cuestionarios/crear"),
         headers: {"Content-Type": "application/json"},
         body: bodyRequest);
 
@@ -69,7 +66,7 @@ class LoungeProvider {
 
     if (response.statusCode == 201) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => Lounge(id: usuarioId, type: type))
+          builder: (BuildContext context) => LoungeDetail(id: usuarioId, type: type, salaName: salaName, salaId: salaId,))
       );
     } else {
       _alert.createAlert(

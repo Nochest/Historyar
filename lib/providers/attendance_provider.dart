@@ -1,4 +1,5 @@
 import 'package:historyar_app/helpers/constant_helpers.dart';
+import 'package:historyar_app/model/attendance.dart';
 import 'package:historyar_app/model/lounge.dart';
 import 'package:historyar_app/model/story.dart';
 import 'package:historyar_app/pages/main_menu_pages/lounge_page.dart';
@@ -10,32 +11,33 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoungeProvider {
+class AttendanceProvider {
   Alert _alert = Alert();
 
-  Future<List<Sala>> getByUserId(int id, int type) async {
+  Future<List<Asistencia>> getAttendancesByLoungeId(int id) async {
     var response = await http.get(
-        Uri.parse("${Constants.URL}/api/salas/usuario/${id}"));
+        Uri.parse("${Constants.URL}/api/asistencias/sala/${id}"));
 
     var jsonData = json.decode(
         Utf8Decoder().convert(response.bodyBytes).toString()
     );
 
-    List<Sala> salas = [];
+    print("csmr");
+
+    List<Asistencia> asistencias = [];
 
     for (var aux in jsonData) {
-      Sala sala = Sala(aux["id"],
-          aux["titulo"],
-          aux["descripcion"],
-          aux["codigo"],
-          aux["password"],
-          aux["fechaCreacion"],
-          aux["fechaFin"]);
+      print(aux);
 
-      salas.add(sala);
+      Asistencia asistencia = Asistencia(aux["id"],
+          aux["usuario"]["nombres"],
+          aux["numeroGrupo"],
+          aux["nota"]);
+
+      asistencias.add(asistencia);
     }
 
-    return salas;
+    return asistencias;
   }
 
   crear(String titulo,

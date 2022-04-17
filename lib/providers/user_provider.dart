@@ -33,7 +33,9 @@ class UserProvider {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      jsonData = json.decode(response.body);
+      jsonData = json.decode(
+          Utf8Decoder().convert(response.bodyBytes).toString()
+      );
       if (jsonData != null) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
@@ -152,7 +154,9 @@ class UserProvider {
     var response = await http.get(
         Uri.parse("${Constants.URL}/api/usuarios/${id}"));
 
-    var jsonData = json.decode(response.body);
+    var jsonData = json.decode(
+        Utf8Decoder().convert(response.bodyBytes).toString()
+    );
 
     print(response.statusCode);
 
@@ -189,7 +193,9 @@ class UserProvider {
     var response = await http.get(
         Uri.parse("${Constants.URL}/api/usuarios/${aux}/${id}"));
 
-    var jsonData = json.decode(response.body);
+    var jsonData = json.decode(
+        Utf8Decoder().convert(response.bodyBytes).toString()
+    );
     //var userData = json.decode(jsonData["usuario"]);
 
     if (response.statusCode == 200 && type == Constants.DOCENTE_USUARIO) {
@@ -319,7 +325,9 @@ class UserProvider {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      var jsonData = json.decode(response.body);
+      var jsonData = json.decode(
+          Utf8Decoder().convert(response.bodyBytes).toString()
+      );
 
       if(jsonData["password"] == password){
 
