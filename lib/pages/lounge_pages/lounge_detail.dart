@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:historyar_app/model/attendance.dart';
 import 'package:historyar_app/pages/lounge_pages/my_lounges.dart';
+import 'package:historyar_app/pages/quiz_pages/quiz_creation.dart';
+import 'package:historyar_app/pages/quiz_pages/quiz_detail.dart';
 import 'package:historyar_app/providers/attendance_provider.dart';
 import 'package:historyar_app/providers/lounge_provider.dart';
 import 'package:historyar_app/providers/quiz_provider.dart';
@@ -166,7 +168,12 @@ class _LoungeDetailState extends State<LoungeDetail> {
                                   style: TextStyle(
                                       color: _colorPalette.text, fontWeight: FontWeight.w600)),
                               onPressed: () {
-
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder:
+                                      (BuildContext context) => QuizCreation(id: widget.id, type: widget.type, salaId: widget.salaId,
+                                        salaName: widget.salaName)
+                                  ),
+                                );
                               }
                           );
                       } else {
@@ -181,7 +188,11 @@ class _LoungeDetailState extends State<LoungeDetail> {
                                   style: TextStyle(
                                       color: _colorPalette.text, fontWeight: FontWeight.w600)),
                               onPressed: () {
-
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(builder:
+                                      (BuildContext context) => QuizDetail(id: widget.id, type: widget.type, salaId: widget.salaId, salaName: widget.salaName,)
+                                  ),
+                                );
                               }
                           );
                       }

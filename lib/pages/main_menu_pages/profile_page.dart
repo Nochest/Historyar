@@ -209,7 +209,8 @@ class _ProfileState extends State<Profile> {
                               ],
                             ),
                           ),
-                        )),
+                        )
+                    ),
                     Padding(
                         padding: EdgeInsets.only(top: 10.0, bottom: 50.0),
                         child: _eliminarButton(context)),
