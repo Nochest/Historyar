@@ -53,7 +53,7 @@ class _QuizDetailState extends State<QuizDetail> {
                 Text(pregunta.descripcion,
                     style: TextStyle(
                         color: _colorPalette.text,
-                        fontSize: 14.0,
+                        fontSize: 18.0,
                         fontWeight: FontWeight.w400)),
                 Text(pregunta.puntaje.toString() + " puntos",
                     style: TextStyle(
@@ -84,33 +84,37 @@ class _QuizDetailState extends State<QuizDetail> {
       texto = 'correcto';
     }
 
-    return Row(
-      children: [
-        Text(
-          alternativa,
-          style: TextStyle(
-              color: _colorPalette.yellow,
-              fontSize: 24.0,
-              fontWeight: FontWeight.w700),
-          textAlign: TextAlign.left,
-        ),
-        Text(
-          texto,
-          style: TextStyle(
-              color: _colorPalette.yellow,
-              fontSize: 24.0,
-              fontWeight: FontWeight.w700),
-          textAlign: TextAlign.left,
-        )
-      ],
+    return Padding(
+      padding: EdgeInsets.only(top: 8.0, bottom: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: Text(
+              alternativa,
+              style: TextStyle(
+                  color: _colorPalette.lightBlue,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w700),
+              textAlign: TextAlign.left,
+            ),
+          ),
+          Text(
+            texto,
+            style: TextStyle(
+                color: color,
+                fontSize: 15.0,
+                fontWeight: FontWeight.w700),
+            textAlign: TextAlign.left,
+          ),
+        ],
+      ),
     );
   }
 
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
   Alert _alert = Alert();
-  var _salaProvider = LoungeProvider();
-  var _atencionProvider = AttendanceProvider();
   var _cuestionarioProvider = QuizProvider();
 
   @override
@@ -205,9 +209,8 @@ class _QuizDetailState extends State<QuizDetail> {
                     FutureBuilder(
                         future: _cuestionarioProvider.getQuestionsByQuizId(snapshot.data!.id),
                         builder: (BuildContext context,
-                            AsyncSnapshot<List<Pregunta>> snapshots) {
+                            AsyncSnapshot<List<Pregunta>?> snapshots) {
 
-                          print(snapshots.data);
                           if(snapshots.data == null) {
                             return Center(child: CircularProgressIndicator());
                           }

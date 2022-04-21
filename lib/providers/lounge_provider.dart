@@ -65,8 +65,6 @@ class LoungeProvider {
         headers: {"Content-Type": "application/json"},
         body: bodyRequest);
 
-    print(response.statusCode);
-
     if (response.statusCode == 201) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => Lounge(id: usuarioId, type: type))

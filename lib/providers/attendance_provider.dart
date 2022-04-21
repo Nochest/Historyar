@@ -22,12 +22,9 @@ class AttendanceProvider {
         Utf8Decoder().convert(response.bodyBytes).toString()
     );
 
-    print("csmr");
-
     List<Asistencia> asistencias = [];
 
     for (var aux in jsonData) {
-      print(aux);
 
       Asistencia asistencia = Asistencia(aux["id"],
           aux["usuario"]["nombres"],
@@ -66,8 +63,6 @@ class AttendanceProvider {
         Uri.parse("${Constants.URL}/api/salas/crear"),
         headers: {"Content-Type": "application/json"},
         body: bodyRequest);
-
-    print(response.statusCode);
 
     if (response.statusCode == 201) {
       Navigator.of(context).push(MaterialPageRoute(

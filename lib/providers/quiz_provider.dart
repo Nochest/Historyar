@@ -58,8 +58,6 @@ class QuizProvider {
         headers: {"Content-Type": "application/json"},
         body: bodyRequest);
 
-    print(response.statusCode);
-
     if (response.statusCode == 201) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => LoungeDetail(id: usuarioId, type: type, salaName: salaName, salaId: salaId,))
@@ -74,41 +72,36 @@ class QuizProvider {
   Future<List<Pregunta>> getQuestionsByQuizId(
       int id
       ) async {
-
-    print(id);
-
     var response = await http.get(
         Uri.parse("${Constants.URL}/api/preguntas/cuestionario/${id}"));
-
-    print(response.statusCode);
-    print(id);
 
     var jsonData = json.decode(
         Utf8Decoder().convert(response.bodyBytes).toString()
     );
 
-    List<Pregunta> preguntas = [];
+    print(response.statusCode);
 
+    List<Pregunta> preguntas = [];
+    try{
     for (var aux in jsonData) {
       List<Alternativa> alternativas = [];
-
-      var jsonData2 = json.decode(
-          Utf8Decoder().convert(aux["alternativas"]).toString()
-      );
-
-      for (var aux2 in jsonData2) {
-        alternativas.add(Alternativa(aux["id"],
-            aux["descripcion"],
-            aux["correcto"]));
+      for (var aux2 in aux["alternativas"]) {
+        alternativas.add(Alternativa(aux2["id"],
+            aux2["descripcion"],
+            aux2["correcto"]));
       }
+        preguntas.add(Pregunta(aux["id"],
+            aux["descripcion"],
+            aux["puntaje"],
+            alternativas));
 
-      preguntas.add(Pregunta(aux["id"],
-          aux["descripcion"],
-          aux["correcto"],
-          alternativas));
-    }
+    } } on Exception catch (exception) {
+  print(exception);
+  } catch (error) {
+      print(error);
+  }
 
-    print(preguntas);
+
     return preguntas;
   }
 
@@ -158,15 +151,13 @@ class QuizProvider {
       ]
     };
 
-    print(data);
+
     var bodyRequest = json.encode(data);
 
     var response = await http.post(
         Uri.parse("${Constants.URL}/api/preguntas/crear"),
         headers: {"Content-Type": "application/json"},
         body: bodyRequest);
-
-    print(response.statusCode);
 
     if (response.statusCode == 201) {
       Navigator.of(context).push(MaterialPageRoute(
