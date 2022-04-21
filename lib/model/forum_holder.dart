@@ -1,17 +1,14 @@
-import 'package:historyar_app/model/comment.dart';
-
 class ForumHolder {
   final int id;
   final String imagUrl;
   final String title;
   final String description;
 
-  ForumHolder({
-    required this.id,
-    required this.imagUrl,
-    required this.title,
-    required this.description
-  });
+  ForumHolder(
+      {required this.id,
+      required this.imagUrl,
+      required this.title,
+      required this.description});
 }
 
 //For rows and columns with card images

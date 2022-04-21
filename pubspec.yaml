@@ -39,6 +39,8 @@ dependencies:
   video_player: ^2.3.0
 
   flutter_elegant_number_button: ^0.0.6
+  ed_screen_recorder: ^0.0.7
+  permission_handler: ^8.1.6
 
 dev_dependencies:
   flutter_test:
