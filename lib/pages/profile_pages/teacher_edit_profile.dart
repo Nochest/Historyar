@@ -245,7 +245,8 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
                 _schoolController.text.isNotEmpty &&
                 _emailController.text.isNotEmpty) {
               _usuarioProvider.actualizarDocente(
-                  widget.id,
+                  user!.id,
+                  user!.userId,
                   widget.type,
                   _mobileController.text,
                   _schoolController.text,
@@ -256,6 +257,12 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
                   celularVisible,
                   emailVisible,
                   context);
+                 print(_nameController);
+                  print(_surnameController);
+                  print(_emailController);
+                  print(_birthDateController);
+                  print('estoy mandando');
+                  print(user!.id);
             } else {
               setState(() {
                 if (_nameController.text.isEmpty) names = true;
