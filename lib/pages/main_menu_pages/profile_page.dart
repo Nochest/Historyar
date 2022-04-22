@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:historyar_app/helpers/constant_helpers.dart';
+import 'package:historyar_app/model/reuser.dart';
 import 'package:historyar_app/model/user.dart';
 import 'package:historyar_app/pages/profile_pages/student_edit_profile.dart';
 import 'package:historyar_app/pages/profile_pages/teacher_edit_profile.dart';
@@ -53,7 +54,7 @@ class _ProfileState extends State<Profile> {
       backgroundColor: _colorPalette.cream,
       body: FutureBuilder(
         future: _usuarioProvider.getUser(widget.id),
-        builder: (BuildContext context, AsyncSnapshot<Usuario?> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<ReUsuario?> snapshot) {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           } else {
@@ -135,8 +136,10 @@ class _ProfileState extends State<Profile> {
                                   builder: (context) => StudentEditProfile(
                                     id: widget.id,
                                     type: widget.type,
+                                  
                                   ),
                                 ),
+                                //print()
                               );
                             else
                               Navigator.of(context).push(
@@ -147,6 +150,9 @@ class _ProfileState extends State<Profile> {
                                   ),
                                 ),
                               );
+                            print('Este es el id');
+                            print(widget.id);
+                            print('...............');
                           },
                           child: Text('Editar',
                               style: TextStyle(
