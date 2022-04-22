@@ -4,7 +4,7 @@ import 'package:historyar_app/utils/color_palette.dart';
 
 ColorPalette _colorPalette = ColorPalette();
 
-Widget historyarButtonApp(BuildContext context, bool isActive) => Padding(
+Widget historyarButtonApp(BuildContext context, bool isActive, int id, int type) => Padding(
     padding: EdgeInsets.only(top: 23.0),
     child: GestureDetector(
       child: Container(
@@ -29,7 +29,7 @@ Widget historyarButtonApp(BuildContext context, bool isActive) => Padding(
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const CreateHistory(),
+              builder: (context) => CreateHistory(id: id, type: type),
             ));
       },
     ));

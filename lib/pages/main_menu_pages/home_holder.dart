@@ -140,7 +140,7 @@ class _HomeHolderState extends State<HomeHolder> {
           }
         },
       ),
-      floatingActionButton: historyarButtonApp(context, false),
+      floatingActionButton: historyarButtonApp(context, false, widget.id, widget.type),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: historyarBottomAppBar(
           context, true, false, false, false, widget.id, widget.type),

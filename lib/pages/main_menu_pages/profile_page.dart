@@ -227,7 +227,7 @@ class _ProfileState extends State<Profile> {
           }
         },
       ),
-      floatingActionButton: historyarButtonApp(context, false),
+      floatingActionButton: historyarButtonApp(context, false, widget.id, widget.type),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: historyarBottomAppBar(
           context, false, false, false, true, widget.id, widget.type),
