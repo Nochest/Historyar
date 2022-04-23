@@ -23,7 +23,6 @@ class _HomeHolderState extends State<HomeHolder> {
   var _forumProvider = ForumProvider();
 
   ColorPalette _colorPalette = ColorPalette();
-
   Future webViewMethod() async {
     await Permission.microphone.request();
   }
