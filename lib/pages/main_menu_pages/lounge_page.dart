@@ -6,6 +6,7 @@ import 'package:historyar_app/providers/lounge_provider.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/app_bar.dart';
 import 'package:historyar_app/widgets/button_app_bar.dart';
+import 'package:historyar_app/widgets/input_text.dart';
 
 class Lounge extends StatefulWidget {
   final int id;
@@ -22,6 +23,16 @@ class _LoungeState extends State<Lounge> {
 
   ColorPalette _colorPalette = ColorPalette();
   var _salaProvider = LoungeProvider();
+  InputText _inputText = InputText();
+
+  bool code = false;
+  bool password = false;
+
+  FocusNode focus_code = FocusNode();
+  FocusNode focus_password = FocusNode();
+
+  TextEditingController _codeController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -267,11 +278,118 @@ class _LoungeState extends State<Lounge> {
           }
         },
       ),
-      floatingActionButton: historyarButtonApp(context, false),
+      floatingActionButton: historyarButtonApp(context, false, widget.id, widget.type),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: historyarBottomAppBar(
           context, false, true, false, false, widget.id, widget.type),
     );
   }
 
+  void createAlert(BuildContext context) {
+    showDialog(
+        barrierColor: _colorPalette.lightBlue.withOpacity(0.6),
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
+            title: Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: Center(
+                    child: Text("Ingresar a una sala",
+                        style: TextStyle(
+                            color: _colorPalette.darkBlue,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 24.0)))),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                    padding: EdgeInsets.only(top: 5.0),
+                    child: SingleChildScrollView(
+                        child: Text(
+                            "Ingrese su contraseña para eliminar su cuenta.",
+                            style: TextStyle(
+                                color: _colorPalette.text,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14.0),
+                            textAlign: TextAlign.justify))
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: _inputText.defaultIText(
+                      focus_code,
+                      _codeController,
+                      TextInputType.text,
+                      'Ingrese el código',
+                      '',
+                      true,
+                      'Ingrese el código',
+                      code),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: _inputText.defaultIText(
+                      focus_password,
+                      _passwordController,
+                      TextInputType.text,
+                      'Ingrese su contraeña',
+                      '',
+                      true,
+                      'Ingrese su contraeña',
+                      password),
+                ),
+                Padding(
+                    padding: EdgeInsets.only(top: 10.0, bottom: 2.0),
+                    child: default_button(context)),
+                Padding(
+                    padding: EdgeInsets.only(top: 2.0),
+                    child: accept_button(context))
+              ],
+            ),
+          );
+        });
+  }
+
+  Widget default_button(BuildContext context) {
+    return MaterialButton(
+        height: 36.0,
+        minWidth: 126.0,
+        color: _colorPalette.lightBlue,
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+        child: Text("Cancelar",
+            style: TextStyle(
+                color: _colorPalette.text, fontWeight: FontWeight.w600)),
+        onPressed: () {
+          setState(() {
+            _passwordController.text = "";
+          });
+          Navigator.of(context).pop();
+        });
+  }
+
+  Widget accept_button(BuildContext context) {
+    return MaterialButton(
+        height: 36.0,
+        minWidth: 126.0,
+        color: _colorPalette.lightBlue,
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+        child: Text("Aceptar",
+            style: TextStyle(
+                color: _colorPalette.text, fontWeight: FontWeight.w600)),
+        onPressed: () {
+          if (_passwordController.text.isNotEmpty) {
+            //_usuarioProvider.borrarCuenta(
+              //  widget.id, _passwordController.text, context);
+          } else {
+            setState(() {
+              _passwordController.text = "";
+              password = true;
+            });
+          }
+        });
+  }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:historyar_app/helpers/constant_helpers.dart';
+import 'package:historyar_app/model/reuser.dart';
 import 'package:historyar_app/model/user.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
 import 'package:historyar_app/pages/main_menu_pages/profile_page.dart';
@@ -32,7 +33,7 @@ class UserProvider {
 
     print(response.statusCode);
 
-    if (response.statusCode == 200) {
+  if (response.statusCode == 200) {
       jsonData = json.decode(
           Utf8Decoder().convert(response.bodyBytes).toString()
       );
@@ -150,7 +151,7 @@ class UserProvider {
     }
   }
 
-  Future<Usuario?> getUser(int id) async {
+  Future<ReUsuario?> getUser(int id) async {
     var response = await http.get(
         Uri.parse("${Constants.URL}/api/usuarios/${id}"));
 
@@ -158,10 +159,11 @@ class UserProvider {
         Utf8Decoder().convert(response.bodyBytes).toString()
     );
 
-    print(response.statusCode);
+    print('Este es el id:');
+    print(id);
 
     if (response.statusCode == 200) {
-      Usuario usuario = Usuario(
+      ReUsuario usuario = ReUsuario(
           jsonData["id"],
           jsonData["nombres"],
           jsonData["apellidos"],
@@ -196,12 +198,18 @@ class UserProvider {
     var jsonData = json.decode(
         Utf8Decoder().convert(response.bodyBytes).toString()
     );
-    //var userData = json.decode(jsonData["usuario"]);
+    print("csmr");
+   print(jsonData["id"]);
+    //print(jsonData["usuario"]["nombres"]);
+
+    //print(response.statusCode);
+   // print(id);
+   // print(type);
 
     if (response.statusCode == 200 && type == Constants.DOCENTE_USUARIO) {
 
       Usuario usuario = Usuario(
-          id = jsonData["id"],
+          jsonData["id"],
           jsonData["usuario"]["nombres"],
           jsonData["usuario"]["apellidos"],
           jsonData["celular"],
@@ -212,23 +220,26 @@ class UserProvider {
           "",
           jsonData["institucionEducativa"],
           jsonData["celularVisible"],
-          jsonData["emailVisible"]);
+          jsonData["emailVisible"],
+          id= jsonData["usuario"]["id"]);
 
       return usuario;
     } else if(response.statusCode == 200 && type == Constants.ALUMNO_USUARIO){
       Usuario usuario = Usuario(
-          id = jsonData["id"],
+          jsonData["id"],
           jsonData["usuario"]["nombres"],
           jsonData["usuario"]["apellidos"],
           "",
+          
           jsonData["usuario"]["email"],
-          jsonData["correoApoderado"],
+          jsonData["emailApoderado"],
           jsonData["usuario"]["fechaNacimiento"],
           jsonData["usuario"]["tipoUsuario"],
           "",
           "",
           false,
-          false);
+          false,
+          id = jsonData["usuario"]["id"]);
 
       return usuario;
     }
@@ -239,6 +250,7 @@ class UserProvider {
 
   actualizarEstudiante(
       int id,
+      int userId,
       int type,
       String nombres,
       String apellidos,
@@ -258,13 +270,17 @@ class UserProvider {
         Uri.parse("${Constants.URL}/api/alumnos/editar/${id}"),
         headers: {"Content-Type": "application/json"},
         body: bodyRequest);
-
-    print(response.statusCode);
+        
+    //print('.............');
+    print(id);
+    print(data['nombres']);
+    //print(response.statusCode);
 
     if (response.statusCode == 200) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => Profile(id: id, type: type))
+          builder: (BuildContext context) => Profile(id: userId, type: type))
           );
+      _alert.createAlert(context, data['nombres'], response.statusCode.toString(), "aceptar");
     } else {
       _alert.createAlert(
           context, "Algo salió mal", "No se ha podido actualizar.",
@@ -274,6 +290,7 @@ class UserProvider {
 
   actualizarDocente(
       int id,
+      int userId,
       int type,
       String celular,
       String institucionEducativa,
@@ -301,12 +318,14 @@ class UserProvider {
         headers: {"Content-Type": "application/json"},
         body: bodyRequest);
 
-    print(response.statusCode);
+    print(id);
+    print(data['nombres']);
 
     if (response.statusCode == 200) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => Profile(id: id, type: type))
+          builder: (BuildContext context) => Profile(id: userId, type: type))
           );
+      
     } else {
       _alert.createAlert(
           context, "Algo salió mal", "No se ha podido actualizar.",

@@ -1,4 +1,4 @@
-class Usuario {
+class ReUsuario {
   final int id;
   final String nombres;
   final String apellidos;
@@ -11,9 +11,8 @@ class Usuario {
   final String institucionEducativa;
   final bool celularVisible;
   final bool emailVisible;
-  final int userId;
 
-  Usuario(this.id, this.nombres, this.apellidos, this.celular, this.email,
+  ReUsuario(this.id, this.nombres, this.apellidos, this.celular, this.email,
       this.correoApoderado, this.fechaNacimiento, this.tipoUsuario, this.password,
-      this.institucionEducativa, this.celularVisible, this.emailVisible, this.userId);
+      this.institucionEducativa, this.celularVisible, this.emailVisible);
 }

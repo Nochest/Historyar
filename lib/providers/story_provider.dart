@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:historyar_app/helpers/constant_helpers.dart';
 import 'package:historyar_app/model/story.dart';
 import 'package:historyar_app/pages/story_pages/my_stories.dart';
@@ -97,6 +100,38 @@ class StoryProvider {
     }
 
     return 0;
+  }
+
+  registerS3(int usuarioId, int? salaId, String nombre, String descripcion, File video, BuildContext context) async {
+
+    print(salaId);
+
+    try {
+      var request = http.MultipartRequest("POST",
+          Uri.parse("${Constants.URL}/api/historias/crear-s3/?usuarioId=${usuarioId}&salaId=${0}"));
+
+      //request.fields["usuarioId"] = usuarioId.toString();
+      //request.fields["salaId"] = salaId.toString();
+
+      request.fields["nombre"] = nombre;
+      request.fields["descripcion"] = descripcion;
+
+      var pic = await http.MultipartFile.fromPath("file", video.path);
+
+      request.files.add(pic);
+
+      var response = await request.send();
+      var responseData = await response.stream.toBytes();
+      var responseString = String.fromCharCodes(responseData);
+
+      log("respuesta " + responseString);
+      log("estado " + response.statusCode.toString());
+      _alert.createAlert(
+          context, response.statusCode.toString(), responseString,
+          "Aceptar");
+    } catch (error) {
+      log(error.toString());
+    }
   }
 
 }
