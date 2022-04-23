@@ -41,6 +41,8 @@ dependencies:
   flutter_elegant_number_button: ^0.0.6
   ed_screen_recorder: ^0.0.7
   permission_handler: ^8.1.6
+  flutter_downloader: ^1.7.3
+  path_provider: ^2.0.9
 
 dev_dependencies:
   flutter_test:
