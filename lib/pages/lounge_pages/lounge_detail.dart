@@ -121,7 +121,7 @@ class _LoungeDetailState extends State<LoungeDetail> {
                 ),
                 const SizedBox(height: 24),
                 FutureBuilder(
-                    future: _atencionProvider.getAttendancesByLoungeId(2),
+                    future: _atencionProvider.getAttendancesByLoungeId(widget.salaId),
                     builder: (BuildContext context, AsyncSnapshot<List<Asistencia>> snapshot) {
 
                       if (!snapshot.hasData) {
