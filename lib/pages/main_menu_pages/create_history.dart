@@ -27,11 +27,9 @@ class CreateHistory extends StatefulWidget {
   final int type;
   final int? salaId;
 
-  const CreateHistory({
-    required this.id,
-    required this.type,
-    this.salaId,
-    Key? key}) : super(key: key);
+  const CreateHistory(
+      {required this.id, required this.type, this.salaId, Key? key})
+      : super(key: key);
 
   @override
   State<CreateHistory> createState() => _CreateHistoryState();
@@ -174,10 +172,14 @@ class _CreateHistoryState extends State<CreateHistory> {
                         children: [
                           IconButton(
                             onPressed: () {
-
-
                               File video = File(route.toString());
-                              _storyProvider.registerS3(widget.id, widget.salaId, "aer", "descripcion", video, context);
+                              _storyProvider.registerS3(
+                                  widget.id,
+                                  widget.salaId,
+                                  "aer",
+                                  "descripcion",
+                                  video,
+                                  context);
                             },
                             icon: Icon(Icons.save),
                           ),

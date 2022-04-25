@@ -14,23 +14,20 @@ class StoryProvider {
   Alert _alert = Alert();
 
   Future<List<Historia>> getByUserId(int id, int type) async {
-    var response = await http.get(
-        Uri.parse("${Constants.URL}/api/historias/usuario/${id}"));
+    var response = await http
+        .get(Uri.parse("${Constants.URL}/api/historias/usuario/${id}"));
 
     print(response.statusCode);
     print(id);
 
-    var jsonData = json.decode(
-        Utf8Decoder().convert(response.bodyBytes).toString()
-    );
+    var jsonData =
+        json.decode(Utf8Decoder().convert(response.bodyBytes).toString());
 
     List<Historia> historias = [];
 
     for (var aux in jsonData) {
-      Historia historia = Historia(aux["id"],
-          aux["nombre"],
-          aux["url"],
-          aux["descripcion"]);
+      Historia historia =
+          Historia(aux["id"], aux["nombre"], aux["url"], aux["descripcion"]);
 
       historias.add(historia);
     }
@@ -39,21 +36,17 @@ class StoryProvider {
   }
 
   Future<Historia?> getById(int id) async {
-    var response = await http.get(
-        Uri.parse("${Constants.URL}/api/historias/${id}"));
+    var response =
+        await http.get(Uri.parse("${Constants.URL}/api/historias/${id}"));
 
-    var jsonData = json.decode(
-        Utf8Decoder().convert(response.bodyBytes).toString()
-    );
+    var jsonData =
+        json.decode(Utf8Decoder().convert(response.bodyBytes).toString());
 
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      Historia historia = Historia(
-          jsonData["id"],
-          jsonData["nombre"],
-          jsonData["url"],
-          jsonData["descripcion"]);
+      Historia historia = Historia(jsonData["id"], jsonData["nombre"],
+          jsonData["url"], jsonData["descripcion"]);
 
       return historia;
     } else {
@@ -61,27 +54,21 @@ class StoryProvider {
     }
   }
 
-  Future<String> getUrl(int id) async  {
-
-    var response = await http.get(
-        Uri.parse("${Constants.URL}/api/historias/url/${id}"));
+  Future<String> getUrl(int id) async {
+    var response =
+        await http.get(Uri.parse("${Constants.URL}/api/historias/url/${id}"));
 
     print(response.statusCode);
     print(response.body);
 
     if (response.statusCode == 200) {
-
       return response.body;
     } else {
       return "hola";
     }
   }
 
-
-  deleteHistoria(int id,
-      int historiaId,
-      int type,
-      BuildContext context) async {
+  deleteHistoria(int id, int historiaId, int type, BuildContext context) async {
     print(historiaId);
 
     var response = await http.delete(
@@ -91,24 +78,24 @@ class StoryProvider {
 
     if (response.statusCode == 200) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => MyStories(id: id, type: type))
-      );
-    } else{
-      _alert.createAlert(
-          context, "Algo salió mal", "No se ha podido eliminar la historia.",
-          "Aceptar");
+          builder: (BuildContext context) => MyStories(id: id, type: type)));
+    } else {
+      _alert.createAlert(context, "Algo salió mal",
+          "No se ha podido eliminar la historia.", "Aceptar");
     }
 
     return 0;
   }
 
-  registerS3(int usuarioId, int? salaId, String nombre, String descripcion, File video, BuildContext context) async {
-
+  registerS3(int usuarioId, int? salaId, String nombre, String descripcion,
+      File video, BuildContext context) async {
     print(salaId);
 
     try {
-      var request = http.MultipartRequest("POST",
-          Uri.parse("${Constants.URL}/api/historias/crear-s3/?usuarioId=${usuarioId}&salaId=${0}"));
+      var request = http.MultipartRequest(
+          "POST",
+          Uri.parse(
+              "${Constants.URL}/api/historias/crear-s3/?usuarioId=${usuarioId}&salaId=${0}"));
 
       //request.fields["usuarioId"] = usuarioId.toString();
       //request.fields["salaId"] = salaId.toString();
@@ -125,13 +112,12 @@ class StoryProvider {
       var responseString = String.fromCharCodes(responseData);
 
       log("respuesta " + responseString);
+      log(request.contentLength.toString());
       log("estado " + response.statusCode.toString());
       _alert.createAlert(
-          context, response.statusCode.toString(), responseString,
-          "Aceptar");
+          context, response.statusCode.toString(), responseString, "Aceptar");
     } catch (error) {
       log(error.toString());
     }
   }
-
 }
