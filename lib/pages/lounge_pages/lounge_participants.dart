@@ -15,6 +15,7 @@ class LoungeParticipant extends StatefulWidget {
 
   final int id;
   final int salaId;
+  final int asistenciaId;
   final String salaName;
   final int type;
 
@@ -22,6 +23,7 @@ class LoungeParticipant extends StatefulWidget {
     required this.id,
     required this.salaId,
     required this.salaName,
+    required this.asistenciaId,
     required this.type,
     Key? key
   }) : super(key: key);
@@ -122,7 +124,7 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                   ),
                   const SizedBox(height: 24),
                   FutureBuilder(
-                      future: _atencionProvider.getAttendancesByLoungeId(2),
+                      future: _atencionProvider.getAttendancesByLoungeId(widget.salaId),
                       builder: (BuildContext context, AsyncSnapshot<List<Asistencia>> snapshot) {
 
                         if (!snapshot.hasData) {

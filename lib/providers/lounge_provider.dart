@@ -1,6 +1,7 @@
 import 'package:historyar_app/helpers/constant_helpers.dart';
 import 'package:historyar_app/model/lounge.dart';
 import 'package:historyar_app/model/story.dart';
+import 'package:historyar_app/pages/lounge_pages/lounge_participants.dart';
 import 'package:historyar_app/pages/main_menu_pages/lounge_page.dart';
 import 'package:historyar_app/pages/story_pages/my_stories.dart';
 import 'package:historyar_app/utils/alert.dart';
@@ -74,6 +75,91 @@ class LoungeProvider {
           context, "Algo salió mal", "No se ha podido publicar.",
           "aceptar");
     }
+  }
+
+  getByCode(String code,
+      String password,
+      int usuarioId,
+      int type,
+      BuildContext context
+      ) async {
+
+    var existe = false;
+    var asistenciaId = 0;
+    DateFormat formatter = DateFormat('yyyy-MM-dd');
+    var selectedDate = DateTime.now();
+
+    var response = await http.get(
+        Uri.parse("${Constants.URL}/api/salas/code?code=${code}"));
+
+    if(response.statusCode == 200) {
+
+      var jsonData = json.decode(
+          Utf8Decoder().convert(response.bodyBytes).toString()
+      );
+
+      if(password == jsonData["password"]) {
+
+        for (var aux in jsonData["asistencias"]) {
+          if (aux["usuario"]["id"] == usuarioId) {
+            existe = true;
+            asistenciaId = aux["id"];
+          }
+        }
+
+        if (existe == false) {
+
+          Map data = {
+            "fecha": formatter.format(selectedDate),
+            "numeroGrupo": 1,
+            "nota": 0,
+            "usuario": {
+              "id": usuarioId
+            },
+            "sala": {
+              "id": jsonData["id"]
+            }
+          };
+
+          var bodyRequest = json.encode(data);
+
+          var asistencia = await http.post(
+              Uri.parse("${Constants.URL}/api/asistencias/crear"),
+              headers: {"Content-Type": "application/json"},
+              body: bodyRequest);
+
+          var asistenciaData = json.decode(
+              Utf8Decoder().convert(asistencia.bodyBytes).toString()
+          );
+
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => LoungeParticipant(id: usuarioId, type: type,
+                asistenciaId: asistenciaData["id"], salaId: jsonData["id"], salaName: jsonData["titulo"],))
+          );
+
+        } else {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (BuildContext context) => LoungeParticipant(id: usuarioId, type: type,
+                asistenciaId: asistenciaId, salaId: jsonData["id"], salaName: jsonData["titulo"],))
+          );
+        }
+
+      } else {
+        _alert.createAlert(
+            context, "Algo salió mal", "la contraseña es incorrecta",
+            "aceptar");
+      }
+
+    } else if (response.statusCode == 404) {
+      _alert.createAlert(
+          context, "No se encontró", "La sala con el código ${code} no existe",
+          "aceptar");
+    } else {
+      _alert.createAlert(
+          context, "Algo salió mal", "No se pudo encontrar la sala.",
+          "aceptar");
+    }
+
   }
 
 }

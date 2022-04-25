@@ -82,7 +82,7 @@ class _LoungeState extends State<Lounge> {
                               fontWeight: FontWeight.w700),
                         ),
                         onTap: () {
-
+                          createAlert(context);
                         },
                       ),
                     ),
@@ -286,6 +286,10 @@ class _LoungeState extends State<Lounge> {
   }
 
   void createAlert(BuildContext context) {
+
+    _codeController.text = "";
+    _passwordController.text = "";
+
     showDialog(
         barrierColor: _colorPalette.lightBlue.withOpacity(0.6),
         context: context,
@@ -302,51 +306,42 @@ class _LoungeState extends State<Lounge> {
                             color: _colorPalette.darkBlue,
                             fontWeight: FontWeight.w700,
                             fontSize: 24.0)))),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                    padding: EdgeInsets.only(top: 5.0),
-                    child: SingleChildScrollView(
-                        child: Text(
-                            "Ingrese su contraseña para eliminar su cuenta.",
-                            style: TextStyle(
-                                color: _colorPalette.text,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14.0),
-                            textAlign: TextAlign.justify))
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: _inputText.defaultIText(
-                      focus_code,
-                      _codeController,
-                      TextInputType.text,
-                      'Ingrese el código',
-                      '',
-                      true,
-                      'Ingrese el código',
-                      code),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: _inputText.defaultIText(
-                      focus_password,
-                      _passwordController,
-                      TextInputType.text,
-                      'Ingrese su contraeña',
-                      '',
-                      true,
-                      'Ingrese su contraeña',
-                      password),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(top: 10.0, bottom: 2.0),
-                    child: default_button(context)),
-                Padding(
-                    padding: EdgeInsets.only(top: 2.0),
-                    child: accept_button(context))
-              ],
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: _inputText.defaultIText(
+                        focus_code,
+                        _codeController,
+                        TextInputType.text,
+                        'Ingrese el código',
+                        '',
+                        true,
+                        'Ingrese el código',
+                        code),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: _inputText.defaultIText(
+                        focus_password,
+                        _passwordController,
+                        TextInputType.text,
+                        'Ingrese su contraeña',
+                        '',
+                        true,
+                        'Ingrese su contraeña',
+                        password),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 10.0, bottom: 2.0),
+                      child: default_button(context)),
+                  Padding(
+                      padding: EdgeInsets.only(top: 2.0),
+                      child: accept_button(context))
+                ],
+              ),
             ),
           );
         });
@@ -364,6 +359,7 @@ class _LoungeState extends State<Lounge> {
                 color: _colorPalette.text, fontWeight: FontWeight.w600)),
         onPressed: () {
           setState(() {
+            _codeController.text = "";
             _passwordController.text = "";
           });
           Navigator.of(context).pop();
@@ -381,12 +377,14 @@ class _LoungeState extends State<Lounge> {
             style: TextStyle(
                 color: _colorPalette.text, fontWeight: FontWeight.w600)),
         onPressed: () {
-          if (_passwordController.text.isNotEmpty) {
-            //_usuarioProvider.borrarCuenta(
-              //  widget.id, _passwordController.text, context);
+          if (_codeController.text.isNotEmpty) {
+            _salaProvider.getByCode(_codeController.text, _passwordController.text,
+                widget.id, widget.type, context);
           } else {
             setState(() {
+              _codeController.text = "";
               _passwordController.text = "";
+              code = true;
               password = true;
             });
           }

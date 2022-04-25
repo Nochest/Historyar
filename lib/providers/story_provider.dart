@@ -26,8 +26,11 @@ class StoryProvider {
     List<Historia> historias = [];
 
     for (var aux in jsonData) {
-      Historia historia =
-          Historia(aux["id"], aux["nombre"], aux["url"], aux["descripcion"]);
+      Historia historia = Historia(aux["id"],
+          aux["nombre"],
+          aux["url"],
+          aux["descripcion"],
+          aux["favorito"]);
 
       historias.add(historia);
     }
@@ -45,8 +48,11 @@ class StoryProvider {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      Historia historia = Historia(jsonData["id"], jsonData["nombre"],
-          jsonData["url"], jsonData["descripcion"]);
+      Historia historia = Historia(
+          jsonData["id"],
+          jsonData["nombre"],
+          jsonData["url"],
+          jsonData["descripcion"], false);
 
       return historia;
     } else {
@@ -83,8 +89,6 @@ class StoryProvider {
       _alert.createAlert(context, "Algo salió mal",
           "No se ha podido eliminar la historia.", "Aceptar");
     }
-
-    return 0;
   }
 
   registerS3(int usuarioId, int? salaId, String nombre, String descripcion,
@@ -120,4 +124,28 @@ class StoryProvider {
       log(error.toString());
     }
   }
+
+  favorito(int id,
+      int historiaId,
+      int type,
+      BuildContext context) async {
+    print(historiaId);
+
+    var response = await http.put(
+        Uri.parse("${Constants.URL}/api/historias/favorito/${historiaId}"));
+
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => MyStories(id: id, type: type))
+      );
+    } else{
+      _alert.createAlert(
+          context, "Algo salió mal", "No se ha podido marcar la historia.",
+          "Aceptar");
+    }
+  }
+
+
 }
