@@ -1,15 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:historyar_app/helpers/constant_helpers.dart';
-import 'package:historyar_app/pages/story_pages/story_detail.dart';
 import 'package:historyar_app/providers/story_provider.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/video_player.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:video_player/video_player.dart';
 
 class StoryVisualizer extends StatefulWidget {
@@ -60,7 +53,7 @@ class _StoryVisualizerState extends State<StoryVisualizer> {
         centerTitle: true,
         elevation: 0,
         title: Text(
-          'Mi Historia',
+          'Ver Historia',
           style: TextStyle(color: _colorPalette.yellow),
         )
       ),

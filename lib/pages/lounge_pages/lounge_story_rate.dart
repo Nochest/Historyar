@@ -1,55 +1,57 @@
-import 'dart:isolate';
-import 'dart:math';
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_elegant_number_button/flutter_elegant_number_button.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:historyar_app/model/story.dart';
 import 'package:historyar_app/pages/story_pages/story_visualizer.dart';
 import 'package:historyar_app/providers/story_provider.dart';
 import 'package:historyar_app/utils/color_palette.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
-class StoryDetail extends StatefulWidget {
+class LoungeStoryRate extends StatefulWidget {
   final int id;
   final int historiaId;
+  final int salaId;
+  final String salaName;
   final int type;
 
-  const StoryDetail({required this.id,
+  const LoungeStoryRate({required this.id,
     required this.historiaId,
+    required this.salaId,
+    required this.salaName,
     required this.type, Key? key})
       : super(key: key);
 
   @override
-  _StoryDetailState createState() => _StoryDetailState();
+  _LoungeStoryRateState createState() => _LoungeStoryRateState();
 }
 
-class _StoryDetailState extends State<StoryDetail> {
+class _LoungeStoryRateState extends State<LoungeStoryRate> {
+
+  final focus_comment = FocusNode();
+
+  bool comment = false;
+  Historia? historia;
+
+  TextEditingController _commentController = TextEditingController();
+  int puntaje = 0;
+
+  getData() async {
+    historia = await _storyProvider.getById(widget.historiaId);
+    puntaje = historia!.puntaje;
+    _commentController.text = historia!.comentario;
+  }
+
   var _storyProvider = StoryProvider();
 
   ColorPalette _colorPalette = ColorPalette();
 
-  ReceivePort receivePort = ReceivePort();
-  int progress = 0;
-
   @override
   void initState() {
-    IsolateNameServer.registerPortWithName(receivePort.sendPort, "donwloadingvideo");
-
-    receivePort.listen((message) {
-      setState(() {
-        progress = message;
-      });
-    });
-
-    FlutterDownloader.registerCallback(downloadCallback);
+    getData();
+    setState(() {});
     super.initState();
-  }
-
-  static downloadCallback(id, status, progress) {
-    SendPort? sendPort = IsolateNameServer.lookupPortByName("donwloadingvideo");
-    sendPort!.send(progress);
   }
 
   @override
@@ -57,13 +59,13 @@ class _StoryDetailState extends State<StoryDetail> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: _colorPalette.lightBlue,
-        centerTitle: true,
-        elevation: 0,
-        title: Text(
-          'Detalle Historia',
-          style: TextStyle(color: _colorPalette.yellow),
-        )
+          backgroundColor: _colorPalette.lightBlue,
+          centerTitle: true,
+          elevation: 0,
+          title: Text(
+            'Calificar Historia',
+            style: TextStyle(color: _colorPalette.yellow),
+          )
       ),
       backgroundColor: _colorPalette.cream,
       body: FutureBuilder(
@@ -146,9 +148,67 @@ class _StoryDetailState extends State<StoryDetail> {
                           ),
                         )
                     ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Calificar',
+                          style: TextStyle(
+                              color: _colorPalette.yellow,
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.w700),
+                          textAlign: TextAlign.left,
+                        ),
+
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Puntaje',
+                          style: TextStyle(
+                              color: _colorPalette.darkBlue,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w500),
+                          textAlign: TextAlign.left,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                          },
+                          child: ElegantNumberButton(
+                            initialValue: puntaje,
+                            buttonSizeWidth: 30,
+                            buttonSizeHeight: 25,
+                            color: _colorPalette.lightBlue,
+                            minValue: 0,
+                            maxValue: 5,
+                            step: 1,
+                            decimalPlaces: 0,
+                            onChanged: (value){
+                              setState(() {
+                                puntaje = value.toInt();
+                              });
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                     Padding(
-                        padding: EdgeInsets.only(top: 10.0, bottom: 50.0),
-                        child: _descargarButton(context, snapshot.data!.url)),
+                        padding: EdgeInsets.only(top: 10.0),
+                        child: TextField(
+                            controller: _commentController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            focusNode: focus_comment,
+                            decoration: InputDecoration(labelText: 'Descripción')
+                        )
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(top: 22.0, bottom: 40.0),
+                        child: _saveButton(context)),
                   ],
                 ),
               ),
@@ -159,10 +219,7 @@ class _StoryDetailState extends State<StoryDetail> {
     );
   }
 
-
-
-
-  Widget _descargarButton(BuildContext context, String url) {
+  Widget _saveButton(BuildContext context) {
     return Center(
       child: MaterialButton(
           height: 48.0,
@@ -170,29 +227,13 @@ class _StoryDetailState extends State<StoryDetail> {
           color: _colorPalette.lightBlue,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(100.0)),
-          child: Text('Descargar',
+          child: Text('Guardar',
               style: TextStyle(
                   color: _colorPalette.yellow, fontWeight: FontWeight.bold)),
-          onPressed: () async {
-            final stasus = await Permission.storage.request();
-
-            const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-            Random _rnd = Random();
-
-            String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
-                length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-
-            if(stasus.isGranted) {
-              final baseStorage = await getExternalStorageDirectory();
-              
-              await FlutterDownloader.enqueue(url: url,
-                  savedDir: baseStorage!.path,
-                  fileName: getRandomString(5) + ".mp4");
-
-            } else {
-              print("Nel");
-            }
+          onPressed: () {
+            _storyProvider.calificar(widget.id, widget.historiaId, widget.salaId, widget.salaName, widget.type, puntaje, _commentController.text, context);
           }),
     );
   }
+
 }
