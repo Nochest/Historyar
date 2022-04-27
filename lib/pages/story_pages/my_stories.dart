@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:historyar_app/pages/main_menu_pages/profile_page.dart';
 import 'package:historyar_app/pages/story_pages/story_detail.dart';
