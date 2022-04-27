@@ -187,7 +187,10 @@ class _StoryDetailState extends State<StoryDetail> {
               
               await FlutterDownloader.enqueue(url: url,
                   savedDir: baseStorage!.path,
-                  fileName: getRandomString(5) + ".mp4");
+                  fileName: getRandomString(5) + ".mp4",
+                  showNotification: false,
+                  openFileFromNotification: false,
+                  saveInPublicStorage: true);
 
             } else {
               print("Nel");
