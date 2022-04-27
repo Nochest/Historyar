@@ -43,6 +43,7 @@ dependencies:
   permission_handler: ^8.1.6
   flutter_downloader: ^1.7.3
   path_provider: ^2.0.9
+  custom_radio_group_list: ^1.0.0
 
 dev_dependencies:
   flutter_test:

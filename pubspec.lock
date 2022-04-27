@@ -71,6 +71,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  custom_radio_group_list:
+    dependency: "direct main"
+    description:
+      name: custom_radio_group_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   ed_screen_recorder:
     dependency: "direct main"
     description:

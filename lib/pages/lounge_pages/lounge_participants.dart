@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:historyar_app/helpers/constant_helpers.dart';
+import 'package:historyar_app/main.dart';
 import 'package:historyar_app/model/attendance.dart';
 import 'package:historyar_app/pages/lounge_pages/my_lounges.dart';
 import 'package:historyar_app/pages/main_menu_pages/lounge_page.dart';
 import 'package:historyar_app/pages/quiz_pages/quiz_creation.dart';
 import 'package:historyar_app/pages/quiz_pages/quiz_detail.dart';
+import 'package:historyar_app/pages/quiz_pages/quiz_resolution.dart';
 import 'package:historyar_app/providers/attendance_provider.dart';
 import 'package:historyar_app/providers/lounge_provider.dart';
 import 'package:historyar_app/providers/quiz_provider.dart';
@@ -12,29 +15,27 @@ import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/input_text.dart';
 
 class LoungeParticipant extends StatefulWidget {
-
   final int id;
   final int salaId;
   final int asistenciaId;
   final String salaName;
   final int type;
 
-  const LoungeParticipant({
-    required this.id,
-    required this.salaId,
-    required this.salaName,
-    required this.asistenciaId,
-    required this.type,
-    Key? key
-  }) : super(key: key);
+  const LoungeParticipant(
+      {required this.id,
+      required this.salaId,
+      required this.salaName,
+      required this.asistenciaId,
+      required this.type,
+      Key? key})
+      : super(key: key);
 
   @override
   _LoungeParticipantState createState() => _LoungeParticipantState();
 }
 
 class _LoungeParticipantState extends State<LoungeParticipant> {
-
-  Widget _buildIcon(int index, String name){
+  Widget _buildIcon(int index, String name) {
     return Container(
       height: 80.0,
       width: 80.0,
@@ -42,17 +43,16 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
         children: [
           GestureDetector(
             child: Icon(Icons.attribution_rounded, size: 60.0),
-            onTap: (){
-
-            },
+            onTap: () {},
           ),
-          Center(child: Text(name,
+          Center(
+              child: Text(
+            name,
             style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15.0),
             overflow: TextOverflow.clip,
             maxLines: 1,
             softWrap: false,
-          )
-          )
+          ))
         ],
       ),
     );
@@ -69,11 +69,10 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-
         Navigator.of(context).push(
-          MaterialPageRoute(builder:
-              (BuildContext context) => Lounge(id: widget.id, type: widget.type)
-          ),
+          MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  Lounge(id: widget.id, type: widget.type)),
         );
         return true;
       },
@@ -81,15 +80,15 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
           backgroundColor: _colorPalette.cream,
           appBar: AppBar(
             backgroundColor: _colorPalette.darkBlue,
-            title:
-            Text('Sala ${widget.salaName}', style: TextStyle(fontWeight: FontWeight.w700)),
+            title: Text('Sala ${widget.salaName}',
+                style: TextStyle(fontWeight: FontWeight.w700)),
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder:
-                      (BuildContext context) => Lounge(id: widget.id, type: widget.type)
-                  ),
+                  MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          Lounge(id: widget.id, type: widget.type)),
                 );
               },
             ),
@@ -100,9 +99,7 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
               child: Column(
                 children: [
                   GestureDetector(
-                    onTap: () {
-
-                    }, // Image tapped
+                    onTap: () {}, // Image tapped
                     child: Image.asset(
                       'assets/video.png',
                       fit: BoxFit.cover, // Fixes border issues
@@ -124,26 +121,24 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                   ),
                   const SizedBox(height: 24),
                   FutureBuilder(
-                      future: _atencionProvider.getAttendancesByLoungeId(widget.salaId),
-                      builder: (BuildContext context, AsyncSnapshot<List<Asistencia>> snapshot) {
-
+                      future: _atencionProvider
+                          .getAttendancesByLoungeId(widget.salaId),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Asistencia>> snapshot) {
                         if (!snapshot.hasData) {
                           return Center(child: CircularProgressIndicator());
                         } else {
                           return Container(
                               child: Wrap(
-                                direction: Axis.horizontal,
-                                spacing: 5.0,
-                                runSpacing: 5.0,
-                                children:
-                                snapshot.data!.map((e) =>
-                                    _buildIcon(e.id, e.nombres)).toList()
-                                ,
-                              )
-                          );
+                            direction: Axis.horizontal,
+                            spacing: 5.0,
+                            runSpacing: 5.0,
+                            children: snapshot.data!
+                                .map((e) => _buildIcon(e.id, e.nombres))
+                                .toList(),
+                          ));
                         }
-                      }
-                  ),
+                      }),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,37 +152,57 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                         textAlign: TextAlign.left,
                       ),
                       FutureBuilder(
-                          future: _cuestionarioProvider.getQuizByLoungeId(widget.salaId),
-                          builder: (BuildContext context, AsyncSnapshot snapshot) {
+                          future: _cuestionarioProvider
+                              .getQuizByLoungeId(widget.salaId),
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
                             if (snapshot.data == null) {
-                              return
-                                Text(
-                                  'No Disponible',
-                                  style: TextStyle(
-                                      color: _colorPalette.darkBlue,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.w700),
-                                  textAlign: TextAlign.center,
-                                );
+                              return Text(
+                                'No Disponible',
+                                style: TextStyle(
+                                    color: _colorPalette.darkBlue,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w700),
+                                textAlign: TextAlign.center,
+                              );
                             } else {
-                              return
-                                MaterialButton(
-                                    height: 30.0,
-                                    minWidth: 100.0,
-                                    color: _colorPalette.lightBlue,
-                                    shape:
-                                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
-                                    child: Text("Resolver",
-                                        style: TextStyle(
-                                            color: _colorPalette.text, fontWeight: FontWeight.w600)),
-                                    onPressed: () {
+                              return MaterialButton(
+                                  height: 30.0,
+                                  minWidth: 100.0,
+                                  color: _colorPalette.lightBlue,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(100.0)),
+                                  child: Text("Resolver",
+                                      style: TextStyle(
+                                          color: _colorPalette.text,
+                                          fontWeight: FontWeight.w600)),
+                                  onPressed: () {
+                                    if (localStorage.getInt('user_type') ==
+                                        Constants.ALUMNO_USUARIO) {
                                       Navigator.of(context).push(
-                                        MaterialPageRoute(builder:
-                                            (BuildContext context) => QuizDetail(id: widget.id, type: widget.type, salaId: widget.salaId, salaName: widget.salaName,)
-                                        ),
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                QuizResolution(
+                                                  id: widget.id,
+                                                  type: widget.type,
+                                                  salaId: widget.salaId,
+                                                  salaName: widget.salaName,
+                                                )),
+                                      );
+                                    } else {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                QuizDetail(
+                                                  id: widget.id,
+                                                  type: widget.type,
+                                                  salaId: widget.salaId,
+                                                  salaName: widget.salaName,
+                                                )),
                                       );
                                     }
-                                );
+                                  });
                             }
                           }),
                     ],
@@ -209,11 +224,7 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                 ],
               ),
             ),
-          )
-      ),
+          )),
     );
-
-
   }
-
 }
