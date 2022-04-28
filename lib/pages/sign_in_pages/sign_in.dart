@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
 import 'package:historyar_app/pages/register_pages/student_register.dart';
@@ -6,8 +7,10 @@ import 'package:historyar_app/pages/sign_in_pages/forget_password.dart';
 import 'package:historyar_app/providers/user_provider.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/input_text.dart';
-
+import 'package:historyar_app/providers/guest_provider.dart';
 class SignIn extends StatefulWidget {
+  bool flag;
+  SignIn({this.flag=false});
   @override
   _SignInState createState() => _SignInState();
 }
@@ -27,6 +30,7 @@ class _SignInState extends State<SignIn> {
   FocusNode focus_password = FocusNode();
 
   var _usuarioProvider =  UserProvider();
+  var _guestProvide = GuestProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -107,8 +111,9 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
               ),
-              Padding(padding: EdgeInsets.only(top: 16.0), child: _loginButton(context)),
-              Padding(padding: EdgeInsets.only(top: 8.0),child: _register_text_button(context))
+              Padding(padding: EdgeInsets.only(top: 12.0), child: _loginButton(context)),
+              Padding(padding: EdgeInsets.only(top: 8.0),child: _register_text_button(context)),
+              Padding(padding: EdgeInsets.only(top:3.0), child:guestlogin(context))
             ],
             ),
           ),
@@ -225,5 +230,83 @@ class _SignInState extends State<SignIn> {
                   (Route<dynamic> route) => true);
         }
     );
+  }
+
+  void guestAlert(BuildContext context){
+    showDialog(
+        barrierColor: _colorPalette.lightBlue.withOpacity(0.6),
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: _colorPalette.cream,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+            title: Padding(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Center(child: Text('Tipo de Usuario', style: TextStyle(color: _colorPalette.darkBlue,fontWeight: FontWeight.w700, fontSize: 24.0)))),
+            content: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text('Elija el tipo de invitado que desea ser', style: TextStyle(color: _colorPalette.text,fontWeight: FontWeight.w400, fontSize: 14.0), textAlign: TextAlign.justify),
+                  SizedBox(height: 24.0),
+                  guestStudentButton(context, 'Estudiante'),
+                  SizedBox(height: 8.0),
+                  guestTeacherButton(context, 'Docente'),
+                ],
+              ),
+            ),
+          );
+        });
+
+  }
+  Widget guestStudentButton(BuildContext context, String text){
+    return MaterialButton(
+        height: 36.0,
+        minWidth: 126.0,
+        color: _colorPalette.lightBlue,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100.0)
+        ),
+        child: Text(text, style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w600)),
+        onPressed: (){
+         _guestProvide.guestSinginStudent(context);
+        }
+    );
+  }
+
+  Widget guestTeacherButton(BuildContext context, String text){
+   return MaterialButton(
+        height: 36.0,
+        minWidth: 126.0,
+        color: _colorPalette.lightBlue,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100.0)
+        ),
+        child: Text(text, style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w600)),
+        onPressed: (){
+           _guestProvide.guestSinginDocente(context);
+        }
+    );
+  }
+  Widget guestlogin(BuildContext context){
+    return Container(
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          //Text('No tienes una cuenta?', style: TextStyle(color: _colorPalette.text, fontWeight: FontWeight.w400, fontSize: 16.0)),
+          TextButton(
+            child: Text('Continue as a guest', style: TextStyle(color: _colorPalette.darkBlue, fontWeight: FontWeight.w400, fontSize: 16.0)),
+            onPressed: () {
+             guestAlert(context);
+            },
+          )
+        ],
+      ),
+    
+    );
+
   }
 }

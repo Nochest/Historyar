@@ -43,6 +43,7 @@ dependencies:
   permission_handler: ^8.1.6
   flutter_downloader: ^1.7.3
   path_provider: ^2.0.9
+  dart_json_mapper: ^2.1.17
 
 dev_dependencies:
   flutter_test:
