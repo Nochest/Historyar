@@ -1,7 +1,14 @@
+import 'dart:io';
+import 'dart:isolate';
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:historyar_app/model/attendance.dart';
 import 'package:historyar_app/model/story.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_participants_story_list.dart';
+import 'package:historyar_app/pages/lounge_pages/lounge_send_mail.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_story_list.dart';
 import 'package:historyar_app/pages/lounge_pages/my_lounges.dart';
 import 'package:historyar_app/pages/main_menu_pages/create_history.dart';
@@ -15,6 +22,8 @@ import 'package:historyar_app/providers/story_provider.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/input_text.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class LoungeDetail extends StatefulWidget {
 
@@ -36,6 +45,28 @@ class LoungeDetail extends StatefulWidget {
 }
 
 class _LoungeDetailState extends State<LoungeDetail> {
+
+  ReceivePort receivePort = ReceivePort();
+  int progress = 0;
+
+  @override
+  void initState() {
+    IsolateNameServer.registerPortWithName(receivePort.sendPort, "donwloadingexcel");
+
+    receivePort.listen((message) {
+      setState(() {
+        progress = message;
+      });
+    });
+
+    FlutterDownloader.registerCallback(downloadCallback);
+    super.initState();
+  }
+
+  static downloadCallback(id, status, progress) {
+    SendPort? sendPort = IsolateNameServer.lookupPortByName("donwloadingexcel");
+    sendPort!.send(progress);
+  }
 
   Widget _buildIcon(int index, String name){
     return Container(
@@ -298,8 +329,68 @@ class _LoungeDetailState extends State<LoungeDetail> {
                           fontWeight: FontWeight.w700),
                       textAlign: TextAlign.left,
                     ),
+                    IconButton(
+                        onPressed: () async {
+                          final stasus = await Permission.storage.request();
+
+                          const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+                          Random _rnd = Random();
+
+                          String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+                              length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+
+                          if(stasus.isGranted) {
+                            final baseStorage = await getExternalStorageDirectory();
+
+                            await FlutterDownloader.enqueue(url: "http://historyarapi10-env.eba-5jcfb6i8.us-east-1.elasticbeanstalk.com/api/salas/asistencias/${widget.salaId}",
+                                savedDir: baseStorage!.path,
+                                fileName: getRandomString(5) + ".xlsx",
+                                showNotification: true,
+                                openFileFromNotification: false,
+                                saveInPublicStorage: true);
+
+                          } else {
+                            print("Nel");
+                          }
+                        },
+                        icon: Icon(
+                          Icons.file_download,
+                          color: Colors.green ,
+                        ))
                   ],
                 ),
+                const SizedBox(height: 24),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Notificar',
+                      style: TextStyle(
+                          color: _colorPalette.yellow,
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.w700),
+                      textAlign: TextAlign.left,
+                    ),
+                    MaterialButton(
+                        height: 30.0,
+                        minWidth: 100.0,
+                        color: _colorPalette.lightBlue,
+                        shape:
+                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+                        child: Text("Ir",
+                            style: TextStyle(
+                                color: _colorPalette.text, fontWeight: FontWeight.w600)),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder:
+                                (BuildContext context) => LoungeSendMail(id: widget.id, type: widget.type, salaId: widget.salaId,
+                                salaName: widget.salaName)
+                            ),
+                          );
+                        }
+                    )
+                  ],
+                )
               ],
             ),
           ),

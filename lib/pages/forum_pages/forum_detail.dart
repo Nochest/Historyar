@@ -86,6 +86,16 @@ class _ForumDetailState extends State<ForumDetail> {
                               ),
                             )
                         ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 16.0),
+                          child: _comment_box(),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 8.0),
+                          child: Row(
+                            children: [Spacer(), _commentButton(context)],
+                          ),
+                        ),
                         Container(
                           alignment: Alignment.topRight,
                           child: Container(
@@ -107,16 +117,16 @@ class _ForumDetailState extends State<ForumDetail> {
                                           child: Padding(
                                               padding: EdgeInsets.all(5.0),
                                               child: ListTile(
-                                                  title: Text(snapshot.data[i].usuario,
-                                                      style: TextStyle(
-                                                          fontSize: 15.0,
-                                                          color: _colorPalette.darkBlue),
-                                                      textAlign: TextAlign.justify),
-                                                  subtitle: Text(snapshot.data[i].descripcion,
-                                                      style: TextStyle(
-                                                          fontSize: 12.0,
-                                                          color: _colorPalette.text),
-                                                      textAlign: TextAlign.justify),
+                                                title: Text(snapshot.data[i].usuario,
+                                                    style: TextStyle(
+                                                        fontSize: 15.0,
+                                                        color: _colorPalette.darkBlue),
+                                                    textAlign: TextAlign.justify),
+                                                subtitle: Text(snapshot.data[i].descripcion,
+                                                    style: TextStyle(
+                                                        fontSize: 12.0,
+                                                        color: _colorPalette.text),
+                                                    textAlign: TextAlign.justify),
                                               )
                                           ),
                                         )
@@ -128,16 +138,6 @@ class _ForumDetailState extends State<ForumDetail> {
                                   );
                                 }
                             ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 16.0),
-                          child: _comment_box(),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 8.0),
-                          child: Row(
-                            children: [Spacer(), _commentButton(context)],
                           ),
                         ),
                       ],

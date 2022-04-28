@@ -159,9 +159,6 @@ class _StoryDetailState extends State<StoryDetail> {
     );
   }
 
-
-
-
   Widget _descargarButton(BuildContext context, String url) {
     return Center(
       child: MaterialButton(
@@ -188,7 +185,7 @@ class _StoryDetailState extends State<StoryDetail> {
               await FlutterDownloader.enqueue(url: url,
                   savedDir: baseStorage!.path,
                   fileName: getRandomString(5) + ".mp4",
-                  showNotification: false,
+                  showNotification: true,
                   openFileFromNotification: false,
                   saveInPublicStorage: true);
 

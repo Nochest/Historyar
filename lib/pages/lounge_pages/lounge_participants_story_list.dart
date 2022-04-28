@@ -85,9 +85,9 @@ class _LoungeParticipantStoryListState extends State<LoungeParticipantStoryList>
                                         MaterialPageRoute(
                                             builder: (BuildContext context) =>
                                                 LoungeParticipantStoryDetail(id: widget.id,
-                                                    historiaId: snapshot.data[i]
-                                                        .id,
-                                                    type: widget.type)
+                                                    historiaId: snapshot.data[i].id,
+                                                    type: widget.type, salaName: widget.salaName,
+                                                    salaId: widget.salaId, asistenciaId: widget.asistenciaId,)
                                         )
                                     );
                                   },
