@@ -4,6 +4,7 @@ import 'package:historyar_app/model/question.dart';
 import 'package:historyar_app/model/quiz.dart';
 import 'package:historyar_app/model/quiz_models/quiz_model.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_detail.dart';
+import 'package:historyar_app/pages/lounge_pages/lounge_participants.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -155,4 +156,74 @@ class QuizProvider {
           "No se ha podido cargar la pregunta.", "aceptar");
     }
   }
+
+  responder(
+      int id,
+      List<int> respuestas,
+      int usuarioId,
+      int type,
+      int salaId,
+      String salaName,
+      int asistenciaId,
+      BuildContext context) async {
+
+    var getAsistente = await http.get(
+        Uri.parse("${Constants.URL}/api/asistencias/${asistenciaId}"));
+
+    var dataAsistente = json.decode(
+        Utf8Decoder().convert(getAsistente.bodyBytes).toString()
+    );
+
+    double nota = 0;
+
+    var response = await http
+        .get(Uri.parse("${Constants.URL}/api/preguntas/cuestionario/${id}"));
+
+    var jsonData =
+    json.decode(Utf8Decoder().convert(response.bodyBytes).toString());
+
+    List<Alternativa> alternativas = [];
+
+    for (var aux in jsonData) {
+      for (var aux2 in aux["alternativas"]) {
+        alternativas.add(
+            Alternativa(aux2["id"], aux["puntaje"].toString(), aux2["correcto"]));
+      }
+    }
+
+    for (var aux in alternativas) {
+      if(respuestas.contains(aux.id) && aux.correcto == true)
+        nota += double.parse(aux.descripcion);
+
+    }
+    print(nota);
+
+    Map data = {
+      'numeroGrupo': dataAsistente["numeroGrupo"],
+      'nota': nota,
+    };
+
+    var bodyRequest = json.encode(data);
+
+    var editar = await http.put(
+        Uri.parse("${Constants.URL}/api/asistencias/editar/${asistenciaId}"),
+        headers: {"Content-Type": "application/json"},
+        body: bodyRequest);
+
+    if (editar.statusCode == 200) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (BuildContext context) => LoungeParticipant(
+            id: usuarioId,
+            type: type,
+            salaName: salaName,
+            salaId: salaId,
+            asistenciaId: asistenciaId,
+          )));
+    } else {
+      _alert.createAlert(context, "Algo salió mal",
+          "No se ha responder el cuestionario.", "aceptar");
+    }
+  }
+
+
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:historyar_app/model/question.dart';
 import 'package:historyar_app/model/quiz.dart';
+import 'package:historyar_app/pages/lounge_pages/lounge_detail.dart';
 import 'package:historyar_app/pages/lounge_pages/my_lounges.dart';
+import 'package:historyar_app/pages/main_menu_pages/lounge_page.dart';
 import 'package:historyar_app/pages/question_pages/question_creation.dart';
 import 'package:historyar_app/providers/quiz_provider.dart';
 import 'package:historyar_app/utils/alert.dart';
@@ -125,7 +127,8 @@ class _QuizDetailState extends State<QuizDetail> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder:
-                    (BuildContext context) => MyLounges(id: widget.id, type: widget.type)
+                    (BuildContext context) => LoungeDetail(id: widget.id, type: widget.type, salaId: widget.salaId,
+                    salaName: widget.salaName)
                 ),
               );
             },

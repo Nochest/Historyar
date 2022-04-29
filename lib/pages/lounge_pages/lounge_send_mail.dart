@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:historyar_app/helpers/constant_helpers.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_detail.dart';
-import 'package:historyar_app/pages/lounge_pages/lounge_story_rate.dart';
 import 'package:historyar_app/providers/story_provider.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/input_text.dart';
+import 'package:http/http.dart' as http;
 
 class LoungeSendMail extends StatefulWidget {
 
@@ -200,23 +201,38 @@ class _LoungeSendMailState extends State<LoungeSendMail> {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(100.0),
               side: BorderSide(color: _colorPalette.yellow)),
-          child: Text('Agregar',
+          child: Text('Enviar',
               style: TextStyle(
                   fontSize: 14.0,
                   color: _colorPalette.yellow,
                   fontWeight: FontWeight.w600)),
           onPressed: () async {
-            if(_emailController.text.isNotEmpty) {
-              setState(() {
-                listado.add(_emailController.text);
-              });
-            }
-            else{
-              _alert.createAlert(
-                  context, "Algo salió mal", "El correo está vacío.",
-                  "aceptar");
-            }
+            if(listado.length > 0)
+              notificar();
           }),
     );
   }
+
+  notificar() async {
+    var request = http.MultipartRequest("POST",
+        Uri.parse("${Constants.URL}/api/salas/notificar/${widget.salaId}"));
+
+    request.fields["correos"] = listado.join(";");
+
+    var response = await request.send();
+
+    if(response.statusCode == 200) {
+      _alert.createAlert(
+          context, "Éxitoso", "Se notificaron sobre la sala a los correos registrados.",
+          "Aceptar");
+      setState(() {
+
+      });
+    } else {
+      _alert.createAlert(
+          context, "Algo salió mal", "No se pudo enviar los correos.",
+          "Aceptar");
+    }
+  }
+
 }

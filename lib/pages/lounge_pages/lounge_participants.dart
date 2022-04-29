@@ -254,46 +254,48 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                               return Text(
                                 'No Disponible',
                                 style: TextStyle(
-                                    color: _colorPalette.darkBlue,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w700),
+                                    color: _colorPalette.text,
+                                    fontWeight: FontWeight.w600),
                                 textAlign: TextAlign.center,
                               );
                             } else {
-                              return MaterialButton(
-                                  height: 30.0,
-                                  minWidth: 100.0,
-                                  color: _colorPalette.lightBlue,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(100.0)),
-                                  child: Text("Resolver",
-                                      style: TextStyle(
-                                          color: _colorPalette.text,
-                                          fontWeight: FontWeight.w600)),
-                                  onPressed: () {
-                                    if (localStorage.getInt('user_type') ==
-                                        Constants.ALUMNO_USUARIO) {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                QuizResolution(
-                                                  id: widget.id,
-                                                  type: widget.type,
-                                                  salaId: widget.salaId,
-                                                  salaName: widget.salaName,
-                                                )),
-                                      );
+                              return FutureBuilder(
+                                  future: _atencionProvider.getById(widget.asistenciaId),
+                                  builder:
+                                      (BuildContext context, AsyncSnapshot atencion) {
+                                    print(atencion.data);
+                                    if (atencion.data == null || atencion.data.nota == null) {
+                                      return MaterialButton(
+                                          height: 30.0,
+                                          minWidth: 100.0,
+                                          color: _colorPalette.lightBlue,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(100.0)),
+                                          child: Text("Resolver",
+                                              style: TextStyle(
+                                                  color: _colorPalette.text,
+                                                  fontWeight: FontWeight.w600)),
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (BuildContext context) =>
+                                                      QuizResolution(
+                                                        id: widget.id,
+                                                        type: widget.type,
+                                                        salaId: widget.salaId,
+                                                        salaName: widget.salaName,
+                                                        asistenciaId: widget.asistenciaId,
+                                                      )),
+                                            );
+                                          });
                                     } else {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                QuizDetail(
-                                                  id: widget.id,
-                                                  type: widget.type,
-                                                  salaId: widget.salaId,
-                                                  salaName: widget.salaName,
-                                                )),
+                                      return Text(
+                                        "Realizado",
+                                        style: TextStyle(
+                                            color: _colorPalette.text,
+                                            fontWeight: FontWeight.w600),
+                                        textAlign: TextAlign.center,
                                       );
                                     }
                                   });
@@ -306,13 +308,36 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Descargar Notas',
+                        'Nota',
                         style: TextStyle(
                             color: _colorPalette.yellow,
                             fontSize: 24.0,
                             fontWeight: FontWeight.w700),
                         textAlign: TextAlign.left,
                       ),
+                      FutureBuilder(
+                          future: _atencionProvider.getById(widget.asistenciaId),
+                          builder:
+                              (BuildContext context, AsyncSnapshot atencion) {
+                                print(atencion.data);
+                            if (atencion.data == null || atencion.data.nota == null) {
+                              return Text(
+                                'Sin calificar',
+                                style: TextStyle(
+                                    color: _colorPalette.text,
+                                    fontWeight: FontWeight.w600),
+                                textAlign: TextAlign.center,
+                              );
+                            } else {
+                              return Text(
+                                atencion.data.nota.toString(),
+                                style: TextStyle(
+                                    color: _colorPalette.text,
+                                    fontWeight: FontWeight.w600),
+                                textAlign: TextAlign.center,
+                              );
+                            }
+                          }),
                     ],
                   ),
                 ],

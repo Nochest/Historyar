@@ -35,9 +35,16 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
 
   int reaccion = 3;
 
+  List<int> reacciones = [0, 0, 0, 0, 0];
+
   getData() async {
     reaccion = await _reaccionProvider
         .getReactionByUserIdAndHistoriaId(widget.id, widget.historiaId);
+  }
+
+  getReacciones() async {
+    reacciones = await _reaccionProvider
+        .getReactionsByHistoriaId(widget.historiaId);
   }
 
   ColorPalette _colorPalette = ColorPalette();
@@ -45,6 +52,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
   @override
   void initState() {
     getData();
+    getReacciones();
     setState(() {});
     super.initState();
   }
@@ -77,6 +85,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
         body: FutureBuilder(
           future: _storyProvider.getById(widget.historiaId),
           builder: (BuildContext context, AsyncSnapshot<Historia?> snapshot) {
+
             if (!snapshot.hasData) {
               return Center(child: CircularProgressIndicator());
             } else {
@@ -180,7 +189,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
                             ),
                           )
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -211,7 +220,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
                                 }
                               ),
                               Text("Aburrido"),
-                              Text("(1)")
+                              Text("(${reacciones[0]})")
                             ]
                           ),
                           Column(
@@ -228,7 +237,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
                                   },
                                 ),
                                 Text("Confundido"),
-                                Text("(1)")
+                                Text("(${reacciones[1]})")
                               ]
                           ),
                           Column(
@@ -245,7 +254,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
                                   },
                                 ),
                                 Text("Neutral"),
-                                Text("(1)")
+                                Text("(${reacciones[2]})")
                               ]
                           ),
                           Column(
@@ -262,7 +271,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
                                   },
                                 ),
                                 Text("Interesante"),
-                                Text("(1)")
+                                Text("(${reacciones[3]})")
                               ]
                           ),
                           Column(
@@ -279,7 +288,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
                                   },
                                 ),
                                 Text("Entendido"),
-                                Text("(1)")
+                                Text("(${reacciones[4]})")
                               ]
                           )
                         ],

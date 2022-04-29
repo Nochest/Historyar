@@ -112,7 +112,6 @@ class LoungeProvider {
           Map data = {
             "fecha": formatter.format(selectedDate),
             "numeroGrupo": 1,
-            "nota": 0,
             "usuario": {
               "id": usuarioId
             },

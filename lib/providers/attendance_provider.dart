@@ -71,4 +71,30 @@ class AttendanceProvider {
     }
   }
 
+
+  Future<Asistencia?> getById(int id) async {
+    var response = await http.get(
+        Uri.parse("${Constants.URL}/api/asistencias/${id}"));
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+
+      var aux = json.decode(
+          Utf8Decoder().convert(response.bodyBytes).toString()
+      );
+
+      print(id);
+
+
+      Asistencia asistencia = Asistencia(aux["id"],
+          aux["usuario"]["nombres"],
+          aux["numeroGrupo"],
+          aux["nota"]);
+
+      return asistencia;
+    } else {
+      return null;
+    }
+  }
+
 }

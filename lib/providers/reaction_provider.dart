@@ -11,6 +11,32 @@ import 'package:intl/intl.dart';
 class ReactionProvider {
   Alert _alert = Alert();
 
+  Future<List<int>> getReactionsByHistoriaId(int historiaId) async {
+    var response = await http.get(
+        Uri.parse("${Constants.URL}/api/reacciones/historia/${historiaId}"));
+
+    var jsonData = json.decode(
+        Utf8Decoder().convert(response.bodyBytes).toString()
+    );
+
+    List<int> reacciones = [0, 0, 0, 0, 0];
+
+    for(var aux in jsonData) {
+      if(aux["reaccion"] == 1)
+        reacciones[0]++;
+      else if(aux["reaccion"] == 2)
+        reacciones[1]++;
+      else if(aux["reaccion"] == 3)
+        reacciones[2]++;
+      else if(aux["reaccion"] == 4)
+        reacciones[3]++;
+      else
+        reacciones[4]++;
+    }
+
+    return reacciones;
+  }
+
   Future<int> getReactionByUserIdAndHistoriaId(int usuarioId,
       int historiaId) async {
     var response = await http.get(
