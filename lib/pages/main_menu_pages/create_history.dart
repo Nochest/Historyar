@@ -20,6 +20,7 @@ import 'package:flutter/services.dart';
 import 'package:historyar_app/providers/story_provider.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:vector_math/vector_math_64.dart' hide Colors;
 
 class CreateHistory extends StatefulWidget {
@@ -42,6 +43,8 @@ class _CreateHistoryState extends State<CreateHistory> {
   String? route;
 
   var _storyProvider = StoryProvider();
+
+  //File file = File(route.toString());
 
   final palette = ColorPalette();
 
@@ -172,7 +175,7 @@ class _CreateHistoryState extends State<CreateHistory> {
                       child: Column(
                         children: [
                           IconButton(
-                            onPressed: () {
+                            onPressed: () async {
                               File video = File(route.toString());
                               _storyProvider.registerS3(
                                   widget.id,
@@ -181,6 +184,8 @@ class _CreateHistoryState extends State<CreateHistory> {
                                   "descripcion",
                                   video,
                                   context);
+                              print(route);
+                             
                             },
                             icon: Icon(Icons.save),
                           ),
@@ -194,6 +199,19 @@ class _CreateHistoryState extends State<CreateHistory> {
                             },
                             icon: Icon(Icons.play_arrow),
                           ),
+                          const SizedBox(height: 8),
+                          IconButton(onPressed: () async{
+
+                            List<String> videoPath = [];
+                            videoPath.add(route.toString());
+                            print('ruta');
+                            print(videoPath);
+                              //File video = File(route.toString());
+                            if(videoPath == null) return;
+           
+                            await Share.shareFiles(videoPath);
+                          
+                          }, icon: Icon(Icons.share))
                         ],
                       ),
                     ),
