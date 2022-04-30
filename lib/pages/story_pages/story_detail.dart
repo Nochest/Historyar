@@ -10,6 +10,7 @@ import 'package:historyar_app/providers/story_provider.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 
 class StoryDetail extends StatefulWidget {
   final int id;
@@ -146,6 +147,11 @@ class _StoryDetailState extends State<StoryDetail> {
                           ),
                         )
                     ),
+                    IconButton(onPressed: () async{
+
+                      await Share.share(snapshot.data!.url);
+
+                    }, icon: Icon(Icons.share)),
                     Padding(
                         padding: EdgeInsets.only(top: 10.0, bottom: 50.0),
                         child: _descargarButton(context, snapshot.data!.url)),
