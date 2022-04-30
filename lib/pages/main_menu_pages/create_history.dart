@@ -185,7 +185,6 @@ class _CreateHistoryState extends State<CreateHistory> {
                                   video,
                                   context);
                               print(route);
-                             
                             },
                             icon: Icon(Icons.save),
                           ),
@@ -200,18 +199,18 @@ class _CreateHistoryState extends State<CreateHistory> {
                             icon: Icon(Icons.play_arrow),
                           ),
                           const SizedBox(height: 8),
-                          IconButton(onPressed: () async{
+                          IconButton(
+                              onPressed: () async {
+                                List<String> videoPath = [];
+                                videoPath.add(route.toString());
+                                print('ruta');
+                                print(videoPath);
+                                //File video = File(route.toString());
+                                if (videoPath == null) return;
 
-                            List<String> videoPath = [];
-                            videoPath.add(route.toString());
-                            print('ruta');
-                            print(videoPath);
-                              //File video = File(route.toString());
-                            if(videoPath == null) return;
-           
-                            await Share.shareFiles(videoPath);
-                          
-                          }, icon: Icon(Icons.share))
+                                await Share.shareFiles(videoPath);
+                              },
+                              icon: Icon(Icons.share))
                         ],
                       ),
                     ),
