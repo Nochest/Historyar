@@ -16,12 +16,10 @@ class ForumCreation extends StatefulWidget {
 
   final int id;
   final int type;
-  final bool isguest;
 
   const ForumCreation({
     required this.id,
     required this.type,
-    required this.isguest,
     Key? key
   }) : super(key: key);
 
@@ -132,7 +130,7 @@ class _ForumCreationState extends State<ForumCreation> {
                 _descriptionController.text.isNotEmpty) {
               _foroProvider.publicar(_topicController.text,
                   _descriptionController.text,
-                  widget.id, widget.type,widget.isguest, context);
+                  widget.id, widget.type, context);
               //Navigator.of(context).pushReplacement(MaterialPageRoute(
               //   builder: (BuildContext context) => SignIn()));
             } else {

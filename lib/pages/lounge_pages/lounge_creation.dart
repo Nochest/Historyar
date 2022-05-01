@@ -9,12 +9,10 @@ class LoungeCreation extends StatefulWidget {
 
   final int id;
   final int type;
-  final bool isguest;
 
   const LoungeCreation({
     required this.id,
     required this.type,
-    required this.isguest,
     Key? key
   }) : super(key: key);
 
@@ -163,7 +161,7 @@ class _LoungeCreationState extends State<LoungeCreation> {
               _salaProvider.crear(_titleController.text,
                   _descriptionController.text,
                   _passwordController.text,
-                  widget.id, widget.type,widget.isguest, context);
+                  widget.id, widget.type, context);
               //Navigator.of(context).pushReplacement(MaterialPageRoute(
               //   builder: (BuildContext context) => SignIn()));
             } else {

@@ -13,14 +13,12 @@ class LoungeSendMail extends StatefulWidget {
   final int salaId;
   final String salaName;
   final int type;
-  final bool isguest;
 
   const LoungeSendMail({
     required this.id,
     required this.salaId,
     required this.salaName,
     required this.type,
-    required this.isguest,
     Key? key
   }) : super(key: key);
 
@@ -49,7 +47,7 @@ class _LoungeSendMailState extends State<LoungeSendMail> {
         Navigator.of(context).push(
           MaterialPageRoute(builder:
               (BuildContext context) => LoungeDetail(id: widget.id, type: widget.type, salaId: widget.salaId,
-              salaName: widget.salaName,isguest: widget.isguest,)
+              salaName: widget.salaName)
           ),
         );
         return true;
@@ -66,7 +64,7 @@ class _LoungeSendMailState extends State<LoungeSendMail> {
               Navigator.of(context).push(
                 MaterialPageRoute(builder:
                     (BuildContext context) => LoungeDetail(id: widget.id, type: widget.type, salaId: widget.salaId,
-                    salaName: widget.salaName, isguest: widget.isguest,)
+                    salaName: widget.salaName)
                 ),
               );
             },

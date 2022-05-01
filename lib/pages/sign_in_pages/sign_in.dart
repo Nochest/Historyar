@@ -18,7 +18,7 @@ class _SignInState extends State<SignIn> {
 
   bool signIn = false;
   bool pass = false;
-  bool isguest = false;
+
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
 
@@ -136,9 +136,7 @@ class _SignInState extends State<SignIn> {
           onPressed: (){
             if(_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty){
 
-              isguest=  _guestProvide.isGuest(false);
-              _usuarioProvider.signIn(_emailController.text, _passwordController.text, context,isguest);
-              
+              _usuarioProvider.signIn(_emailController.text, _passwordController.text, context);
     /*
               Navigator.of(context).
               pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => HomeHolder()),
@@ -273,9 +271,7 @@ class _SignInState extends State<SignIn> {
         ),
         child: Text(text, style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w600)),
         onPressed: (){
-          isguest = _guestProvide.isGuest(true);
-         _guestProvide.guestSinginStudent(context,isguest);
-         
+         _guestProvide.guestSinginStudent(context);
         }
     );
   }
@@ -290,9 +286,7 @@ class _SignInState extends State<SignIn> {
         ),
         child: Text(text, style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w600)),
         onPressed: (){
-         isguest = _guestProvide.isGuest(true);
-           _guestProvide.guestSinginDocente(context,isguest);
-           
+           _guestProvide.guestSinginDocente(context);
         }
     );
   }
@@ -307,7 +301,6 @@ class _SignInState extends State<SignIn> {
             child: Text('Continue as a guest', style: TextStyle(color: _colorPalette.darkBlue, fontWeight: FontWeight.w400, fontSize: 16.0)),
             onPressed: () {
              guestAlert(context);
-
             },
           )
         ],

@@ -11,7 +11,6 @@ class LoungeParticipantStoryList extends StatefulWidget {
   final int asistenciaId;
   final String salaName;
   final int type;
-  final bool isguest;
 
   const LoungeParticipantStoryList({
     required this.id,
@@ -19,7 +18,6 @@ class LoungeParticipantStoryList extends StatefulWidget {
     required this.salaName,
     required this.asistenciaId,
     required this.type,
-    required this.isguest,
     Key? key
   }) : super(key: key);
 
@@ -42,7 +40,7 @@ class _LoungeParticipantStoryListState extends State<LoungeParticipantStoryList>
         Navigator.of(context).push(
           MaterialPageRoute(builder:
               (BuildContext context) => LoungeParticipant(id: widget.id, type: widget.type, salaId: widget.salaId,
-              salaName: widget.salaName, asistenciaId: widget.asistenciaId, isguest: widget.isguest,)
+              salaName: widget.salaName, asistenciaId: widget.asistenciaId,)
           ),
         );
         return true;
@@ -89,7 +87,7 @@ class _LoungeParticipantStoryListState extends State<LoungeParticipantStoryList>
                                                 LoungeParticipantStoryDetail(id: widget.id,
                                                     historiaId: snapshot.data[i].id,
                                                     type: widget.type, salaName: widget.salaName,
-                                                    salaId: widget.salaId, asistenciaId: widget.asistenciaId,isguest: widget.isguest,)
+                                                    salaId: widget.salaId, asistenciaId: widget.asistenciaId,)
                                         )
                                     );
                                   },

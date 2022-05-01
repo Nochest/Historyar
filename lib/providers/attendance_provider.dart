@@ -38,7 +38,6 @@ class AttendanceProvider {
       String password,
       int usuarioId,
       int type,
-      bool isguest,
       BuildContext context) async{
 
     var date = DateTime.now();
@@ -63,7 +62,7 @@ class AttendanceProvider {
 
     if (response.statusCode == 201) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => Lounge(id: usuarioId, type: type,isguest: isguest,))
+          builder: (BuildContext context) => Lounge(id: usuarioId, type: type))
       );
     } else {
       _alert.createAlert(

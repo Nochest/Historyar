@@ -44,7 +44,6 @@ class LoungeProvider {
       String password,
       int usuarioId,
       int type,
-      bool isguest,
       BuildContext context) async{
 
     var date = DateTime.now();
@@ -69,7 +68,7 @@ class LoungeProvider {
 
     if (response.statusCode == 201) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => Lounge(id: usuarioId, type: type,isguest: isguest,))
+          builder: (BuildContext context) => Lounge(id: usuarioId, type: type))
       );
     } else {
       _alert.createAlert(
@@ -82,7 +81,6 @@ class LoungeProvider {
       String password,
       int usuarioId,
       int type,
-      bool isguest,
       BuildContext context
       ) async {
 
@@ -135,13 +133,13 @@ class LoungeProvider {
 
           Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => LoungeParticipant(id: usuarioId, type: type,
-                asistenciaId: asistenciaData["id"], salaId: jsonData["id"], salaName: jsonData["titulo"],isguest: isguest,))
+                asistenciaId: asistenciaData["id"], salaId: jsonData["id"], salaName: jsonData["titulo"],))
           );
 
         } else {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (BuildContext context) => LoungeParticipant(id: usuarioId, type: type,
-                asistenciaId: asistenciaId, salaId: jsonData["id"], salaName: jsonData["titulo"],isguest: isguest,))
+                asistenciaId: asistenciaId, salaId: jsonData["id"], salaName: jsonData["titulo"],))
           );
         }
 

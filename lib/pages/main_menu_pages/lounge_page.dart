@@ -11,8 +11,8 @@ import 'package:historyar_app/widgets/input_text.dart';
 class Lounge extends StatefulWidget {
   final int id;
   final int type;
-  final bool isguest;
-  const Lounge({required this.id, required this.type, required this.isguest, Key? key})
+
+  const Lounge({required this.id, required this.type, Key? key})
       : super(key: key);
 
   @override
@@ -111,7 +111,7 @@ class _LoungeState extends State<Lounge> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder:
-                                  (BuildContext context) => MyLounges(id: widget.id, type: widget.type,isguest: widget.isguest,)
+                                  (BuildContext context) => MyLounges(id: widget.id, type: widget.type)
                           ));
                         },
                       ),
@@ -141,7 +141,7 @@ class _LoungeState extends State<Lounge> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder:
-                                  (BuildContext context) => LoungeCreation(id: widget.id, type: widget.type,isguest: widget.isguest,)
+                                  (BuildContext context) => LoungeCreation(id: widget.id, type: widget.type)
                           ));
                         },
                       ),
@@ -281,7 +281,7 @@ class _LoungeState extends State<Lounge> {
       floatingActionButton: historyarButtonApp(context, false, widget.id, widget.type),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: historyarBottomAppBar(
-          context, false, true, false, false, widget.id, widget.type, widget.isguest),
+          context, false, true, false, false, widget.id, widget.type),
     );
   }
 
@@ -379,7 +379,7 @@ class _LoungeState extends State<Lounge> {
         onPressed: () {
           if (_codeController.text.isNotEmpty) {
             _salaProvider.getByCode(_codeController.text, _passwordController.text,
-                widget.id, widget.type,widget.isguest, context);
+                widget.id, widget.type, context);
           } else {
             setState(() {
               _codeController.text = "";

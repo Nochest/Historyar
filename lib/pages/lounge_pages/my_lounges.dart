@@ -10,11 +10,10 @@ class MyLounges extends StatefulWidget {
 
   final int id;
   final int type;
-  final bool isguest;
+
   const MyLounges({
     required this.id,
     required this.type,
-    required this.isguest,
     Key? key
   }) : super(key: key);
 
@@ -36,7 +35,7 @@ class _MyLoungesState extends State<MyLounges> {
 
         Navigator.of(context).push(
           MaterialPageRoute(builder:
-              (BuildContext context) => Lounge(id: widget.id, type: widget.type,isguest: widget.isguest,)
+              (BuildContext context) => Lounge(id: widget.id, type: widget.type)
           ),
         );
         return true;
@@ -52,7 +51,7 @@ class _MyLoungesState extends State<MyLounges> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder:
-                    (BuildContext context) => Lounge(id: widget.id, type: widget.type,isguest: widget.isguest,)
+                    (BuildContext context) => Lounge(id: widget.id, type: widget.type)
                 ),
               );
             },
@@ -93,7 +92,7 @@ class _MyLoungesState extends State<MyLounges> {
                                 onTap: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(builder:
-                                        (BuildContext context) => LoungeDetail(id: widget.id, type: widget.type, salaId: snapshot.data[i].id, salaName: snapshot.data[i].titulo,isguest: widget.isguest,)
+                                        (BuildContext context) => LoungeDetail(id: widget.id, type: widget.type, salaId: snapshot.data[i].id, salaName: snapshot.data[i].titulo,)
                                     ),
                                   );
                                 },

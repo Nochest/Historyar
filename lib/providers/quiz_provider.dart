@@ -44,7 +44,7 @@ class QuizProvider {
   }
 
   crear(String tema, String descripcion, int salaId, String salaName,
-      int usuarioId, int type, bool isguest, BuildContext context) async {
+      int usuarioId, int type, BuildContext context) async {
     var date = DateTime.now();
     DateFormat formatter = DateFormat('yyyy-MM-dd');
 
@@ -68,7 +68,6 @@ class QuizProvider {
                 type: type,
                 salaName: salaName,
                 salaId: salaId,
-                isguest: isguest,
               )));
     } else {
       _alert.createAlert(
@@ -121,7 +120,6 @@ class QuizProvider {
       bool correctoC,
       String alternativaD,
       bool correctoD,
-      bool isguest,
       BuildContext context) async {
     var date = DateTime.now();
     DateFormat formatter = DateFormat('yyyy-MM-dd');
@@ -152,7 +150,6 @@ class QuizProvider {
                 type: type,
                 salaName: salaName,
                 salaId: salaId,
-                isguest: isguest,
               )));
     } else {
       _alert.createAlert(context, "Algo salió mal",
@@ -168,7 +165,6 @@ class QuizProvider {
       int salaId,
       String salaName,
       int asistenciaId,
-      bool isguest,
       BuildContext context) async {
 
     var getAsistente = await http.get(
@@ -222,7 +218,6 @@ class QuizProvider {
             salaName: salaName,
             salaId: salaId,
             asistenciaId: asistenciaId,
-            isguest: isguest,
           )));
     } else {
       _alert.createAlert(context, "Algo salió mal",

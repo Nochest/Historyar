@@ -18,7 +18,7 @@ class GuestProvider {
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
   length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
-  guestSinginDocente(BuildContext context, bool isguest) async{
+  guestSinginDocente(BuildContext context) async{
     
       Map data = {
       'celular': 'unknow',
@@ -65,13 +65,12 @@ class GuestProvider {
        print(jsonData.runtimeType);
        print(auxiliar);
        print(auxiliar.join());
-        print(isguest);
        if( users != null){
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (BuildContext context) =>
                     HomeHolder(
-                        id: res, type: 2,isguest: isguest,)),
+                        id: res, type: 2)),
                 (Route<dynamic> route) => false);
        }
        //var id = int.parse(list['id']);
@@ -84,7 +83,7 @@ class GuestProvider {
   
   }
   
-  guestSinginStudent(BuildContext context, bool isguest) async{
+  guestSinginStudent(BuildContext context) async{
    Map data = {
       'emailApoderado': 'unknow',
       'nombres': 'unknow',
@@ -128,21 +127,15 @@ class GuestProvider {
        print(jsonData.runtimeType);
        print(auxiliar);
        print(auxiliar.join());
-       print(isguest);
        if( users != null){
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (BuildContext context) =>
                     HomeHolder(
-                        id: res, type: 1, isguest: isguest,)),
+                        id: res, type: 1)),
                 (Route<dynamic> route) => false);
       }
     }
 
   }
-
-  bool isGuest(bool confirm) {
-    return confirm;
-  }
-  
 }

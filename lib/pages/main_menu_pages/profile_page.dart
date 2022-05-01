@@ -15,8 +15,8 @@ import 'package:historyar_app/widgets/input_text.dart';
 class Profile extends StatefulWidget {
   final int id;
   final int type;
-  final bool isguest;
-  const Profile({required this.id, required this.type,required this.isguest, Key? key})
+
+  const Profile({required this.id, required this.type, Key? key})
       : super(key: key);
 
   @override
@@ -40,8 +40,8 @@ class _ProfileState extends State<Profile> {
     focus_password.addListener(() {
       setState(() {});
     });
-    if(widget.isguest == false){
-       return Scaffold(
+
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: _colorPalette.lightBlue,
         centerTitle: true,
@@ -110,7 +110,7 @@ class _ProfileState extends State<Profile> {
                         onTap: () {
                           Navigator.of(context).push(
                               MaterialPageRoute(builder:
-                                  (BuildContext context) => MyStories(id: widget.id, type: widget.type,isguest: widget.isguest,)
+                                  (BuildContext context) => MyStories(id: widget.id, type: widget.type)
                               )
                           );
                         },
@@ -136,7 +136,7 @@ class _ProfileState extends State<Profile> {
                                   builder: (context) => StudentEditProfile(
                                     id: widget.id,
                                     type: widget.type,
-                                    isguest: widget.isguest,
+                                  
                                   ),
                                 ),
                                 //print()
@@ -147,7 +147,6 @@ class _ProfileState extends State<Profile> {
                                   builder: (context) => TeacherEditProfile(
                                     id: widget.id,
                                     type: widget.type,
-                                    isguest: widget.isguest,
                                   ),
                                 ),
                               );
@@ -231,53 +230,8 @@ class _ProfileState extends State<Profile> {
       floatingActionButton: historyarButtonApp(context, false, widget.id, widget.type),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: historyarBottomAppBar(
-          context, false, false, false, true, widget.id, widget.type,widget.isguest),
+          context, false, false, false, true, widget.id, widget.type),
     );
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-        backgroundColor: _colorPalette.lightBlue,
-        centerTitle: true,
-        elevation: 0,
-        title: Text(
-          'Perfil',
-          style: TextStyle(color: _colorPalette.yellow),
-        ),
-      ),
-      body:Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Image.network("https://i.imgur.com/7RelDWE.png"),
-          Column(
-            children: <Widget>[
-              Text('No disponible'
-              
-              ),
-              Text('como invitado'
-              ),
-              MaterialButton( elevation: 10.0,
-              minWidth: 170.0,
-              height:50.0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)
-              ),
-              child: Text('Logueate'),
-               onPressed: () {  },
-              ),
-            ],
-
-          )
-          
-        ],
-      ),
-      
-      floatingActionButton: historyarButtonApp(context, false, widget.id, widget.type),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: historyarBottomAppBar(
-          context, false, false, false, true, widget.id, widget.type,widget.isguest),
-      );
-    }
-
-   
   }
 
   Widget _eliminarButton(BuildContext context) {

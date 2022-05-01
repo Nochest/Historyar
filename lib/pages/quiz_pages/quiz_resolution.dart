@@ -16,7 +16,6 @@ class QuizResolution extends StatefulWidget {
   final String salaName;
   final int asistenciaId;
   final int type;
-  final bool isguest;
 
   const QuizResolution(
       {required this.id,
@@ -24,7 +23,6 @@ class QuizResolution extends StatefulWidget {
       required this.salaName,
       required this.asistenciaId,
       required this.type,
-      required this.isguest,
       Key? key})
       : super(key: key);
 
@@ -62,7 +60,7 @@ class _QuizResolutionState extends State<QuizResolution> {
         Navigator.of(context).push(
           MaterialPageRoute(builder:
               (BuildContext context) => LoungeParticipant(id: widget.id, type: widget.type, salaId: widget.salaId,
-            salaName: widget.salaName, asistenciaId: widget.asistenciaId,isguest: widget.isguest,)
+            salaName: widget.salaName, asistenciaId: widget.asistenciaId,)
           ),
         );
         return true;
@@ -145,7 +143,6 @@ class _QuizResolutionState extends State<QuizResolution> {
                         widget.salaId,
                         widget.salaName,
                         widget.asistenciaId,
-                        widget.isguest,
                         context);
                   },
                 ),

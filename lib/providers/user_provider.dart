@@ -21,7 +21,7 @@ class UserProvider {
   Alert _alert = Alert();
 
   Future<void> signIn(
-      String email, String password, BuildContext context, bool isguest) async {
+      String email, String password, BuildContext context) async {
     LoginResponse user;
     Map<String, dynamic> request = {
       'email': email,
@@ -40,7 +40,7 @@ class UserProvider {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (BuildContext context) =>
-                HomeHolder(id: user.id, type: user.tipoUsuario, isguest: isguest,),
+                HomeHolder(id: user.id, type: user.tipoUsuario),
           ),
           (Route<dynamic> route) => false);
     } else if (response.statusCode == 403) {
@@ -264,7 +264,6 @@ class UserProvider {
       String apellidos,
       String email,
       String fechaNacimiento,
-      bool isguest,
       BuildContext context) async {
     Map data = {
       'nombres': nombres,
@@ -286,7 +285,7 @@ class UserProvider {
 
     if (response.statusCode == 200) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => Profile(id: userId, type: type,isguest: isguest,)));
+          builder: (BuildContext context) => Profile(id: userId, type: type)));
       _alert.createAlert(
           context, data['nombres'], response.statusCode.toString(), "aceptar");
     } else {
@@ -307,7 +306,6 @@ class UserProvider {
       String fechaNacimiento,
       bool celularVisible,
       bool emailVisible,
-      bool isguest,
       BuildContext context) async {
     Map data = {
       'celular': celular,
@@ -331,7 +329,7 @@ class UserProvider {
 
     if (response.statusCode == 200) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => Profile(id: userId, type: type,isguest: isguest,)));
+          builder: (BuildContext context) => Profile(id: userId, type: type)));
     } else {
       _alert.createAlert(
           context, "Algo salió mal", "No se ha podido actualizar.", "aceptar");

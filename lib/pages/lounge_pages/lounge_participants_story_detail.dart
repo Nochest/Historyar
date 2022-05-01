@@ -16,14 +16,13 @@ class LoungeParticipantStoryDetail extends StatefulWidget {
   final int asistenciaId;
   final String salaName;
   final int type;
-  final bool isguest;
 
   const LoungeParticipantStoryDetail({required this.id,
     required this.historiaId,
     required this.salaId,
     required this.salaName,
     required this.asistenciaId,
-    required this.type, required this.isguest, Key? key})
+    required this.type, Key? key})
       : super(key: key);
 
   @override
@@ -67,7 +66,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
         Navigator.of(context).push(
           MaterialPageRoute(builder:
               (BuildContext context) => LoungeParticipantStoryList(id: widget.id, type: widget.type, salaId: widget.salaId,
-            salaName: widget.salaName, asistenciaId: widget.asistenciaId, isguest: widget.isguest,)
+            salaName: widget.salaName, asistenciaId: widget.asistenciaId,)
           ),
         );
         return true;
@@ -217,7 +216,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
                                 iconSize: 50,
                                 onPressed: () {
                                   _reaccionProvider.guardar(widget.id, widget.historiaId, widget.type, 1,
-                                      widget.salaId, widget.salaName, widget.asistenciaId,widget.isguest, context);
+                                      widget.salaId, widget.salaName, widget.asistenciaId,context);
                                 }
                               ),
                               Text("Aburrido"),
@@ -234,7 +233,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
                                   iconSize: 50,
                                   onPressed: () {
                                     _reaccionProvider.guardar(widget.id, widget.historiaId, widget.type, 2,
-                                        widget.salaId, widget.salaName, widget.asistenciaId,widget.isguest, context);
+                                        widget.salaId, widget.salaName, widget.asistenciaId,context);
                                   },
                                 ),
                                 Text("Confundido"),
@@ -251,7 +250,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
                                   iconSize: 50,
                                   onPressed: () {
                                     _reaccionProvider.guardar(widget.id, widget.historiaId, widget.type, 3,
-                                        widget.salaId, widget.salaName, widget.asistenciaId,widget.isguest, context);
+                                        widget.salaId, widget.salaName, widget.asistenciaId,context);
                                   },
                                 ),
                                 Text("Neutral"),
@@ -268,7 +267,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
                                   iconSize: 50,
                                   onPressed: () {
                                     _reaccionProvider.guardar(widget.id, widget.historiaId, widget.type, 4,
-                                        widget.salaId, widget.salaName, widget.asistenciaId, widget.isguest, context);
+                                        widget.salaId, widget.salaName, widget.asistenciaId,context);
                                   },
                                 ),
                                 Text("Interesante"),
@@ -285,7 +284,7 @@ class _LoungeParticipantStoryDetailState extends State<LoungeParticipantStoryDet
                                   iconSize: 50,
                                   onPressed: () {
                                     _reaccionProvider.guardar(widget.id, widget.historiaId, widget.type, 5,
-                                        widget.salaId, widget.salaName, widget.asistenciaId, widget.isguest, context);
+                                        widget.salaId, widget.salaName, widget.asistenciaId,context);
                                   },
                                 ),
                                 Text("Entendido"),

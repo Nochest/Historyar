@@ -127,7 +127,6 @@ class StoryProvider {
   deleteHistoria(int id,
       int historiaId,
       int type,
-      bool isguest,
       BuildContext context) async {
     print(historiaId);
 
@@ -138,7 +137,7 @@ class StoryProvider {
 
     if (response.statusCode == 200) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => MyStories(id: id, type: type,isguest: isguest,))
+          builder: (BuildContext context) => MyStories(id: id, type: type))
       );
     } else{
       _alert.createAlert(
@@ -185,7 +184,6 @@ class StoryProvider {
   favorito(int id,
       int historiaId,
       int type,
-      bool isguest,
       BuildContext context) async {
     print(historiaId);
 
@@ -196,7 +194,7 @@ class StoryProvider {
 
     if (response.statusCode == 200) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => MyStories(id: id, type: type,isguest: isguest,))
+          builder: (BuildContext context) => MyStories(id: id, type: type))
       );
     } else{
       _alert.createAlert(
@@ -250,7 +248,6 @@ class StoryProvider {
       int type,
       int puntaje,
       String descripcion,
-      bool isguest,
       BuildContext context) async {
     print(historiaId);
 
@@ -271,7 +268,7 @@ class StoryProvider {
     if (response.statusCode == 200) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => LoungeStoryList(id: id, type: type, salaId: salaId,
-              salaName: salaName,isguest: isguest,)
+              salaName: salaName)
       ));
     } else{
       _alert.createAlert(

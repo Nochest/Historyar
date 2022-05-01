@@ -20,10 +20,9 @@ class ForumEdit extends StatefulWidget {
   final int id;
   final int type;
   final int userId;
-  final bool isguest;
 
   const ForumEdit(
-      {required this.id, required this.type, required this.userId, required this.isguest, Key? key})
+      {required this.id, required this.type, required this.userId, Key? key})
       : super(key: key);
 
   @override
@@ -87,7 +86,7 @@ class _ForumEditState extends State<ForumEdit> {
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          MyForums(id: widget.userId, type: widget.type, isguest: widget.isguest,)),
+                          MyForums(id: widget.userId, type: widget.type)),
                   (Route<dynamic> route) => false);
             },
           ),
@@ -170,7 +169,6 @@ class _ForumEditState extends State<ForumEdit> {
                   _descriptionController.text,
                   widget.userId,
                   widget.type,
-                  widget.isguest,
                   context);
               //Navigator.of(context).pushReplacement(MaterialPageRoute(
               //   builder: (BuildContext context) => SignIn()));

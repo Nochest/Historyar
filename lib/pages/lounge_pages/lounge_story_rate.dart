@@ -15,13 +15,11 @@ class LoungeStoryRate extends StatefulWidget {
   final int salaId;
   final String salaName;
   final int type;
-  final bool isguest;
 
   const LoungeStoryRate({required this.id,
     required this.historiaId,
     required this.salaId,
     required this.salaName,
-    required this.isguest,
     required this.type, Key? key})
       : super(key: key);
 
@@ -233,7 +231,7 @@ class _LoungeStoryRateState extends State<LoungeStoryRate> {
               style: TextStyle(
                   color: _colorPalette.yellow, fontWeight: FontWeight.bold)),
           onPressed: () {
-            _storyProvider.calificar(widget.id, widget.historiaId, widget.salaId, widget.salaName, widget.type, puntaje, _commentController.text, widget.isguest, context);
+            _storyProvider.calificar(widget.id, widget.historiaId, widget.salaId, widget.salaName, widget.type, puntaje, _commentController.text, context);
           }),
     );
   }

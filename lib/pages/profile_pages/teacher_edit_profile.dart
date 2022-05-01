@@ -13,9 +13,8 @@ import 'package:intl/intl.dart';
 class TeacherEditProfile extends StatefulWidget {
   final int id;
   final int type;
-  final bool isguest;
 
-  const TeacherEditProfile({required this.id, required this.type,required this.isguest, Key? key})
+  const TeacherEditProfile({required this.id, required this.type, Key? key})
       : super(key: key);
 
   @override
@@ -105,7 +104,7 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        Profile(id: widget.id, type: widget.type, isguest: widget.isguest,)),
+                        Profile(id: widget.id, type: widget.type)),
                 (Route<dynamic> route) => false);
           },
         ),
@@ -257,7 +256,6 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
                   _birthDateController.text,
                   celularVisible,
                   emailVisible,
-                  widget.isguest,
                   context);
                  print(_nameController);
                   print(_surnameController);
