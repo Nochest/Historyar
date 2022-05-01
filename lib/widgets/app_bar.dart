@@ -7,7 +7,7 @@ import 'package:historyar_app/utils/color_palette.dart';
 
 ColorPalette _colorPalette = ColorPalette();
 
-Widget historyarBottomAppBar( BuildContext context, bool b1, bool b2, bool b3, bool b4, int id, int type){
+Widget historyarBottomAppBar( BuildContext context, bool b1, bool b2, bool b3, bool b4, int id, int type, bool isguest){
   return BottomAppBar(
     color: _colorPalette.lightBlue,
     child: Container(
@@ -26,7 +26,7 @@ Widget historyarBottomAppBar( BuildContext context, bool b1, bool b2, bool b3, b
                   onTap: (){
                     Navigator.push(
                         context,
-                        PageRouteBuilder(pageBuilder: (context, animation1, animation2) => HomeHolder(id: id, type: type), transitionDuration: Duration.zero)
+                        PageRouteBuilder(pageBuilder: (context, animation1, animation2) => HomeHolder(id: id, type: type, isguest: isguest,), transitionDuration: Duration.zero)
                     );
                   },
                 ),
@@ -42,7 +42,7 @@ Widget historyarBottomAppBar( BuildContext context, bool b1, bool b2, bool b3, b
                     onTap: (){
                       Navigator.push(
                           context,
-                          PageRouteBuilder(pageBuilder: (context, animation1, animation2) => Lounge(id: id, type: type), transitionDuration: Duration.zero)
+                          PageRouteBuilder(pageBuilder: (context, animation1, animation2) => Lounge(id: id, type: type,isguest: isguest,), transitionDuration: Duration.zero)
                       );
                     },
                   ),
@@ -57,7 +57,7 @@ Widget historyarBottomAppBar( BuildContext context, bool b1, bool b2, bool b3, b
                   onTap: (){
                     Navigator.push(
                         context,
-                        PageRouteBuilder(pageBuilder: (context, animation1, animation2) => Community(id: id, type: type), transitionDuration: Duration.zero)
+                        PageRouteBuilder(pageBuilder: (context, animation1, animation2) => Community(id: id, type: type,isguest: isguest,), transitionDuration: Duration.zero)
                     );
                   },
                 ),
@@ -71,7 +71,7 @@ Widget historyarBottomAppBar( BuildContext context, bool b1, bool b2, bool b3, b
                   onTap: (){
                     Navigator.push(
                         context,
-                        PageRouteBuilder(pageBuilder: (context, animation1, animation2) => Profile(id: id, type: type), transitionDuration: Duration.zero)
+                        PageRouteBuilder(pageBuilder: (context, animation1, animation2) => Profile(id: id, type: type,isguest: isguest,), transitionDuration: Duration.zero)
                     );
                   },
                 ),

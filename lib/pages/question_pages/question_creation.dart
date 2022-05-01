@@ -12,6 +12,7 @@ class QuestionCreation extends StatefulWidget {
   final String salaName;
   final int cuestionarioId;
   final int type;
+  final bool isguest;
 
   const QuestionCreation({
     required this.id,
@@ -19,6 +20,7 @@ class QuestionCreation extends StatefulWidget {
     required this.salaName,
     required this.cuestionarioId,
     required this.type,
+    required this.isguest,
     Key? key
   }) : super(key: key);
 
@@ -329,6 +331,7 @@ class _QuestionCreationState extends State<QuestionCreation> {
                   correctoC,
                   _descriptionControllerD.text,
                   correctoD,
+                  widget.isguest,
                   context);
               //Navigator.of(context).pushReplacement(MaterialPageRoute(
               //   builder: (BuildContext context) => SignIn()));

@@ -10,12 +10,14 @@ class QuizCreation extends StatefulWidget {
   final int salaId;
   final String salaName;
   final int type;
+  final bool isguest;
 
   const QuizCreation({
     required this.id,
     required this.salaId,
     required this.salaName,
     required this.type,
+    required this.isguest,
     Key? key
   }) : super(key: key);
 
@@ -113,7 +115,7 @@ class _QuizCreationState extends State<QuizCreation> {
               _cuestionarioProvider.crear(_titleController.text,
                   _descriptionController.text,
                   widget.salaId, widget.salaName,
-                  widget.id, widget.type, context);
+                  widget.id, widget.type,widget.isguest, context);
               //Navigator.of(context).pushReplacement(MaterialPageRoute(
               //   builder: (BuildContext context) => SignIn()));
             } else {

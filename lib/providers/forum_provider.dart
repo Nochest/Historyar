@@ -118,6 +118,7 @@ class ForumProvider {
       String descripcion,
       int usuarioId,
       int type,
+      bool isguest,
       BuildContext context) async{
 
     Map data = {
@@ -136,7 +137,7 @@ class ForumProvider {
 
     if (response.statusCode == 201) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => Community(id: usuarioId, type: type))
+          builder: (BuildContext context) => Community(id: usuarioId, type: type,isguest: isguest,))
           );
     } else {
       _alert.createAlert(
@@ -179,6 +180,7 @@ class ForumProvider {
       int id,
       int type,
       int userId,
+      bool isguest,
       BuildContext context) async {
     var response = await http.delete(
         Uri.parse("${Constants.URL}/api/publicaciones/eliminar/${id}"));
@@ -188,7 +190,7 @@ class ForumProvider {
     if (response.statusCode == 200) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) =>
-              MyForums(id: userId, type: type)
+              MyForums(id: userId, type: type, isguest: isguest,)
       ));
     } else {
       _alert.createAlert(
@@ -202,6 +204,7 @@ class ForumProvider {
       String descripcion,
       int usuarioId,
       int type,
+      bool isguest,
       BuildContext context) async{
 
     Map data = {
@@ -219,7 +222,7 @@ class ForumProvider {
 
     if (response.statusCode == 200) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => MyForums(id: usuarioId, type: type))
+          builder: (BuildContext context) => MyForums(id: usuarioId, type: type, isguest: isguest,))
           );
     } else {
       _alert.createAlert(

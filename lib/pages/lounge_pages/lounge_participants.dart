@@ -25,6 +25,7 @@ class LoungeParticipant extends StatefulWidget {
   final int asistenciaId;
   final String salaName;
   final int type;
+  final bool isguest;
 
   const LoungeParticipant(
       {required this.id,
@@ -32,6 +33,7 @@ class LoungeParticipant extends StatefulWidget {
       required this.salaName,
       required this.asistenciaId,
       required this.type,
+      required this.isguest,
       Key? key})
       : super(key: key);
 
@@ -78,7 +80,7 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) =>
-                  Lounge(id: widget.id, type: widget.type)),
+                  Lounge(id: widget.id, type: widget.type, isguest: widget.isguest,)),
         );
         return true;
       },
@@ -94,7 +96,7 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          Lounge(id: widget.id, type: widget.type)),
+                          Lounge(id: widget.id, type: widget.type, isguest: widget.isguest,)),
                 );
               },
             ),
@@ -194,6 +196,7 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                                         salaId: widget.salaId,
                                         salaName: widget.salaName,
                                         asistenciaId: widget.asistenciaId,
+                                        isguest: widget.isguest,
                                       )),
                             );
                           })
@@ -286,6 +289,7 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                                                         salaId: widget.salaId,
                                                         salaName: widget.salaName,
                                                         asistenciaId: widget.asistenciaId,
+                                                        isguest: widget.isguest,
                                                       )),
                                             );
                                           });

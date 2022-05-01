@@ -31,12 +31,14 @@ class LoungeDetail extends StatefulWidget {
   final int salaId;
   final String salaName;
   final int type;
+  final bool isguest;
 
   const LoungeDetail({
     required this.id,
     required this.salaId,
     required this.salaName,
     required this.type,
+    required this.isguest,
     Key? key
   }) : super(key: key);
 
@@ -107,7 +109,7 @@ class _LoungeDetailState extends State<LoungeDetail> {
 
         Navigator.of(context).push(
           MaterialPageRoute(builder:
-              (BuildContext context) => MyLounges(id: widget.id, type: widget.type)
+              (BuildContext context) => MyLounges(id: widget.id, type: widget.type,isguest: widget.isguest,)
           ),
         );
         return true;
@@ -123,7 +125,7 @@ class _LoungeDetailState extends State<LoungeDetail> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder:
-                    (BuildContext context) => MyLounges(id: widget.id, type: widget.type)
+                    (BuildContext context) => MyLounges(id: widget.id, type: widget.type,isguest: widget.isguest,)
                 ),
               );
             },
@@ -216,7 +218,7 @@ class _LoungeDetailState extends State<LoungeDetail> {
                           Navigator.of(context).push(
                             MaterialPageRoute(builder:
                                 (BuildContext context) => LoungeStoryList(id: widget.id, type: widget.type, salaId: widget.salaId,
-                              salaName: widget.salaName)
+                              salaName: widget.salaName,isguest: widget.isguest,)
                             ),
                           );
                         }
@@ -289,7 +291,7 @@ class _LoungeDetailState extends State<LoungeDetail> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(builder:
                                       (BuildContext context) => QuizCreation(id: widget.id, type: widget.type, salaId: widget.salaId,
-                                        salaName: widget.salaName)
+                                        salaName: widget.salaName,isguest: widget.isguest,)
                                   ),
                                 );
                               }
@@ -308,7 +310,7 @@ class _LoungeDetailState extends State<LoungeDetail> {
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(builder:
-                                      (BuildContext context) => QuizDetail(id: widget.id, type: widget.type, salaId: widget.salaId, salaName: widget.salaName,)
+                                      (BuildContext context) => QuizDetail(id: widget.id, type: widget.type, salaId: widget.salaId, salaName: widget.salaName,isguest: widget.isguest,)
                                   ),
                                 );
                               }
@@ -384,7 +386,7 @@ class _LoungeDetailState extends State<LoungeDetail> {
                           Navigator.of(context).push(
                             MaterialPageRoute(builder:
                                 (BuildContext context) => LoungeSendMail(id: widget.id, type: widget.type, salaId: widget.salaId,
-                                salaName: widget.salaName)
+                                salaName: widget.salaName,isguest: widget.isguest,)
                             ),
                           );
                         }

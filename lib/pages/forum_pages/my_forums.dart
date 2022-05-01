@@ -17,10 +17,12 @@ class MyForums extends StatefulWidget {
 
   final int id;
   final int type;
+  final bool isguest;
 
   const MyForums({
     required this.id,
     required this.type,
+    required this.isguest,
     Key? key
   }) : super(key: key);
 
@@ -42,7 +44,7 @@ class _MyForumsState extends State<MyForums> {
 
         Navigator.of(context).push(
           MaterialPageRoute(builder:
-              (BuildContext context) => Community(id: widget.id, type: widget.type)
+              (BuildContext context) => Community(id: widget.id, type: widget.type, isguest: widget.isguest,)
           ),
         );
         return true;
@@ -58,7 +60,8 @@ class _MyForumsState extends State<MyForums> {
             onPressed: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder:
-                      (BuildContext context) => Community(id: widget.id, type: widget.type)
+                      (BuildContext context) => Community(id: widget.id, type: widget.type, isguest: widget.isguest
+                      ,)
                   ),
               );
             },
@@ -151,7 +154,7 @@ class _MyForumsState extends State<MyForums> {
         onPressed: (){
           Navigator.of(context).
           push(MaterialPageRoute(
-              builder: (BuildContext context) => ForumEdit(id: id, type: widget.type, userId: widget.id)
+              builder: (BuildContext context) => ForumEdit(id: id, type: widget.type, userId: widget.id, isguest: widget.isguest,)
             )
           );
         }
@@ -168,7 +171,7 @@ class _MyForumsState extends State<MyForums> {
         ),
         child: Text("Eliminar", style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w600)),
         onPressed: (){
-          _foroProvider.borrarPublicacion(id, widget.type, widget.id, context);
+          _foroProvider.borrarPublicacion(id, widget.type, widget.id,widget.isguest, context,);
         }
     );
   }
