@@ -172,7 +172,7 @@ class _MyStoriesState extends State<MyStories> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Text('Elija la opción', style: TextStyle(color: _colorPalette.text,fontWeight: FontWeight.w400, fontSize: 14.0), textAlign: TextAlign.justify),
+                  Text('El siguiente video será eliminado de forma permanente', style: TextStyle(color: _colorPalette.text,fontWeight: FontWeight.w400, fontSize: 14.0), textAlign: TextAlign.justify),
                   SizedBox(height: 24.0),
                   MaterialButton(
                       height: 36.0,
