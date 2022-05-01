@@ -66,6 +66,7 @@ class ReactionProvider {
       int salaId,
       String salaName,
       int asistenciaId,
+      bool isguest,
       BuildContext context) async{
 
     var get = await http.get(
@@ -90,7 +91,7 @@ class ReactionProvider {
       if (response.statusCode == 200) {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (BuildContext context) => LoungeParticipantStoryDetail(id: usuarioId,
-              type: type, historiaId: historiaId, salaId: salaId, asistenciaId: asistenciaId, salaName: salaName,))
+              type: type, historiaId: historiaId, salaId: salaId, asistenciaId: asistenciaId, salaName: salaName, isguest: isguest,))
         );
       } else {
         _alert.createAlert(
@@ -118,7 +119,7 @@ class ReactionProvider {
       if (response.statusCode == 201) {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (BuildContext context) => LoungeParticipantStoryDetail(id: usuarioId,
-              type: type, historiaId: historiaId, salaId: salaId, asistenciaId: asistenciaId, salaName: salaName,))
+              type: type, historiaId: historiaId, salaId: salaId, asistenciaId: asistenciaId, salaName: salaName,isguest: isguest,))
         );
       } else {
         _alert.createAlert(

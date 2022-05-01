@@ -20,10 +20,12 @@ class StudentEditProfile extends StatefulWidget {
 
   final int id;
   final int type;
+  final bool isguest;
 
   const StudentEditProfile({
     required this.id,
     required this.type,
+    required this.isguest,
     Key? key
   }) : super(key: key);
 
@@ -111,7 +113,7 @@ class _StudentEditProfile extends State<StudentEditProfile> {
             Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
                     builder: (BuildContext context) =>
-                        Profile(id: widget.id, type: widget.type)),
+                        Profile(id: widget.id, type: widget.type, isguest: widget.isguest,)),
                 (Route<dynamic> route) => false);
           },
         ),
@@ -204,6 +206,7 @@ class _StudentEditProfile extends State<StudentEditProfile> {
                   _surnameController.text,
                   _emailController.text,
                   _birthDateController.text,
+                  widget.isguest,
                   context);
                   print(_nameController);
                   print(_surnameController);

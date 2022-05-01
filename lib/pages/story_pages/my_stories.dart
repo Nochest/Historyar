@@ -8,10 +8,12 @@ class MyStories extends StatefulWidget {
 
   final int id;
   final int type;
+  final bool isguest;
 
   const MyStories({
     required this.id,
     required this.type,
+    required this.isguest,
     Key? key
   }) : super(key: key);
 
@@ -33,7 +35,7 @@ class _MyStoriesState extends State<MyStories> {
 
         Navigator.of(context).push(
           MaterialPageRoute(builder:
-              (BuildContext context) => Profile(id: widget.id, type: widget.type)
+              (BuildContext context) => Profile(id: widget.id, type: widget.type,isguest:widget.isguest,)
           ),
         );
         return true;
@@ -196,7 +198,7 @@ class _MyStoriesState extends State<MyStories> {
                       ),
                       child: Text("Eliminar", style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w600)),
                       onPressed: (){
-                        _storyProvider.deleteHistoria(widget.id, historiaId, widget.type, context);
+                        _storyProvider.deleteHistoria(widget.id, historiaId, widget.type,widget.isguest, context,);
                       }
                   )
                 ],
@@ -255,7 +257,7 @@ class _MyStoriesState extends State<MyStories> {
                       ),
                       child: Text("Aceptar", style: TextStyle(color: _colorPalette.yellow, fontWeight: FontWeight.w600)),
                       onPressed: (){
-                        _storyProvider.favorito(widget.id, historiaId, widget.type, context);
+                        _storyProvider.favorito(widget.id, historiaId, widget.type,widget.isguest, context);
                       }
                   )
                 ],

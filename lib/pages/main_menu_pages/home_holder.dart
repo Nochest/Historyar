@@ -11,8 +11,9 @@ import 'package:permission_handler/permission_handler.dart';
 class HomeHolder extends StatefulWidget {
   final int id;
   final int type;
-
-  const HomeHolder({required this.id, required this.type, Key? key})
+  final bool isguest;
+  const HomeHolder(
+      {required this.id, required this.type, required this.isguest, Key? key})
       : super(key: key);
 
   @override
@@ -36,114 +37,160 @@ class _HomeHolderState extends State<HomeHolder> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: _colorPalette.lightBlue,
-        centerTitle: true,
-        elevation: 0,
-        title: Text(
-          'Bienvenido',
-          style: TextStyle(color: _colorPalette.yellow),
+    if (widget.isguest == false) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: _colorPalette.lightBlue,
+          centerTitle: true,
+          elevation: 0,
+          title: Text(
+            'Bienvenido',
+            style: TextStyle(color: _colorPalette.yellow),
+          ),
         ),
-      ),
-      backgroundColor: _colorPalette.cream,
-      body: FutureBuilder(
-        future: _forumProvider.getAll(widget.type),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.data == null) {
-            return Center(child: CircularProgressIndicator());
-          } else {
-            return SafeArea(
-              child: SingleChildScrollView(
-                child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Column(children: [
-                      Padding(
-                        padding: EdgeInsets.only(top: 24.0),
-                        child: GestureDetector(
-                          child: Container(
-                            width: double.maxFinite,
-                            height: 48.0,
-                            decoration: BoxDecoration(
-                              color: _colorPalette.lightBlue,
-                              border: Border.all(
-                                  color: _colorPalette.yellow, width: 2.0),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 24.0),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.add,
-                                    color: _colorPalette.yellow,
-                                    size: 24.0,
-                                  ),
-                                  SizedBox(width: 20.0),
-                                  Text('Crear Sala Rápida',
-                                      style: TextStyle(
-                                          color: _colorPalette.yellow,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 24.0))
-                                ],
+        backgroundColor: _colorPalette.cream,
+        body: FutureBuilder(
+          future: _forumProvider.getAll(widget.type),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.data == null) {
+              return Center(child: CircularProgressIndicator());
+            } else {
+              return SafeArea(
+                child: SingleChildScrollView(
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Column(children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 24.0),
+                          child: GestureDetector(
+                            child: Container(
+                              width: double.maxFinite,
+                              height: 48.0,
+                              decoration: BoxDecoration(
+                                color: _colorPalette.lightBlue,
+                                border: Border.all(
+                                    color: _colorPalette.yellow, width: 2.0),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 24.0),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.add,
+                                      color: _colorPalette.yellow,
+                                      size: 24.0,
+                                    ),
+                                    SizedBox(width: 20.0),
+                                    Text('Crear Sala Rápida',
+                                        style: TextStyle(
+                                            color: _colorPalette.yellow,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 24.0))
+                                  ],
+                                ),
                               ),
                             ),
+                            onTap: () {},
                           ),
-                          onTap: () {},
                         ),
-                      ),
-                      Padding(
+                        Padding(
+                            padding: EdgeInsets.only(top: 24.0),
+                            child: Container(
+                                alignment: Alignment.topLeft,
+                                child: Text('Foros',
+                                    style: TextStyle(
+                                        color: _colorPalette.yellow,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 24.0)))),
+                        Padding(
                           padding: EdgeInsets.only(top: 24.0),
                           child: Container(
-                              alignment: Alignment.topLeft,
-                              child: Text('Foros',
-                                  style: TextStyle(
-                                      color: _colorPalette.yellow,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 24.0)))),
-                      Padding(
-                        padding: EdgeInsets.only(top: 24.0),
-                        child: Container(
-                          alignment: Alignment.topLeft,
-                          child: SizedBox(
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (context, i) {
-                                  return GestureDetector(
-                                    child: VerticalCardItem(i, snapshot.data),
-                                    onTap: () {
-                                      //TODO: Go to journey detail passing data
+                            alignment: Alignment.topLeft,
+                            child: SizedBox(
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (context, i) {
+                                    return GestureDetector(
+                                      child: VerticalCardItem(i, snapshot.data),
+                                      onTap: () {
+                                        //TODO: Go to journey detail passing data
 
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) =>
-                                                  ForumDetail(
-                                                      title: snapshot
-                                                          .data[i].title,
-                                                      id: snapshot.data[i].id,
-                                                      description: snapshot
-                                                          .data[i].description,
-                                                      type: widget.type,
-                                                      userId: widget.id)));
-                                    },
-                                  );
-                                }),
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (BuildContext
+                                                        context) =>
+                                                    ForumDetail(
+                                                        title: snapshot
+                                                            .data[i].title,
+                                                        id: snapshot.data[i].id,
+                                                        description: snapshot
+                                                            .data[i]
+                                                            .description,
+                                                        type: widget.type,
+                                                        userId: widget.id)));
+                                      },
+                                    );
+                                  }),
+                            ),
                           ),
                         ),
-                      ),
-                    ])),
+                      ])),
+                ),
+              );
+            }
+          },
+        ),
+        floatingActionButton:
+            historyarButtonApp(context, false, widget.id, widget.type),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: historyarBottomAppBar(context, true, false, false,
+            false, widget.id, widget.type, widget.isguest),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: _colorPalette.lightBlue,
+          centerTitle: true,
+          elevation: 0,
+          title: Text(
+            'Bienvenido',
+            style: TextStyle(color: _colorPalette.yellow),
+          ),
+        ),
+        body:Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Image.network("https://i.imgur.com/7RelDWE.png"),
+          Column(
+            children: <Widget>[
+              Text('No disponible'
+              
               ),
-            );
-          }
-        },
+              Text('como invitado'
+              ),
+              MaterialButton( elevation: 10.0,
+              minWidth: 170.0,
+              height:50.0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)
+              ),
+              child: Text('Logueate'),
+               onPressed: () {  },
+              ),
+            ],
+
+          )
+          
+        ],
       ),
-      floatingActionButton:
-          historyarButtonApp(context, false, widget.id, widget.type),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: historyarBottomAppBar(
-          context, true, false, false, false, widget.id, widget.type),
-    );
+        floatingActionButton:
+            historyarButtonApp(context, false, widget.id, widget.type),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: historyarBottomAppBar(context, true, false, false,
+            false, widget.id, widget.type, widget.isguest),
+      );
+    }
   }
 }

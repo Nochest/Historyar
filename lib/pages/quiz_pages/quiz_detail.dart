@@ -16,12 +16,14 @@ class QuizDetail extends StatefulWidget {
   final int salaId;
   final String salaName;
   final int type;
+  final bool isguest;
 
   const QuizDetail({
     required this.id,
     required this.salaId,
     required this.salaName,
     required this.type,
+    required this.isguest,
     Key? key
   }) : super(key: key);
 
@@ -128,7 +130,7 @@ class _QuizDetailState extends State<QuizDetail> {
               Navigator.of(context).push(
                 MaterialPageRoute(builder:
                     (BuildContext context) => LoungeDetail(id: widget.id, type: widget.type, salaId: widget.salaId,
-                    salaName: widget.salaName)
+                    salaName: widget.salaName,isguest: widget.isguest,)
                 ),
               );
             },
@@ -191,7 +193,7 @@ class _QuizDetailState extends State<QuizDetail> {
                             Navigator.of(context).push(
                               MaterialPageRoute(builder:
                                   (BuildContext context) => QuestionCreation(id: widget.id, salaId: widget.salaId,
-                                      salaName: widget.salaName, cuestionarioId: snapshot.data!.id, type: widget.type)
+                                      salaName: widget.salaName, cuestionarioId: snapshot.data!.id, type: widget.type,isguest: widget.isguest,)
                               ),
                             );
                           },
