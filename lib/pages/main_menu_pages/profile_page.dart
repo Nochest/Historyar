@@ -108,11 +108,9 @@ class _ProfileState extends State<Profile> {
                               fontWeight: FontWeight.w700),
                         ),
                         onTap: () {
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder:
-                                  (BuildContext context) => MyStories(id: widget.id, type: widget.type)
-                              )
-                          );
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  MyStories(id: widget.id, type: widget.type)));
                         },
                       ),
                     ),
@@ -136,7 +134,6 @@ class _ProfileState extends State<Profile> {
                                   builder: (context) => StudentEditProfile(
                                     id: widget.id,
                                     type: widget.type,
-                                  
                                   ),
                                 ),
                                 //print()
@@ -207,7 +204,9 @@ class _ProfileState extends State<Profile> {
                                         color: _colorPalette.text,
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.w400)),
-                                Text(snapshot.data!.fechaNacimiento,
+                                Text(
+                                    Constants.formatter.format(DateTime.parse(
+                                        snapshot.data!.fechaNacimiento)),
                                     style: TextStyle(
                                         color: _colorPalette.yellow,
                                         fontSize: 16.0,
@@ -215,8 +214,7 @@ class _ProfileState extends State<Profile> {
                               ],
                             ),
                           ),
-                        )
-                    ),
+                        )),
                     Padding(
                         padding: EdgeInsets.only(top: 10.0, bottom: 50.0),
                         child: _eliminarButton(context)),
@@ -227,7 +225,8 @@ class _ProfileState extends State<Profile> {
           }
         },
       ),
-      floatingActionButton: historyarButtonApp(context, false, widget.id, widget.type),
+      floatingActionButton:
+          historyarButtonApp(context, false, widget.id, widget.type),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: historyarBottomAppBar(
           context, false, false, false, true, widget.id, widget.type),

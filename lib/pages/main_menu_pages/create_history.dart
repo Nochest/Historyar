@@ -40,6 +40,7 @@ class _CreateHistoryState extends State<CreateHistory> {
   EdScreenRecorder? screenRecorder;
   Map<String, dynamic>? _response;
   bool isRecording = false;
+  bool expandModels = false;
   String? route;
 
   var _storyProvider = StoryProvider();
@@ -171,7 +172,7 @@ class _CreateHistoryState extends State<CreateHistory> {
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(2.0),
                       child: Column(
                         children: [
                           IconButton(
@@ -188,7 +189,7 @@ class _CreateHistoryState extends State<CreateHistory> {
                             },
                             icon: Icon(Icons.save),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 4),
                           IconButton(
                             onPressed: () {
                               startRecord(fileName: 'PRUEBA01');
@@ -198,7 +199,7 @@ class _CreateHistoryState extends State<CreateHistory> {
                             },
                             icon: Icon(Icons.play_arrow),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 4),
                           IconButton(
                               onPressed: () async {
                                 List<String> videoPath = [];
@@ -210,12 +211,113 @@ class _CreateHistoryState extends State<CreateHistory> {
 
                                 await Share.shareFiles(videoPath);
                               },
-                              icon: Icon(Icons.share))
+                              icon: Icon(Icons.share)),
+                          const SizedBox(height: 4),
+                          IconButton(
+                              onPressed: () {
+                                expandModels = !expandModels;
+                                setState(() {});
+                              },
+                              icon: Icon(Icons.burst_mode_outlined)),
                         ],
                       ),
                     ),
                   ),
                 ),
+          expandModels
+              ? Positioned(
+                  top: 225,
+                  left: 50,
+                  child: Container(
+                    width: 250,
+                    decoration: BoxDecoration(
+                      color: palette.cream,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: palette.yellow, width: 3),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Text('Modelos 3D'),
+                          const SizedBox(height: 16),
+                          Wrap(
+                            spacing: 16,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: GestureDetector(
+                                  child: Image.asset(
+                                    'assets/3d_icons/fox.png',
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                  onTap: () {
+                                    this.arSessionManager!.onPlaneOrPointTap =
+                                        getFox;
+                                    expandModels = false;
+                                    log('Selected fox 01');
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: GestureDetector(
+                                  child: Image.asset(
+                                    'assets/3d_icons/duck.png',
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                  onTap: () {
+                                    log('Selected duck 01');
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: GestureDetector(
+                                  child: Image.asset(
+                                    'assets/3d_icons/fox.png',
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                  onTap: () {
+                                    log('Selected fox 03');
+                                  },
+                                ),
+                              ),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.h_mobiledata_rounded)),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.h_mobiledata_rounded)),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.h_mobiledata_rounded)),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.h_mobiledata_rounded)),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.h_mobiledata_rounded)),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.h_mobiledata_rounded)),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.h_mobiledata_rounded)),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.h_mobiledata_rounded)),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ))
+              : const SizedBox.shrink(),
           isRecording
               ? CircleAvatar(
                   child: IconButton(
@@ -279,7 +381,38 @@ class _CreateHistoryState extends State<CreateHistory> {
         var newNode = ARNode(
             type: NodeType.webGLB,
             uri:
-                "https://github.com/KhronosGroup/glTF-Sample-Models/tree/master/2.0/Box/glTF-Binary/Box.glb",
+                "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Box/glTF-Binary/Box.glb",
+            scale: Vector3(0.2, 0.2, 0.2),
+            position: Vector3(0.0, 0.0, 0.0),
+            rotation: Vector4(1.0, 0.0, 0.0, 0.0));
+        bool? didAddNodeToAnchor = await this
+            .arObjectManager!
+            .addNode(newNode, planeAnchor: newAnchor);
+        if (didAddNodeToAnchor!) {
+          this.nodes.add(newNode);
+        } else {
+          this.arSessionManager!.onError("Adding Node to Anchor failed");
+        }
+      } else {
+        this.arSessionManager!.onError("Adding Anchor failed");
+      }
+    }
+  }
+
+  Future<void> getFox(List<ARHitTestResult> hitTestResults) async {
+    var singleHitTestResult = hitTestResults.firstWhere(
+        (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
+    if (singleHitTestResult != null) {
+      var newAnchor =
+          ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
+      bool? didAddAnchor = await this.arAnchorManager!.addAnchor(newAnchor);
+      if (didAddAnchor!) {
+        this.anchors.add(newAnchor);
+        // Add note to anchor
+        var newNode = ARNode(
+            type: NodeType.webGLB,
+            uri:
+                "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Fox/glTF-Binary/Fox.glb",
             scale: Vector3(0.2, 0.2, 0.2),
             position: Vector3(0.0, 0.0, 0.0),
             rotation: Vector4(1.0, 0.0, 0.0, 0.0));

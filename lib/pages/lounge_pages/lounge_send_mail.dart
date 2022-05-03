@@ -8,26 +8,24 @@ import 'package:historyar_app/widgets/input_text.dart';
 import 'package:http/http.dart' as http;
 
 class LoungeSendMail extends StatefulWidget {
-
   final int id;
   final int salaId;
   final String salaName;
   final int type;
 
-  const LoungeSendMail({
-    required this.id,
-    required this.salaId,
-    required this.salaName,
-    required this.type,
-    Key? key
-  }) : super(key: key);
+  const LoungeSendMail(
+      {required this.id,
+      required this.salaId,
+      required this.salaName,
+      required this.type,
+      Key? key})
+      : super(key: key);
 
   @override
   _LoungeSendMailState createState() => _LoungeSendMailState();
 }
 
 class _LoungeSendMailState extends State<LoungeSendMail> {
-
   final List<String> listado = [];
   InputText _inputText = InputText();
 
@@ -45,99 +43,97 @@ class _LoungeSendMailState extends State<LoungeSendMail> {
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).push(
-          MaterialPageRoute(builder:
-              (BuildContext context) => LoungeDetail(id: widget.id, type: widget.type, salaId: widget.salaId,
-              salaName: widget.salaName)
-          ),
+          MaterialPageRoute(
+              builder: (BuildContext context) => LoungeDetail(
+                  id: widget.id,
+                  type: widget.type,
+                  salaId: widget.salaId,
+                  salaName: widget.salaName)),
         );
         return true;
       },
       child: Scaffold(
-        backgroundColor: _colorPalette.cream,
-        appBar: AppBar(
-          backgroundColor: _colorPalette.darkBlue,
-          title:
-          Text('Enviar notificación', style: TextStyle(fontWeight: FontWeight.w700)),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder:
-                    (BuildContext context) => LoungeDetail(id: widget.id, type: widget.type, salaId: widget.salaId,
-                    salaName: widget.salaName)
-                ),
-              );
-            },
+          backgroundColor: _colorPalette.cream,
+          appBar: AppBar(
+            backgroundColor: _colorPalette.darkBlue,
+            title: Text('Enviar notificación',
+                style: TextStyle(fontWeight: FontWeight.w700)),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => LoungeDetail(
+                          id: widget.id,
+                          type: widget.type,
+                          salaId: widget.salaId,
+                          salaName: widget.salaName)),
+                );
+              },
+            ),
           ),
-        ),
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(widget.salaName,
-                              style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: _colorPalette.darkBlue),
-                              textAlign: TextAlign.justify),
-                          _sendButton(context)
-                        ],
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(widget.salaName,
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: _colorPalette.darkBlue),
+                                textAlign: TextAlign.justify),
+                            _sendButton(context)
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 16.0),
-                      child: _mailBox(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 8.0),
-                      child: Row(
-                        children: [Spacer(), _saveButton(context)],
+                      Padding(
+                        padding: EdgeInsets.only(top: 16.0),
+                        child: _mailBox(),
                       ),
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: listado.length,
-                      itemBuilder: (BuildContext context, int i) {
-                        final item = listado[i];
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.0),
+                        child: Row(
+                          children: [Spacer(), _saveButton(context)],
+                        ),
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: listado.length,
+                        itemBuilder: (BuildContext context, int i) {
+                          final item = listado[i];
 
-                        return Column(
-                            children: [
-                              Divider(color: Colors.black),
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      right: 10.0, left: 10.0),
-                                  child: ListTile(
-                                      title: Text(item,
-                                          style: TextStyle(
-                                              fontSize: 15.0,
-                                              color: _colorPalette.darkBlue),
-                                          textAlign: TextAlign.justify),
-                                      trailing: IconButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              listado.remove(item);
-                                            });
-                                          },
-                                          icon: Icon(Icons.delete)
-                                      )
-                                  )
-                              ),
-                            ]
-                        );
-                      },
-                    )
-                  ],
-                )),
-          ),
-        )
-      ),
+                          return Column(children: [
+                            Divider(color: Colors.black),
+                            Padding(
+                                padding:
+                                    EdgeInsets.only(right: 10.0, left: 10.0),
+                                child: ListTile(
+                                    title: Text(item,
+                                        style: TextStyle(
+                                            fontSize: 15.0,
+                                            color: _colorPalette.darkBlue),
+                                        textAlign: TextAlign.justify),
+                                    trailing: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            listado.remove(item);
+                                          });
+                                        },
+                                        icon: Icon(Icons.delete)))),
+                          ]);
+                        },
+                      )
+                    ],
+                  )),
+            ),
+          )),
     );
   }
 
@@ -148,17 +144,16 @@ class _LoungeSendMailState extends State<LoungeSendMail> {
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(5.0)),
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        child: _inputText.defaultIText(
-            focus_email,
-            _emailController,
-            TextInputType.text,
-            'Correo electrónico',
-            '',
-            false,
-            'Correo electrónico',
-            email)
-      ),
+          padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          child: _inputText.defaultIText(
+              focus_email,
+              _emailController,
+              TextInputType.text,
+              'Correo electrónico',
+              '',
+              false,
+              'Correo electrónico',
+              email)),
     );
   }
 
@@ -177,20 +172,15 @@ class _LoungeSendMailState extends State<LoungeSendMail> {
                   color: _colorPalette.yellow,
                   fontWeight: FontWeight.w600)),
           onPressed: () async {
-            if(_emailController.text.isNotEmpty) {
+            if (_emailController.text.isNotEmpty &&
+                !listado.contains(_emailController.text)) {
               setState(() {
                 listado.add(_emailController.text);
               });
             }
-            else{
-              _alert.createAlert(
-                  context, "Algo salió mal", "El correo está vacío.",
-                  "aceptar");
-            }
           }),
     );
   }
-
 
   Widget _sendButton(BuildContext context) {
     return Center(
@@ -207,8 +197,7 @@ class _LoungeSendMailState extends State<LoungeSendMail> {
                   color: _colorPalette.yellow,
                   fontWeight: FontWeight.w600)),
           onPressed: () async {
-            if(listado.length > 0)
-              notificar();
+            if (listado.length > 0) notificar();
           }),
     );
   }
@@ -221,18 +210,13 @@ class _LoungeSendMailState extends State<LoungeSendMail> {
 
     var response = await request.send();
 
-    if(response.statusCode == 200) {
-      _alert.createAlert(
-          context, "Éxitoso", "Se notificaron sobre la sala a los correos registrados.",
-          "Aceptar");
-      setState(() {
-
-      });
+    if (response.statusCode == 200) {
+      _alert.createAlert(context, "Éxitoso",
+          "Se notificaron sobre la sala a los correos registrados.", "Aceptar");
+      setState(() {});
     } else {
-      _alert.createAlert(
-          context, "Algo salió mal", "No se pudo enviar los correos.",
-          "Aceptar");
+      _alert.createAlert(context, "Algo salió mal",
+          "No se pudo enviar los correos.", "Aceptar");
     }
   }
-
 }

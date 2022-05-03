@@ -74,7 +74,7 @@ flutter:
     - assets/splash/
     - assets/1872.jpg
     - assets/aea.mp4
-
+    - assets/3d_icons/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

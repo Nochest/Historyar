@@ -15,7 +15,6 @@ class InputText {
       bool submit) {
     return TextFormField(
       focusNode: focus,
-      enableInteractiveSelection: false,
       controller: controller,
       obscureText: lock,
       keyboardType: type,
@@ -54,6 +53,6 @@ class InputText {
 }
 
 String validate(String value, String field) {
-  if (value.isEmpty) return '$field must not be empty';
+  if (value.isEmpty) return '$field no debe estar vacío';
   return '';
 }
