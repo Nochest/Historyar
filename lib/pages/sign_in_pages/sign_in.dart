@@ -108,9 +108,9 @@ class _SignInState extends State<SignIn> {
                       ),
                       const SizedBox(height: 16),
                       _loginButton(context),
-                      const SizedBox(height: 32),
+                      const SizedBox(height: 20),
                       _register_text_button(context),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 5),
                       guestlogin(context)
                     ],
                   ),
@@ -293,44 +293,10 @@ class _SignInState extends State<SignIn> {
                           fontWeight: FontWeight.w400,
                           fontSize: 14.0),
                       textAlign: TextAlign.justify),
-                  SizedBox(height: 24.0),
-                  guestStudentButton(context, 'Estudiante'),
-                  SizedBox(height: 8.0),
-                  guestTeacherButton(context, 'Docente'),
                 ],
               ),
             ),
           );
-        });
-  }
-
-  Widget guestStudentButton(BuildContext context, String text) {
-    return MaterialButton(
-        height: 36.0,
-        minWidth: 126.0,
-        color: _colorPalette.lightBlue,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
-        child: Text(text,
-            style: TextStyle(
-                color: _colorPalette.yellow, fontWeight: FontWeight.w600)),
-        onPressed: () {
-          _guestProvide.guestSinginStudent(context);
-        });
-  }
-
-  Widget guestTeacherButton(BuildContext context, String text) {
-    return MaterialButton(
-        height: 36.0,
-        minWidth: 126.0,
-        color: _colorPalette.lightBlue,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
-        child: Text(text,
-            style: TextStyle(
-                color: _colorPalette.yellow, fontWeight: FontWeight.w600)),
-        onPressed: () {
-          _guestProvide.guestSinginDocente(context);
         });
   }
 

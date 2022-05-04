@@ -188,7 +188,7 @@ class _ProfileState extends State<Profile> {
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w600)),
                                 SizedBox(height: 8.0),
-                                Text('Correo electronico',
+                                Text('Correo electrónico',
                                     style: TextStyle(
                                         color: _colorPalette.text,
                                         fontSize: 14.0,

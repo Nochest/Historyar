@@ -83,9 +83,6 @@ class AttendanceProvider {
           Utf8Decoder().convert(response.bodyBytes).toString()
       );
 
-      print(id);
-
-
       Asistencia asistencia = Asistencia(aux["id"],
           aux["usuario"]["nombres"],
           aux["numeroGrupo"],

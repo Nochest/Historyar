@@ -1,40 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:historyar_app/model/attendance.dart';
 import 'package:historyar_app/model/story.dart';
+import 'package:historyar_app/pages/guest_pages/create_history_guest.dart';
+import 'package:historyar_app/pages/guest_pages/guiz_resolution_guest.dart';
+import 'package:historyar_app/pages/guest_pages/story_list_guest.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_participants_story_list.dart';
 import 'package:historyar_app/pages/main_menu_pages/create_history.dart';
 import 'package:historyar_app/pages/main_menu_pages/lounge_page.dart';
 import 'package:historyar_app/pages/quiz_pages/quiz_resolution.dart';
+import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
 import 'package:historyar_app/pages/story_pages/story_visualizer.dart';
 import 'package:historyar_app/providers/attendance_provider.dart';
-import 'package:historyar_app/providers/lounge_provider.dart';
 import 'package:historyar_app/providers/quiz_provider.dart';
 import 'package:historyar_app/providers/story_provider.dart';
-import 'package:historyar_app/utils/alert.dart';
 import 'package:historyar_app/utils/color_palette.dart';
-import 'package:historyar_app/widgets/input_text.dart';
 
-class LoungeParticipant extends StatefulWidget {
+class LoungeGuest extends StatefulWidget {
   final int id;
   final int salaId;
   final int asistenciaId;
   final String salaName;
-  final int type;
 
-  const LoungeParticipant(
+  const LoungeGuest(
       {required this.id,
-      required this.salaId,
-      required this.salaName,
-      required this.asistenciaId,
-      required this.type,
-      Key? key})
+        required this.salaId,
+        required this.salaName,
+        required this.asistenciaId,
+        Key? key})
       : super(key: key);
 
   @override
-  _LoungeParticipantState createState() => _LoungeParticipantState();
+  _LoungeGuestState createState() => _LoungeGuestState();
 }
 
-class _LoungeParticipantState extends State<LoungeParticipant> {
+class _LoungeGuestState extends State<LoungeGuest> {
   Widget _buildIcon(int index, String name) {
     return Container(
       height: 80.0,
@@ -47,21 +46,18 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
           ),
           Center(
               child: Text(
-            name,
-            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15.0),
-            overflow: TextOverflow.clip,
-            maxLines: 1,
-            softWrap: false,
-          ))
+                name,
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15.0),
+                overflow: TextOverflow.clip,
+                maxLines: 1,
+                softWrap: false,
+              ))
         ],
       ),
     );
   }
 
   ColorPalette _colorPalette = ColorPalette();
-  InputText _inputText = InputText();
-  Alert _alert = Alert();
-  var _salaProvider = LoungeProvider();
   var _atencionProvider = AttendanceProvider();
   var _cuestionarioProvider = QuizProvider();
   var _storyProvider = StoryProvider();
@@ -73,7 +69,7 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
         Navigator.of(context).push(
           MaterialPageRoute(
               builder: (BuildContext context) =>
-                  Lounge(id: widget.id, type: widget.type)),
+                  SignIn()),
         );
         return true;
       },
@@ -89,7 +85,7 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          Lounge(id: widget.id, type: widget.type)),
+                          SignIn()),
                 );
               },
             ),
@@ -133,9 +129,8 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          CreateHistory(
+                                          CreateHistoryGuest(
                                               id: widget.id,
-                                              type: widget.type,
                                               salaId: widget.salaId)),
                                 );
                               });
@@ -148,7 +143,7 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                                           id: widget.id,
                                           historiaId: snapshot.data!.id,
                                           url: snapshot.data!.url,
-                                          type: widget.type)));
+                                          type: 1)));
                             }, // Image tapped
                             child: Image.asset(
                               'assets/video.png',
@@ -183,9 +178,8 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      LoungeParticipantStoryList(
+                                      StoryListGuest(
                                         id: widget.id,
-                                        type: widget.type,
                                         salaId: widget.salaId,
                                         salaName: widget.salaName,
                                         asistenciaId: widget.asistenciaId,
@@ -219,13 +213,13 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                         } else {
                           return Container(
                               child: Wrap(
-                            direction: Axis.horizontal,
-                            spacing: 5.0,
-                            runSpacing: 5.0,
-                            children: snapshot.data!
-                                .map((e) => _buildIcon(e.id, e.nombres))
-                                .toList(),
-                          ));
+                                direction: Axis.horizontal,
+                                spacing: 5.0,
+                                runSpacing: 5.0,
+                                children: snapshot.data!
+                                    .map((e) => _buildIcon(e.id, e.nombres))
+                                    .toList(),
+                              ));
                         }
                       }),
                   const SizedBox(height: 24),
@@ -275,9 +269,8 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
                                                   builder: (BuildContext context) =>
-                                                      QuizResolution(
+                                                      QuizResolutionGuest(
                                                         id: widget.id,
-                                                        type: widget.type,
                                                         salaId: widget.salaId,
                                                         salaName: widget.salaName,
                                                         asistenciaId: widget.asistenciaId,
@@ -314,7 +307,7 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                           future: _atencionProvider.getById(widget.asistenciaId),
                           builder:
                               (BuildContext context, AsyncSnapshot atencion) {
-                                print(atencion.data);
+                            print(atencion.data);
                             if (atencion.data == null || atencion.data.nota == null) {
                               return Text(
                                 'Sin calificar',

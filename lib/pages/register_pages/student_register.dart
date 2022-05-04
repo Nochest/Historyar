@@ -192,7 +192,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                               color: _colorPalette.text),
                           children: [
                             TextSpan(
-                                text: 'terminos y condiciones ',
+                                text: 'términos y condiciones ',
                                 style: TextStyle(
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.w600,
@@ -201,7 +201,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                                   ..onTap = () {
                                     _alert.createAlert(
                                         context,
-                                        'Terminos y Condiciones',
+                                        'Términos y Condiciones',
                                         lorem_ipsum.toString(),
                                         'Cerrar');
                                   }),
@@ -213,7 +213,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                                     color: _colorPalette.text),
                                 children: [
                                   TextSpan(
-                                      text: 'privacidad y politicas ',
+                                      text: 'privacidad y políticas ',
                                       style: TextStyle(
                                           fontSize: 16.0,
                                           fontWeight: FontWeight.w600,
@@ -222,7 +222,7 @@ class _StudentRegisterState extends State<StudentRegister> {
                                         ..onTap = () {
                                           _alert.createAlert(
                                               context,
-                                              'Privacidad y Politicas',
+                                              'Privacidad y Políticas',
                                               lorem_ipsum.toString(),
                                               'Cerrar');
                                         }),
@@ -328,12 +328,40 @@ class _StudentRegisterState extends State<StudentRegister> {
         initialDate: selectedDate,
         firstDate: DateTime(1950, 8),
         lastDate: DateTime(2101));
+
+    int calculateAge(DateTime birthDate) {
+      DateTime currentDate = DateTime.now();
+      print(currentDate.year);
+      print(birthDate.year);
+      int age = currentDate.year - birthDate.year;
+      int month1 = currentDate.month;
+      int month2 = birthDate.month;
+      if (month2 > month1) {
+        age--;
+      } else if (month1 == month2) {
+        int day1 = currentDate.day;
+        int day2 = birthDate.day;
+        if (day2 > day1) {
+          age--;
+        }
+      }
+      print(age);
+      return age;
+    }
+
     if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        _birthDateController.text = formatterFront.format(picked);
-        _birthFrontDateController.text = formatter.format(picked);
-      });
+
+      if(calculateAge(picked) >= 10) {
+
+        setState(() {
+          selectedDate = picked;
+          _birthDateController.text = formatterFront.format(picked);
+          _birthFrontDateController.text = formatter.format(picked);
+        });
+
+      } else {
+        _alert.createAlert(context, 'Alerta', 'Debes tener más de 10 años para registrarte en el app como estudiante', "Aceptar");
+      }
     }
   }
 }
