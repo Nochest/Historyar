@@ -1,14 +1,10 @@
 import 'dart:developer';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
 import 'package:historyar_app/pages/main_menu_pages/profile_page.dart';
-import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
 import 'package:historyar_app/providers/user_provider.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:historyar_app/utils/color_palette.dart';
-import 'package:historyar_app/utils/data_picker.dart';
 import 'package:historyar_app/widgets/input_text.dart';
 
 import 'package:intl/intl.dart';
