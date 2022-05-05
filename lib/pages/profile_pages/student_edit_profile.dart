@@ -75,7 +75,8 @@ class _StudentEditProfile extends State<StudentEditProfile> {
     _emailController.text = user!.email;
     _nameController.text = user!.nombres;
     _surnameController.text = user!.apellidos;
-    _birthDateController.text = formatterFront.format(DateTime.parse(user!.fechaNacimiento));
+    _birthDateController.text = formatter.format(DateTime.parse(user!.fechaNacimiento));
+    _birthFrontDateController.text = formatterFront.format(DateTime.parse(user!.fechaNacimiento));
     
     selectedDate= DateTime.parse(user!.fechaNacimiento);
   }
@@ -206,7 +207,7 @@ class _StudentEditProfile extends State<StudentEditProfile> {
                   _nameController.text,
                   _surnameController.text,
                   _emailController.text,
-                  _birthFrontDateController.text,
+                  _birthDateController.text,
                   context);
                   print(_nameController);
                   print(_surnameController);
@@ -234,15 +235,15 @@ class _StudentEditProfile extends State<StudentEditProfile> {
 
   Widget _createFechaNac(BuildContext context) {
     return TextFormField(
-      controller: _birthDateController,
+      controller: _birthFrontDateController,
       decoration: InputDecoration(
         label: Text('Fecha de nacimiento'),
         labelStyle: TextStyle(
-          color: birthFocus.hasFocus || _birthDateController.text.isNotEmpty
+          color: birthFocus.hasFocus || _birthFrontDateController.text.isNotEmpty
               ? _colorPalette.yellow
               : _colorPalette.text,
           fontWeight:
-          birthFocus.hasFocus || _birthDateController.text.isNotEmpty
+          birthFocus.hasFocus || _birthFrontDateController.text.isNotEmpty
               ? FontWeight.w600
               : FontWeight.normal,
         ),
@@ -264,8 +265,8 @@ class _StudentEditProfile extends State<StudentEditProfile> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        _birthDateController.text = formatterFront.format(picked);
-        _birthFrontDateController.text = formatter.format(picked);
+        _birthDateController.text = formatter.format(picked);
+        _birthFrontDateController.text = formatterFront.format(picked);
       });
     }
   }

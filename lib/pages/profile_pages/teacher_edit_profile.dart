@@ -64,7 +64,8 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
     _emailController.text = user!.email;
     _nameController.text = user!.nombres;
     _surnameController.text = user!.apellidos;
-    _birthDateController.text = formatterFront.format(DateTime.parse(user!.fechaNacimiento));
+    _birthDateController.text = formatter.format(DateTime.parse(user!.fechaNacimiento));
+    _birthFrontDateController.text = formatterFront.format(DateTime.parse(user!.fechaNacimiento));
     _schoolController.text = user!.institucionEducativa;
     _mobileController.text = user!.celular;
     celularVisible = user!.celularVisible;
@@ -256,14 +257,14 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
                   _nameController.text,
                   _surnameController.text,
                   _emailController.text,
-                  _birthFrontDateController.text,
+                  _birthDateController.text,
                   celularVisible,
                   emailVisible,
                   context);
                  print(_nameController);
                   print(_surnameController);
                   print(_emailController);
-                  print(_birthDateController);
+                  print(_birthDateController.text);
                   print('estoy mandando');
                   print(user!.id);
             } else {
@@ -282,15 +283,15 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
 
   Widget _createFechaNac(BuildContext context) {
     return TextFormField(
-      controller: _birthDateController,
+      controller: _birthFrontDateController,
       decoration: InputDecoration(
         label: Text('Fecha de nacimiento'),
         labelStyle: TextStyle(
-          color: birthFocus.hasFocus || _birthDateController.text.isNotEmpty
+          color: birthFocus.hasFocus || _birthFrontDateController.text.isNotEmpty
               ? _colorPalette.yellow
               : _colorPalette.text,
           fontWeight:
-          birthFocus.hasFocus || _birthDateController.text.isNotEmpty
+          birthFocus.hasFocus || _birthFrontDateController.text.isNotEmpty
               ? FontWeight.w600
               : FontWeight.normal,
         ),
@@ -312,8 +313,8 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        _birthDateController.text = formatterFront.format(picked);
-        _birthFrontDateController.text = formatter.format(picked);
+        _birthDateController.text = formatter.format(picked);
+        _birthFrontDateController.text = formatterFront.format(picked);
       });
     }
   }
