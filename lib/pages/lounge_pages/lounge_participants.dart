@@ -260,7 +260,7 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                                   future: _atencionProvider.getById(widget.asistenciaId),
                                   builder:
                                       (BuildContext context, AsyncSnapshot atencion) {
-                                    print(atencion.data);
+
                                     if (atencion.data == null || atencion.data.nota == null) {
                                       return MaterialButton(
                                           height: 30.0,
@@ -316,7 +316,7 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                           future: _atencionProvider.getById(widget.asistenciaId),
                           builder:
                               (BuildContext context, AsyncSnapshot atencion) {
-                                print(atencion.data);
+
                             if (atencion.data == null || atencion.data.nota == null) {
                               return Text(
                                 'Sin calificar',
