@@ -26,10 +26,15 @@ import 'package:vector_math/vector_math_64.dart' hide Colors;
 class CreateHistory extends StatefulWidget {
   final int id;
   final int type;
+  final int caso;
   final int? salaId;
+  final String? salaName;
+  final int? asistenciaId;
 
   const CreateHistory(
-      {required this.id, required this.type, this.salaId, Key? key})
+      {required this.id, required this.type, this.salaId,
+         required this.caso, this.salaName, this.asistenciaId,
+        Key? key})
       : super(key: key);
 
   @override
@@ -180,10 +185,14 @@ class _CreateHistoryState extends State<CreateHistory> {
                               File video = File(route.toString());
                               _storyProvider.registerS3(
                                   widget.id,
+                                  widget.type,
                                   widget.salaId,
+                                  widget.salaName,
+                                  widget.asistenciaId,
                                   "aer",
                                   "descripcion",
                                   video,
+                                  widget.caso,
                                   context);
                               print(route);
                             },

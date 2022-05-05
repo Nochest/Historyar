@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:historyar_app/helpers/constant_helpers.dart';
 import 'package:historyar_app/model/attendance.dart';
 import 'package:historyar_app/model/story.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_participants_story_list.dart';
@@ -136,7 +137,8 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                                           CreateHistory(
                                               id: widget.id,
                                               type: widget.type,
-                                              salaId: widget.salaId)),
+                                              salaId: widget.salaId, caso: Constants.PARTICIPANTE_SALA,
+                                          salaName: widget.salaName, asistenciaId: widget.asistenciaId,)),
                                 );
                               });
                         } else {

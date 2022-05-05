@@ -178,13 +178,14 @@ class _CreateHistoryGuestState extends State<CreateHistoryGuest> {
                     IconButton(
                       onPressed: () async {
                         File video = File(route.toString());
+                        /*
                         _storyProvider.registerS3(
                             widget.id,
                             widget.salaId,
                             "aer",
                             "descripcion",
                             video,
-                            context);
+                            context);*/
                         print(route);
                       },
                       icon: Icon(Icons.save),

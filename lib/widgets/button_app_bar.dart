@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:historyar_app/helpers/constant_helpers.dart';
 import 'package:historyar_app/pages/main_menu_pages/create_history.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 
@@ -29,7 +30,7 @@ Widget historyarButtonApp(BuildContext context, bool isActive, int id, int type)
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CreateHistory(id: id, type: type),
+              builder: (context) => CreateHistory(id: id, type: type, caso: Constants.MENU,),
             ));
       },
     ));

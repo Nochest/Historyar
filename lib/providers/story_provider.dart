@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:historyar_app/helpers/constant_helpers.dart';
 import 'package:historyar_app/model/story.dart';
+import 'package:historyar_app/pages/lounge_pages/lounge_detail.dart';
+import 'package:historyar_app/pages/lounge_pages/lounge_participants.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_story_list.dart';
 import 'package:historyar_app/pages/story_pages/my_stories.dart';
 import 'package:historyar_app/utils/alert.dart';
@@ -146,7 +148,8 @@ class StoryProvider {
     }
   }
 
-  registerS3(int usuarioId, int? salaId, String nombre, String descripcion, File video, BuildContext context) async {
+  registerS3(int usuarioId, int type, int? salaId, String? salaName, int? asistenciaId,
+      String nombre, String descripcion, File video, int caso, BuildContext context) async {
 
     print(salaId);
 
@@ -173,9 +176,32 @@ class StoryProvider {
 
       log("respuesta " + responseString);
       log("estado " + response.statusCode.toString());
-      _alert.createAlert(
-          context, response.statusCode.toString(), responseString,
-          "Aceptar");
+
+      if(response.statusCode == 200) {
+        if (caso == Constants.MI_SALA) {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder:
+                (BuildContext context) => LoungeDetail(id: usuarioId, type: type, salaId: salaId!,
+                salaName: salaName!)
+            ),
+          );
+        } else if(caso == Constants.PARTICIPANTE_SALA) {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder:
+                (BuildContext context) => LoungeParticipant(id: usuarioId, type: type, salaId: salaId!,
+                    salaName: salaName!, asistenciaId: asistenciaId!,)
+            ),
+          );
+        } else {
+          _alert.createAlert(
+              context, response.statusCode.toString(), responseString,
+              "Aceptar");
+        }
+      } else {
+        _alert.createAlert(
+            context, "Algo salió mal", "No se ha podido guardar la historia.",
+            "Aceptar");
+      }
     } catch (error) {
       log(error.toString());
     }

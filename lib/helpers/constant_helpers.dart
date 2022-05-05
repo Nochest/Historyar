@@ -6,5 +6,9 @@ class Constants {
   static const int ALUMNO_USUARIO = 1;
   static const int DOCENTE_USUARIO = 2;
 
+  static const int MENU = 1;
+  static const int MI_SALA = 2;
+  static const int PARTICIPANTE_SALA = 3;
+
   static DateFormat formatter = DateFormat('dd/MM/yyyy');
 }
