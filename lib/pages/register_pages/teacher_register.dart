@@ -117,7 +117,7 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                 child: Padding(
                   padding: EdgeInsets.only(top: 24.0),
                   child: Text(
-                    'Bienvenido nuevo maestro!',
+                    'Bienvenido nuevo docente!',
                     style: TextStyle(
                         fontWeight: FontWeight.w700,
                         color: _colorPalette.yellow,

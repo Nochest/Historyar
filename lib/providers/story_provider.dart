@@ -151,8 +151,6 @@ class StoryProvider {
   registerS3(int usuarioId, int type, int? salaId, String? salaName, int? asistenciaId,
       String nombre, String descripcion, File video, int caso, BuildContext context) async {
 
-    print(salaId);
-
     if(salaId == null)
       salaId = 0;
 
@@ -194,7 +192,7 @@ class StoryProvider {
           );
         } else {
           _alert.createAlert(
-              context, response.statusCode.toString(), responseString,
+              context, "Aviso", "Se ha guardado la historia correctamente",
               "Aceptar");
         }
       } else {

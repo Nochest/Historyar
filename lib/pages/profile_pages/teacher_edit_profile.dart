@@ -44,8 +44,10 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
   bool birthDate = false;
   bool celularVisible = false;
   bool emailVisible = false;
+  final birthFocus = FocusNode();
 
   DateFormat formatter = DateFormat('yyyy-MM-dd');
+  DateFormat formatterFront = DateFormat('dd/MM/yyyy');
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
@@ -53,6 +55,7 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _schoolController = TextEditingController();
   TextEditingController _birthDateController = TextEditingController();
+  TextEditingController _birthFrontDateController = TextEditingController();
 
   var selectedDate = DateTime.now();
 
@@ -61,7 +64,8 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
     _emailController.text = user!.email;
     _nameController.text = user!.nombres;
     _surnameController.text = user!.apellidos;
-    _birthDateController.text = user!.fechaNacimiento;
+    _birthDateController.text = formatter.format(DateTime.parse(user!.fechaNacimiento));
+    _birthFrontDateController.text = formatterFront.format(DateTime.parse(user!.fechaNacimiento));
     _schoolController.text = user!.institucionEducativa;
     _mobileController.text = user!.celular;
     celularVisible = user!.celularVisible;
@@ -260,7 +264,7 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
                  print(_nameController);
                   print(_surnameController);
                   print(_emailController);
-                  print(_birthDateController);
+                  print(_birthDateController.text);
                   print('estoy mandando');
                   print(user!.id);
             } else {
@@ -279,7 +283,19 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
 
   Widget _createFechaNac(BuildContext context) {
     return TextFormField(
-      controller: _birthDateController,
+      controller: _birthFrontDateController,
+      decoration: InputDecoration(
+        label: Text('Fecha de nacimiento'),
+        labelStyle: TextStyle(
+          color: birthFocus.hasFocus || _birthFrontDateController.text.isNotEmpty
+              ? _colorPalette.yellow
+              : _colorPalette.text,
+          fontWeight:
+          birthFocus.hasFocus || _birthFrontDateController.text.isNotEmpty
+              ? FontWeight.w600
+              : FontWeight.normal,
+        ),
+      ),
       onTap: () async {
         FocusScope.of(context).requestFocus(FocusNode());
 
@@ -298,6 +314,7 @@ class _TeacherEditProfile extends State<TeacherEditProfile> {
       setState(() {
         selectedDate = picked;
         _birthDateController.text = formatter.format(picked);
+        _birthFrontDateController.text = formatterFront.format(picked);
       });
     }
   }

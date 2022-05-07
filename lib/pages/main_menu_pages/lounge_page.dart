@@ -318,7 +318,7 @@ class _LoungeState extends State<Lounge> {
                         TextInputType.text,
                         'Ingrese el código',
                         '',
-                        true,
+                        false,
                         'Ingrese el código',
                         code),
                   ),

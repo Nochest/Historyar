@@ -75,7 +75,7 @@ Widget historyarBottomAppBar( BuildContext context, bool b1, bool b2, bool b3, b
                     );
                   },
                 ),
-                Center(child: Text('Profile', style: TextStyle(color: b4? _colorPalette.yellow : _colorPalette.info, fontWeight: FontWeight.w700, fontSize: 11.0)))
+                Center(child: Text('Mi Perfil', style: TextStyle(color: b4? _colorPalette.yellow : _colorPalette.info, fontWeight: FontWeight.w700, fontSize: 11.0)))
               ],
             )
           ],

@@ -211,7 +211,7 @@ class _MyStoriesState extends State<MyStories> {
 
     String pregunta = "La siguiente historia se marcará como favorita";
 
-    if(favorito == false) {
+    if(favorito == true) {
       pregunta = "La siguiente historia se desmarcará como favorita";
     }
 

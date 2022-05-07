@@ -5,6 +5,7 @@ import 'package:historyar_app/model/quiz.dart';
 import 'package:historyar_app/model/quiz_models/quiz_model.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_detail.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_participants.dart';
+import 'package:historyar_app/pages/quiz_pages/quiz_detail.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -145,7 +146,7 @@ class QuizProvider {
 
     if (response.statusCode == 201) {
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => LoungeDetail(
+          builder: (BuildContext context) => QuizDetail(
                 id: usuarioId,
                 type: type,
                 salaName: salaName,

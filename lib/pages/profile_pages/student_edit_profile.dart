@@ -1,14 +1,10 @@
 import 'dart:developer';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
 import 'package:historyar_app/pages/main_menu_pages/profile_page.dart';
-import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
 import 'package:historyar_app/providers/user_provider.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:historyar_app/utils/color_palette.dart';
-import 'package:historyar_app/utils/data_picker.dart';
 import 'package:historyar_app/widgets/input_text.dart';
 
 import 'package:intl/intl.dart';
@@ -51,6 +47,7 @@ class _StudentEditProfile extends State<StudentEditProfile> {
 
 
   DateFormat formatter = DateFormat('yyyy-MM-dd');
+  DateFormat formatterFront = DateFormat('dd/MM/yyyy');
 
   final focus_email_parent = FocusNode();
   final focus_names = FocusNode();
@@ -58,12 +55,14 @@ class _StudentEditProfile extends State<StudentEditProfile> {
   final focus_email = FocusNode();
   final focus_password = FocusNode();
   final focus_password_confirm = FocusNode();
+  final birthFocus = FocusNode();
 
   TextEditingController _emailParentController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _surnameController = TextEditingController();
   TextEditingController _birthDateController = TextEditingController();
+  TextEditingController _birthFrontDateController = TextEditingController();
 
   var selectedDate = DateTime.now();
 
@@ -72,7 +71,8 @@ class _StudentEditProfile extends State<StudentEditProfile> {
     _emailController.text = user!.email;
     _nameController.text = user!.nombres;
     _surnameController.text = user!.apellidos;
-    _birthDateController.text = user!.fechaNacimiento;
+    _birthDateController.text = formatter.format(DateTime.parse(user!.fechaNacimiento));
+    _birthFrontDateController.text = formatterFront.format(DateTime.parse(user!.fechaNacimiento));
     
     selectedDate= DateTime.parse(user!.fechaNacimiento);
   }
@@ -231,10 +231,21 @@ class _StudentEditProfile extends State<StudentEditProfile> {
 
   Widget _createFechaNac(BuildContext context) {
     return TextFormField(
-      controller: _birthDateController,
+      controller: _birthFrontDateController,
+      decoration: InputDecoration(
+        label: Text('Fecha de nacimiento'),
+        labelStyle: TextStyle(
+          color: birthFocus.hasFocus || _birthFrontDateController.text.isNotEmpty
+              ? _colorPalette.yellow
+              : _colorPalette.text,
+          fontWeight:
+          birthFocus.hasFocus || _birthFrontDateController.text.isNotEmpty
+              ? FontWeight.w600
+              : FontWeight.normal,
+        ),
+      ),
       onTap: () async {
         FocusScope.of(context).requestFocus(FocusNode());
-        print("terrible");
 
         await _selectDate(context);
       },
@@ -251,6 +262,7 @@ class _StudentEditProfile extends State<StudentEditProfile> {
       setState(() {
         selectedDate = picked;
         _birthDateController.text = formatter.format(picked);
+        _birthFrontDateController.text = formatterFront.format(picked);
       });
     }
   }

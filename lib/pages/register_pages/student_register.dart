@@ -360,7 +360,7 @@ class _StudentRegisterState extends State<StudentRegister> {
         });
 
       } else {
-        _alert.createAlert(context, 'Alerta', 'Debes tener más de 10 años para registrarte en el app como estudiante', "Aceptar");
+        _alert.createAlert(context, 'Alerta', 'Debes tener de 10 años a más para registrarte en el app como estudiante', "Aceptar");
       }
     }
   }

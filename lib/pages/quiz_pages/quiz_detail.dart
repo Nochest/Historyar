@@ -116,118 +116,130 @@ class _QuizDetailState extends State<QuizDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: _colorPalette.cream,
-        appBar: AppBar(
-          backgroundColor: _colorPalette.darkBlue,
-          title:
-          Text('Cuestionario', style: TextStyle(fontWeight: FontWeight.w700)),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder:
-                    (BuildContext context) => LoungeDetail(id: widget.id, type: widget.type, salaId: widget.salaId,
-                    salaName: widget.salaName)
+    return WillPopScope(
+      onWillPop: () async {
+
+        Navigator.of(context).push(
+          MaterialPageRoute(builder:
+              (BuildContext context) => LoungeDetail(id: widget.id, type: widget.type, salaId: widget.salaId,
+              salaName: widget.salaName)
+          ),
+        );
+        return true;
+      },
+      child: Scaffold(
+          backgroundColor: _colorPalette.cream,
+          appBar: AppBar(
+            backgroundColor: _colorPalette.darkBlue,
+            title:
+            Text('Cuestionario', style: TextStyle(fontWeight: FontWeight.w700)),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder:
+                      (BuildContext context) => LoungeDetail(id: widget.id, type: widget.type, salaId: widget.salaId,
+                      salaName: widget.salaName)
+                  ),
+                );
+              },
+            ),
+          ),
+          body: FutureBuilder(
+          future: _cuestionarioProvider.getQuizByLoungeId(widget.salaId),
+          builder: (BuildContext context, AsyncSnapshot<Cuestionario?> snapshot) {
+            if (!snapshot.hasData) {
+              return Center(child: CircularProgressIndicator());
+            } else {
+              return SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(24),
+                  child: Column(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Tema',
+                              style: TextStyle(
+                                  color: _colorPalette.text,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w400)),
+                          Text(
+                              snapshot.data!.tema,
+                              style: TextStyle(
+                                  color: _colorPalette.yellow,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600)),
+                          SizedBox(height: 8.0),
+                          Text('Descripción',
+                              style: TextStyle(
+                                  color: _colorPalette.text,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w400)),
+                          Text(
+                              snapshot.data!.descripcion,
+                              style: TextStyle(
+                                  color: _colorPalette.yellow,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Preguntas',
+                            style: TextStyle(
+                                color: _colorPalette.yellow,
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.w700),
+                            textAlign: TextAlign.left,
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder:
+                                    (BuildContext context) => QuestionCreation(id: widget.id, salaId: widget.salaId,
+                                        salaName: widget.salaName, cuestionarioId: snapshot.data!.id, type: widget.type)
+                                ),
+                              );
+                            },
+                            child: Text('Agregar',
+                                style: TextStyle(
+                                    color: _colorPalette.lightBlue,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w500)),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      FutureBuilder(
+                          future: _cuestionarioProvider.getQuestionsByQuizId(snapshot.data!.id),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<Pregunta>?> snapshots) {
+
+                            if(snapshots.data == null) {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                            else {
+                              return Column(
+                                children: snapshots.data!.map((e) =>
+                                      _buildQ(e.id, e)).toList()
+                                ,
+                              );
+                            }
+                          }
+                      ),
+                    ],
+                  ),
                 ),
               );
-            },
-          ),
-        ),
-        body: FutureBuilder(
-        future: _cuestionarioProvider.getQuizByLoungeId(widget.salaId),
-        builder: (BuildContext context, AsyncSnapshot<Cuestionario?> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          } else {
-            return SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(24),
-                child: Column(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Tema',
-                            style: TextStyle(
-                                color: _colorPalette.text,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w400)),
-                        Text(
-                            snapshot.data!.tema,
-                            style: TextStyle(
-                                color: _colorPalette.yellow,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600)),
-                        SizedBox(height: 8.0),
-                        Text('Descripción',
-                            style: TextStyle(
-                                color: _colorPalette.text,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w400)),
-                        Text(
-                            snapshot.data!.descripcion,
-                            style: TextStyle(
-                                color: _colorPalette.yellow,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.w600)),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Preguntas',
-                          style: TextStyle(
-                              color: _colorPalette.yellow,
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.w700),
-                          textAlign: TextAlign.left,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder:
-                                  (BuildContext context) => QuestionCreation(id: widget.id, salaId: widget.salaId,
-                                      salaName: widget.salaName, cuestionarioId: snapshot.data!.id, type: widget.type)
-                              ),
-                            );
-                          },
-                          child: Text('Agregar',
-                              style: TextStyle(
-                                  color: _colorPalette.lightBlue,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w500)),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 24),
-                    FutureBuilder(
-                        future: _cuestionarioProvider.getQuestionsByQuizId(snapshot.data!.id),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<Pregunta>?> snapshots) {
-
-                          if(snapshots.data == null) {
-                            return Center(child: CircularProgressIndicator());
-                          }
-                          else {
-                            return Column(
-                              children: snapshots.data!.map((e) =>
-                                    _buildQ(e.id, e)).toList()
-                              ,
-                            );
-                          }
-                        }
-                    ),
-                  ],
-                ),
-              ),
-            );
+            }
           }
-        }
-      )
+        )
+      ),
     );
 
 

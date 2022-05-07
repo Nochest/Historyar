@@ -176,6 +176,7 @@ class _LoungeSendMailState extends State<LoungeSendMail> {
                 !listado.contains(_emailController.text)) {
               setState(() {
                 listado.add(_emailController.text);
+                _emailController.text = "";
               });
             }
           }),
