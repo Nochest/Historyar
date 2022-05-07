@@ -3,7 +3,7 @@ import 'package:historyar_app/helpers/constant_helpers.dart';
 import 'package:historyar_app/model/attendance.dart';
 import 'package:historyar_app/model/story.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_participants_story_list.dart';
-import 'package:historyar_app/pages/main_menu_pages/create_history.dart';
+import 'package:historyar_app/pages/main_menu_pages/create_history/create_history_screen.dart';
 import 'package:historyar_app/pages/main_menu_pages/lounge_page.dart';
 import 'package:historyar_app/pages/quiz_pages/quiz_resolution.dart';
 import 'package:historyar_app/pages/story_pages/story_visualizer.dart';
@@ -135,10 +135,13 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
                                           CreateHistory(
-                                              id: widget.id,
-                                              type: widget.type,
-                                              salaId: widget.salaId, caso: Constants.PARTICIPANTE_SALA,
-                                          salaName: widget.salaName, asistenciaId: widget.asistenciaId,)),
+                                            id: widget.id,
+                                            type: widget.type,
+                                            salaId: widget.salaId,
+                                            caso: Constants.PARTICIPANTE_SALA,
+                                            salaName: widget.salaName,
+                                            asistenciaId: widget.asistenciaId,
+                                          )),
                                 );
                               });
                         } else {
@@ -257,18 +260,19 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                               );
                             } else {
                               return FutureBuilder(
-                                  future: _atencionProvider.getById(widget.asistenciaId),
-                                  builder:
-                                      (BuildContext context, AsyncSnapshot atencion) {
-
-                                    if (atencion.data == null || atencion.data.nota == null) {
+                                  future: _atencionProvider
+                                      .getById(widget.asistenciaId),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot atencion) {
+                                    if (atencion.data == null ||
+                                        atencion.data.nota == null) {
                                       return MaterialButton(
                                           height: 30.0,
                                           minWidth: 100.0,
                                           color: _colorPalette.lightBlue,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
-                                              BorderRadius.circular(100.0)),
+                                                  BorderRadius.circular(100.0)),
                                           child: Text("Resolver",
                                               style: TextStyle(
                                                   color: _colorPalette.text,
@@ -276,14 +280,18 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                                           onPressed: () {
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
-                                                  builder: (BuildContext context) =>
-                                                      QuizResolution(
-                                                        id: widget.id,
-                                                        type: widget.type,
-                                                        salaId: widget.salaId,
-                                                        salaName: widget.salaName,
-                                                        asistenciaId: widget.asistenciaId,
-                                                      )),
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          QuizResolution(
+                                                            id: widget.id,
+                                                            type: widget.type,
+                                                            salaId:
+                                                                widget.salaId,
+                                                            salaName:
+                                                                widget.salaName,
+                                                            asistenciaId: widget
+                                                                .asistenciaId,
+                                                          )),
                                             );
                                           });
                                     } else {
@@ -313,11 +321,13 @@ class _LoungeParticipantState extends State<LoungeParticipant> {
                         textAlign: TextAlign.left,
                       ),
                       FutureBuilder(
-                          future: _atencionProvider.getById(widget.asistenciaId),
+                          future:
+                              _atencionProvider.getById(widget.asistenciaId),
                           builder:
                               (BuildContext context, AsyncSnapshot atencion) {
-
-                            if (atencion.data == null || atencion.data.nota == null) {
+                            print(atencion.data);
+                            if (atencion.data == null ||
+                                atencion.data.nota == null) {
                               return Text(
                                 'Sin calificar',
                                 style: TextStyle(
