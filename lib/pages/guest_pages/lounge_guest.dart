@@ -5,7 +5,7 @@ import 'package:historyar_app/pages/guest_pages/create_history_guest.dart';
 import 'package:historyar_app/pages/guest_pages/guiz_resolution_guest.dart';
 import 'package:historyar_app/pages/guest_pages/story_list_guest.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_participants_story_list.dart';
-import 'package:historyar_app/pages/main_menu_pages/create_history.dart';
+import 'package:historyar_app/pages/main_menu_pages/create_history/create_history_screen.dart';
 import 'package:historyar_app/pages/main_menu_pages/lounge_page.dart';
 import 'package:historyar_app/pages/quiz_pages/quiz_resolution.dart';
 import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
@@ -23,10 +23,10 @@ class LoungeGuest extends StatefulWidget {
 
   const LoungeGuest(
       {required this.id,
-        required this.salaId,
-        required this.salaName,
-        required this.asistenciaId,
-        Key? key})
+      required this.salaId,
+      required this.salaName,
+      required this.asistenciaId,
+      Key? key})
       : super(key: key);
 
   @override
@@ -46,12 +46,12 @@ class _LoungeGuestState extends State<LoungeGuest> {
           ),
           Center(
               child: Text(
-                name,
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15.0),
-                overflow: TextOverflow.clip,
-                maxLines: 1,
-                softWrap: false,
-              ))
+            name,
+            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15.0),
+            overflow: TextOverflow.clip,
+            maxLines: 1,
+            softWrap: false,
+          ))
         ],
       ),
     );
@@ -67,9 +67,7 @@ class _LoungeGuestState extends State<LoungeGuest> {
     return WillPopScope(
       onWillPop: () async {
         Navigator.of(context).push(
-          MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  SignIn()),
+          MaterialPageRoute(builder: (BuildContext context) => SignIn()),
         );
         return true;
       },
@@ -84,8 +82,7 @@ class _LoungeGuestState extends State<LoungeGuest> {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          SignIn()),
+                      builder: (BuildContext context) => SignIn()),
                 );
               },
             ),
@@ -213,13 +210,13 @@ class _LoungeGuestState extends State<LoungeGuest> {
                         } else {
                           return Container(
                               child: Wrap(
-                                direction: Axis.horizontal,
-                                spacing: 5.0,
-                                runSpacing: 5.0,
-                                children: snapshot.data!
-                                    .map((e) => _buildIcon(e.id, e.nombres))
-                                    .toList(),
-                              ));
+                            direction: Axis.horizontal,
+                            spacing: 5.0,
+                            runSpacing: 5.0,
+                            children: snapshot.data!
+                                .map((e) => _buildIcon(e.id, e.nombres))
+                                .toList(),
+                          ));
                         }
                       }),
                   const SizedBox(height: 24),
@@ -249,18 +246,20 @@ class _LoungeGuestState extends State<LoungeGuest> {
                               );
                             } else {
                               return FutureBuilder(
-                                  future: _atencionProvider.getById(widget.asistenciaId),
-                                  builder:
-                                      (BuildContext context, AsyncSnapshot atencion) {
+                                  future: _atencionProvider
+                                      .getById(widget.asistenciaId),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot atencion) {
                                     print(atencion.data);
-                                    if (atencion.data == null || atencion.data.nota == null) {
+                                    if (atencion.data == null ||
+                                        atencion.data.nota == null) {
                                       return MaterialButton(
                                           height: 30.0,
                                           minWidth: 100.0,
                                           color: _colorPalette.lightBlue,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
-                                              BorderRadius.circular(100.0)),
+                                                  BorderRadius.circular(100.0)),
                                           child: Text("Resolver",
                                               style: TextStyle(
                                                   color: _colorPalette.text,
@@ -268,13 +267,17 @@ class _LoungeGuestState extends State<LoungeGuest> {
                                           onPressed: () {
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
-                                                  builder: (BuildContext context) =>
-                                                      QuizResolutionGuest(
-                                                        id: widget.id,
-                                                        salaId: widget.salaId,
-                                                        salaName: widget.salaName,
-                                                        asistenciaId: widget.asistenciaId,
-                                                      )),
+                                                  builder:
+                                                      (BuildContext context) =>
+                                                          QuizResolutionGuest(
+                                                            id: widget.id,
+                                                            salaId:
+                                                                widget.salaId,
+                                                            salaName:
+                                                                widget.salaName,
+                                                            asistenciaId: widget
+                                                                .asistenciaId,
+                                                          )),
                                             );
                                           });
                                     } else {
@@ -304,11 +307,13 @@ class _LoungeGuestState extends State<LoungeGuest> {
                         textAlign: TextAlign.left,
                       ),
                       FutureBuilder(
-                          future: _atencionProvider.getById(widget.asistenciaId),
+                          future:
+                              _atencionProvider.getById(widget.asistenciaId),
                           builder:
                               (BuildContext context, AsyncSnapshot atencion) {
                             print(atencion.data);
-                            if (atencion.data == null || atencion.data.nota == null) {
+                            if (atencion.data == null ||
+                                atencion.data.nota == null) {
                               return Text(
                                 'Sin calificar',
                                 style: TextStyle(

@@ -32,9 +32,13 @@ class CreateHistory extends StatefulWidget {
   final int? asistenciaId;
 
   const CreateHistory(
-      {required this.id, required this.type, this.salaId,
-         required this.caso, this.salaName, this.asistenciaId,
-        Key? key})
+      {required this.id,
+      required this.type,
+      this.salaId,
+      required this.caso,
+      this.salaName,
+      this.asistenciaId,
+      Key? key})
       : super(key: key);
 
   @override
@@ -279,7 +283,12 @@ class _CreateHistoryState extends State<CreateHistory> {
                                     height: 24,
                                   ),
                                   onTap: () {
+                                    this.arSessionManager!.onPlaneOrPointTap =
+                                        getDuck;
+                                    expandModels = false;
+
                                     log('Selected duck 01');
+                                    setState(() {});
                                   },
                                 ),
                               ),
@@ -422,6 +431,37 @@ class _CreateHistoryState extends State<CreateHistory> {
             type: NodeType.webGLB,
             uri:
                 "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Fox/glTF-Binary/Fox.glb",
+            scale: Vector3(0.2, 0.2, 0.2),
+            position: Vector3(0.0, 0.0, 0.0),
+            rotation: Vector4(1.0, 0.0, 0.0, 0.0));
+        bool? didAddNodeToAnchor = await this
+            .arObjectManager!
+            .addNode(newNode, planeAnchor: newAnchor);
+        if (didAddNodeToAnchor!) {
+          this.nodes.add(newNode);
+        } else {
+          this.arSessionManager!.onError("Adding Node to Anchor failed");
+        }
+      } else {
+        this.arSessionManager!.onError("Adding Anchor failed");
+      }
+    }
+  }
+
+  Future<void> getDuck(List<ARHitTestResult> hitTestResults) async {
+    var singleHitTestResult = hitTestResults.firstWhere(
+        (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
+    if (singleHitTestResult != null) {
+      var newAnchor =
+          ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
+      bool? didAddAnchor = await this.arAnchorManager!.addAnchor(newAnchor);
+      if (didAddAnchor!) {
+        this.anchors.add(newAnchor);
+        // Add note to anchor
+        var newNode = ARNode(
+            type: NodeType.webGLB,
+            uri:
+                "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
             scale: Vector3(0.2, 0.2, 0.2),
             position: Vector3(0.0, 0.0, 0.0),
             rotation: Vector4(1.0, 0.0, 0.0, 0.0));
