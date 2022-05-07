@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:historyar_app/helpers/constant_helpers.dart';
 import 'package:historyar_app/providers/forum_provider.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/app_bar.dart';
 import 'package:historyar_app/widgets/button_app_bar.dart';
+import 'package:http/http.dart' as http;
 
 class ForumDetail extends StatefulWidget {
   final int id;
@@ -194,26 +198,62 @@ class _ForumDetailState extends State<ForumDetail> {
                   color: _colorPalette.yellow,
                   fontWeight: FontWeight.w600)),
           onPressed: () async {
-            var aux = false;
-            //TODO: Push comment
             if (_controller.text.isNotEmpty) {
-              aux = await _forumProvider.comentar(
-                  _controller.text, 0, widget.userId, widget.id);
+              comentar(_controller.text, 0, widget.userId, widget.id);
             } else {
               alert.createAlert(context, 'Error',
                   'No puede ingresar un comentario vacio', 'ok');
             }
-
-            print(aux);
-            if (aux == true) {
-              setState(() {
-                _controller.text = "";
-              });
-            } else {
-              _alert.createAlert(context, "Algo salió mal",
-                  "No se ha podido realizar el comentario.", "aceptar");
-            }
           }),
     );
+  }
+
+  comentar(String descripcion,
+      int reaccion,
+      int usuarioId,
+      int publicacionId) async {
+
+    List<String> insultos = ["ctmr", "ptmr", "mierda", "puta", "culero", "conchatumadre", "putamadre", "pinche", "maldito", "perra", "webon", "verga"];
+
+    var pasa = true;
+
+    for(var aux in insultos) {
+      if(descripcion.contains(aux) == true)
+        pasa = false;
+    }
+
+    if(pasa == true) {
+      Map data = {
+        'descripcion': descripcion,
+        'reaccion': reaccion,
+        'usuario' : {
+          'id' : usuarioId
+        },
+        'publicacion' : {
+          'id' : publicacionId
+        }
+      };
+      var bodyRequest = json.encode(data);
+
+      var response = await http.post(
+          Uri.parse("${Constants.URL}/api/comentarios/crear"),
+          headers: {"Content-Type": "application/json"},
+          body: bodyRequest);
+
+      print(response.statusCode);
+
+      if (response.statusCode == 201) {
+        setState(() {
+
+        });
+      } else {
+        _alert.createAlert(context, "Algo salió mal",
+            "No se ha podido realizar el comentario.", "aceptar");
+      }
+    } else {
+      _alert.createAlert(
+          context, "Algo salió mal", "No se pueden incluir groserías en sus publicaciones.",
+          "aceptar");
+    }
   }
 }

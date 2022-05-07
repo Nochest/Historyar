@@ -5,6 +5,7 @@ import 'package:historyar_app/model/user.dart';
 import 'package:historyar_app/pages/profile_pages/student_edit_profile.dart';
 import 'package:historyar_app/pages/profile_pages/teacher_edit_profile.dart';
 import 'package:historyar_app/pages/register_pages/teacher_register.dart';
+import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
 import 'package:historyar_app/pages/story_pages/my_stories.dart';
 import 'package:historyar_app/providers/user_provider.dart';
 import 'package:historyar_app/utils/color_palette.dart';
@@ -50,6 +51,25 @@ class _ProfileState extends State<Profile> {
           'Perfil',
           style: TextStyle(color: _colorPalette.yellow),
         ),
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            SignIn(),
+                      ),
+                          (Route<dynamic> route) => false);
+                },
+                child: Icon(
+                    Icons.logout
+                ),
+              )
+          ),
+        ],
       ),
       backgroundColor: _colorPalette.cream,
       body: FutureBuilder(

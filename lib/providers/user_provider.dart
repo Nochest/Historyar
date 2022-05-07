@@ -106,6 +106,9 @@ class UserProvider {
           MaterialPageRoute(
               builder: (BuildContext context) => SuccessRegister()),
           (Route<dynamic> route) => false);
+    } else {
+      _alert.createAlert(
+          context, "Algo salió mal", "No se ha crear la cuenta.", "aceptar");
     }
 
     return 0;
@@ -139,6 +142,9 @@ class UserProvider {
           MaterialPageRoute(
               builder: (BuildContext context) => SuccessRegister()),
           (Route<dynamic> route) => false);
+    } else {
+      _alert.createAlert(
+          context, "Algo salió mal", "No se ha crear la cuenta.", "aceptar");
     }
 
     return 0;

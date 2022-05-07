@@ -12,6 +12,9 @@ import 'package:historyar_app/utils/alert.dart';
 import 'package:http/http.dart' as http;
 
 class ForumProvider {
+
+  List<String> insultos = ["ctmr", "ptmr", "mierda", "puta", "culero", "conchatumadre", "putamadre", "pinche", "maldito", "perra", "webon", "verga"];
+
   Alert _alert = Alert();
 
   Future<List<ForumHolder>> getAll(int type) async {
@@ -120,27 +123,43 @@ class ForumProvider {
       int type,
       BuildContext context) async{
 
-    Map data = {
-      'descripcion': descripcion,
-      'tema': tema,
-      'usuario' : {
-        'id' : usuarioId
+    var pasa = true;
+
+    for(var aux in insultos) {
+      if(tema.contains(aux) == true)
+        pasa = false;
+      if(descripcion.contains(aux) == true)
+        pasa = false;
+    }
+
+    if(pasa == true) {
+      Map data = {
+        'descripcion': descripcion,
+        'tema': tema,
+        'usuario': {
+          'id': usuarioId
+        }
+      };
+      var bodyRequest = json.encode(data);
+
+      var response = await http.post(
+          Uri.parse("${Constants.URL}/api/publicaciones/crear"),
+          headers: {"Content-Type": "application/json;  charset=UTF-8"},
+          body: bodyRequest);
+
+      if (response.statusCode == 201) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (BuildContext context) =>
+                Community(id: usuarioId, type: type))
+        );
+      } else {
+        _alert.createAlert(
+            context, "Algo salió mal", "No se ha podido publicar.",
+            "aceptar");
       }
-    };
-    var bodyRequest = json.encode(data);
-
-    var response = await http.post(
-        Uri.parse("${Constants.URL}/api/publicaciones/crear"),
-        headers: {"Content-Type": "application/json;  charset=UTF-8"},
-        body: bodyRequest);
-
-    if (response.statusCode == 201) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (BuildContext context) => Community(id: usuarioId, type: type))
-          );
     } else {
       _alert.createAlert(
-          context, "Algo salió mal", "No se ha podido publicar.",
+          context, "Algo salió mal", "No se pueden incluir groserías en sus publicaciones.",
           "aceptar");
     }
   }
@@ -149,6 +168,7 @@ class ForumProvider {
       int reaccion,
       int usuarioId,
       int publicacionId) async {
+
     Map data = {
       'descripcion': descripcion,
       'reaccion': reaccion,
