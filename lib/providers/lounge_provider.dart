@@ -2,16 +2,13 @@ import 'dart:developer';
 
 import 'package:historyar_app/helpers/constant_helpers.dart';
 import 'package:historyar_app/model/lounge.dart';
-import 'package:historyar_app/model/story.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_participants.dart';
 import 'package:historyar_app/pages/main_menu_pages/lounge_page.dart';
-import 'package:historyar_app/pages/story_pages/my_stories.dart';
 import 'package:historyar_app/utils/alert.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoungeProvider {
   Alert _alert = Alert();

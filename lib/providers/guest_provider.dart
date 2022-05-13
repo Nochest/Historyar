@@ -33,6 +33,8 @@ class GuestProvider {
           Utf8Decoder().convert(sala.bodyBytes).toString()
       );
 
+      print(salaData);
+
       if(password == salaData["password"]) {
 
         Map datausuario = {

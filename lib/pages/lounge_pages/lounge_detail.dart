@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_elegant_number_button/flutter_elegant_number_button.dart';
 import 'package:historyar_app/helpers/constant_helpers.dart';
 import 'package:historyar_app/model/attendance.dart';
 import 'package:historyar_app/model/story.dart';
@@ -24,6 +25,8 @@ import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/input_text.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoungeDetail extends StatefulWidget {
   final int id;
@@ -46,6 +49,8 @@ class LoungeDetail extends StatefulWidget {
 class _LoungeDetailState extends State<LoungeDetail> {
   ReceivePort receivePort = ReceivePort();
   int progress = 0;
+  int _numberController = 2;
+  int maxGrupo = 1;
 
   @override
   void initState() {
@@ -67,15 +72,31 @@ class _LoungeDetailState extends State<LoungeDetail> {
     sendPort!.send(progress);
   }
 
-  Widget _buildIcon(int index, String name) {
+  Widget _buildIcon(int index, String name, int grupo) {
+
+    List colors = [Colors.black, Colors.brown, Colors.amber, Colors.blueAccent, Colors.cyan, Colors.purple];
+
+    if(grupo > maxGrupo){
+      maxGrupo = grupo;
+    }
+
     return Container(
-      height: 80.0,
+      height: 95.0,
       width: 80.0,
       child: Column(
         children: [
+          Center(
+              child: Text(
+                "G${grupo}",
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12.0),
+              )),
           GestureDetector(
-            child: Icon(Icons.attribution_rounded, size: 60.0),
-            onTap: () {},
+            child: Icon(
+              Icons.attribution_rounded, size: 60.0,
+              color: colors[grupo],),
+            onTap: () {
+              createAlert(index, name, context);
+            },
           ),
           Center(
               child: Text(
@@ -259,11 +280,49 @@ class _LoungeDetailState extends State<LoungeDetail> {
                             spacing: 5.0,
                             runSpacing: 5.0,
                             children: snapshot.data!
-                                .map((e) => _buildIcon(e.id, e.nombres))
+                                .map((e) => _buildIcon(e.id, e.nombres, e.numeroGrupo))
                                 .toList(),
                           ));
                         }
                       }),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                        },
+                        child: ElegantNumberButton(
+                          initialValue: _numberController,
+                          buttonSizeWidth: 30,
+                          buttonSizeHeight: 25,
+                          color: _colorPalette.lightBlue,
+                          minValue: 1,
+                          maxValue: 5,
+                          step: 1,
+                          decimalPlaces: 0,
+                          onChanged: (value){
+                            setState(() {
+                              _numberController = value.toInt();
+                            });
+                          },
+                        ),
+                      ),
+                      MaterialButton(
+                          height: 30.0,
+                          minWidth: 100.0,
+                          color: _colorPalette.lightBlue,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100.0)),
+                          child: Text("Partir",
+                              style: TextStyle(
+                                  color: _colorPalette.text,
+                                  fontWeight: FontWeight.w600)),
+                          onPressed: () {
+                            partir(widget.salaId, _numberController, context);
+                          })
+                    ],
+                  ),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -420,5 +479,94 @@ class _LoungeDetailState extends State<LoungeDetail> {
             ),
           )),
     );
+  }
+
+  partir(int id, int cantidad, BuildContext context) async {
+
+    var response = await http.put(
+        Uri.parse("${Constants.URL}/api/asistencias/sala/grupos/${id}?cantidad=${cantidad}"),
+        headers: {"Content-Type": "application/json"});
+
+    if (response.statusCode == 200) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                LoungeDetail(
+                  id: widget.id,
+                  type: widget.type,
+                  salaId: widget.salaId,
+                  salaName: widget.salaName
+                )),
+      );
+    } else {
+      _alert.createAlert(
+          context, "Algo salió mal", "No se ha podido partir las salas.", "Aceptar");
+    }
+  }
+
+  void createAlert(int id, String nombre, BuildContext context) {
+    showDialog(
+        barrierColor: _colorPalette.lightBlue.withOpacity(0.6),
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: _colorPalette.cream,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
+            title: Padding(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Center(
+                    child: Text('Mover a ${nombre} al',
+                        style: TextStyle(
+                            color: _colorPalette.darkBlue,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 24.0)))),
+            content: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(maxGrupo, (index) {
+                  return MaterialButton(
+                      height: 30.0,
+                      minWidth: 100.0,
+                      color: _colorPalette.lightBlue,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100.0)),
+                      child: Text("Grupo ${(index + 1)}",
+                          style: TextStyle(
+                              color: _colorPalette.text,
+                              fontWeight: FontWeight.w600)),
+                      onPressed: () {
+                        mover(id, (index + 1), context);
+                      });
+                }),
+              ),
+            ),
+          );
+        });
+  }
+
+  mover(int id, int grupo, BuildContext context) async {
+
+    var response = await http.put(
+        Uri.parse("${Constants.URL}/api/asistencias/grupo/${id}?grupo=${grupo}"),
+        headers: {"Content-Type": "application/json"});
+
+    if (response.statusCode == 200) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                LoungeDetail(
+                    id: widget.id,
+                    type: widget.type,
+                    salaId: widget.salaId,
+                    salaName: widget.salaName
+                )),
+      );
+    } else {
+      _alert.createAlert(
+          context, "Algo salió mal", "No se ha podido partir las salas.", "Aceptar");
+    }
   }
 }

@@ -17,18 +17,31 @@ class _SignInState extends State<SignIn> {
   bool signIn = false;
   bool pass = false;
 
+  bool name = false;
+  bool salaCode = false;
+  bool salaPassword = false;
+
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _salaCodeController = TextEditingController();
+  TextEditingController _salaPasswordController = TextEditingController();
+
   FocusNode focus_email = FocusNode();
   FocusNode focus_password = FocusNode();
 
+  FocusNode focus_name = FocusNode();
+  FocusNode focus_sala_code = FocusNode();
+  FocusNode focus_sala_password = FocusNode();
+
+
   var _usuarioProvider = UserProvider();
 
-  var _guestProvide = GuestProvider();
+  var _guestProvider = GuestProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -264,42 +277,6 @@ class _SignInState extends State<SignIn> {
         });
   }
 
-  void guestAlert(BuildContext context) {
-    showDialog(
-        barrierColor: _colorPalette.lightBlue.withOpacity(0.6),
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: _colorPalette.cream,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0)),
-            title: Padding(
-                padding: EdgeInsets.only(top: 16.0),
-                child: Center(
-                    child: Text('Tipo de Usuario',
-                        style: TextStyle(
-                            color: _colorPalette.darkBlue,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 24.0)))),
-            content: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text('Elija el tipo de invitado que desea ser',
-                      style: TextStyle(
-                          color: _colorPalette.text,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14.0),
-                      textAlign: TextAlign.justify),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
   Widget guestlogin(BuildContext context) {
     return Container(
       alignment: Alignment.center,
@@ -320,5 +297,120 @@ class _SignInState extends State<SignIn> {
         ],
       ),
     );
+  }
+
+
+  void guestAlert(BuildContext context) {
+    _nameController.text = "";
+    _salaCodeController.text = "";
+    _salaPasswordController.text = "";
+
+    showDialog(
+        barrierColor: _colorPalette.lightBlue.withOpacity(0.6),
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0)),
+            title: Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: Center(
+                    child: Text("Ingresar a una sala sin cuenta",
+                        style: TextStyle(
+                            color: _colorPalette.darkBlue,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 24.0)))),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: _inputText.defaultIText(
+                        focus_name,
+                        _nameController,
+                        TextInputType.text,
+                        'Ingrese su nombre',
+                        '',
+                        false,
+                        'Ingrese su nombre',
+                        name),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: _inputText.defaultIText(
+                        focus_sala_code,
+                        _salaCodeController,
+                        TextInputType.text,
+                        'Ingrese el código',
+                        '',
+                        false,
+                        'Ingrese el código',
+                        salaCode),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: _inputText.defaultIText(
+                        focus_sala_password,
+                        _salaPasswordController,
+                        TextInputType.text,
+                        'Ingrese su contraeña',
+                        '',
+                        true,
+                        'Ingrese su contraeña',
+                        salaPassword),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 10.0, bottom: 2.0),
+                      child: default_button(context)),
+                  Padding(
+                      padding: EdgeInsets.only(top: 2.0),
+                      child: accept_button(context))
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget default_button(BuildContext context) {
+    return MaterialButton(
+        height: 36.0,
+        minWidth: 126.0,
+        color: _colorPalette.lightBlue,
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+        child: Text("Cancelar",
+            style: TextStyle(
+                color: _colorPalette.text, fontWeight: FontWeight.w600)),
+        onPressed: () {
+          Navigator.of(context).pop();
+        });
+  }
+
+  Widget accept_button(BuildContext context) {
+    return MaterialButton(
+        height: 36.0,
+        minWidth: 126.0,
+        color: _colorPalette.lightBlue,
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+        child: Text("Aceptar",
+            style: TextStyle(
+                color: _colorPalette.text, fontWeight: FontWeight.w600)),
+        onPressed: () {
+          if (_nameController.text.isNotEmpty && _salaCodeController.text.isNotEmpty) {
+            _guestProvider.SingIn(_salaCodeController.text, _salaPasswordController.text,
+                _nameController.text, context);
+          } else {
+            setState(() {
+              _salaCodeController.text = "";
+              _salaPasswordController.text = "";
+              salaCode = true;
+              salaPassword = true;
+            });
+          }
+        });
   }
 }
