@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:historyar_app/pages/forum_pages/forum_detail.dart';
 import 'package:historyar_app/providers/forum_provider.dart';
+import 'package:historyar_app/providers/lounge_provider.dart';
+import 'package:historyar_app/utils/alert.dart';
 import 'package:historyar_app/utils/color_palette.dart';
 import 'package:historyar_app/widgets/app_bar.dart';
 import 'package:historyar_app/widgets/button_app_bar.dart';
@@ -21,6 +25,13 @@ class HomeHolder extends StatefulWidget {
 
 class _HomeHolderState extends State<HomeHolder> {
   var _forumProvider = ForumProvider();
+  var _salaProvider = LoungeProvider();
+  Alert _alert = Alert();
+  Random _rnd = Random();
+  static const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+
+  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
   ColorPalette _colorPalette = ColorPalette();
   Future webViewMethod() async {
@@ -89,7 +100,14 @@ class _HomeHolderState extends State<HomeHolder> {
                               ),
                             ),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            _alert.createAlert(
+                              context, "Sala Creada", "Revisa en tus salas.", "Aceptar");
+                            _salaProvider.crear(getRandomString(5),
+                                "Sala rápida",
+                                "123",
+                                widget.id, widget.type, context);
+                          },
                         ),
                       ),
                       Padding(

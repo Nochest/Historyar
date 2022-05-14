@@ -62,6 +62,7 @@ class LoungeProvider {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) =>
               Lounge(id: usuarioId, type: type)));
+
     } else {
       _alert.createAlert(
           context, "Algo salió mal", "No se ha podido publicar.", "aceptar");
@@ -138,4 +139,29 @@ class LoungeProvider {
           "No se pudo encontrar la sala.", "aceptar");
     }
   }
+
+  Future<Sala?> getById(int salaId) async {
+    var response = await http.get(
+        Uri.parse("${Constants.URL}/api/salas/${salaId}"));
+
+    var jsonData = json.decode(
+        Utf8Decoder().convert(response.bodyBytes).toString()
+    );
+
+    if (response.statusCode == 200) {
+      Sala sala = Sala(
+          jsonData["id"],
+          jsonData["titulo"],
+          jsonData["descripcion"],
+          jsonData["codigo"],
+          jsonData["password"],
+          jsonData["fechaCreacion"],
+          jsonData["fechaFin"]);
+
+      return sala;
+    } else {
+      return null;
+    }
+  }
+
 }

@@ -8,11 +8,13 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_elegant_number_button/flutter_elegant_number_button.dart';
 import 'package:historyar_app/helpers/constant_helpers.dart';
 import 'package:historyar_app/model/attendance.dart';
+import 'package:historyar_app/model/lounge.dart';
 import 'package:historyar_app/model/story.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_send_mail.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_story_list.dart';
 import 'package:historyar_app/pages/lounge_pages/my_lounges.dart';
 import 'package:historyar_app/pages/main_menu_pages/create_history/create_history_screen.dart';
+import 'package:historyar_app/pages/main_menu_pages/lounge_page.dart';
 import 'package:historyar_app/pages/quiz_pages/quiz_creation.dart';
 import 'package:historyar_app/pages/quiz_pages/quiz_detail.dart';
 import 'package:historyar_app/pages/story_pages/story_visualizer.dart';
@@ -156,6 +158,53 @@ class _LoungeDetailState extends State<LoungeDetail> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
+                        'Credenciales',
+                        style: TextStyle(
+                            color: _colorPalette.yellow,
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.w700),
+                        textAlign: TextAlign.left,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  FutureBuilder(
+                      future: _salaProvider.getById(widget.salaId),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<Sala?> snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(child: CircularProgressIndicator());
+                        } else {
+                          return
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Código: ${snapshot.data?.codigo}',
+                                  style: TextStyle(
+                                      color: _colorPalette.darkBlue,
+                                      fontSize: 17.0,
+                                      fontWeight: FontWeight.w700),
+                                  textAlign: TextAlign.left,
+                                ),
+                                Text(
+                                  'Contraseña: ${snapshot.data?.password}',
+                                  style: TextStyle(
+                                      color: _colorPalette.darkBlue,
+                                      fontSize: 17.0,
+                                      fontWeight: FontWeight.w700),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ],
+                            );
+                        }
+                      }
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
                         'Mi Historia',
                         style: TextStyle(
                             color: _colorPalette.yellow,
@@ -215,7 +264,8 @@ class _LoungeDetailState extends State<LoungeDetail> {
                             ),
                           );
                         }
-                      }),
+                      }
+                  ),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

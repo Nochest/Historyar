@@ -14,7 +14,6 @@ import 'package:http/http.dart' as http;
 class GuestProvider {
   Alert _alert = Alert();
   Random _rnd = Random();
-  var rng = new Random();
   static const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
   
   String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
