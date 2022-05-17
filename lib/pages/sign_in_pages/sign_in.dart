@@ -38,7 +38,6 @@ class _SignInState extends State<SignIn> {
   FocusNode focus_sala_code = FocusNode();
   FocusNode focus_sala_password = FocusNode();
 
-
   var _usuarioProvider = UserProvider();
 
   var _guestProvider = GuestProvider();
@@ -105,7 +104,7 @@ class _SignInState extends State<SignIn> {
                         children: [
                           Spacer(),
                           TextButton(
-                            child: Text('Olvidaste tu contraseña?',
+                            child: Text('¿Olvidaste tu contraseña?',
                                 style: TextStyle(
                                     color: _colorPalette.darkBlue,
                                     fontWeight: FontWeight.w400,
@@ -181,7 +180,7 @@ class _SignInState extends State<SignIn> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('No tienes una cuenta?',
+          Text('¿No tienes una cuenta?',
               style: TextStyle(
                   color: _colorPalette.text,
                   fontWeight: FontWeight.w400,
@@ -299,7 +298,6 @@ class _SignInState extends State<SignIn> {
     );
   }
 
-
   void guestAlert(BuildContext context) {
     _nameController.text = "";
     _salaCodeController.text = "";
@@ -380,7 +378,7 @@ class _SignInState extends State<SignIn> {
         minWidth: 126.0,
         color: _colorPalette.lightBlue,
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
         child: Text("Cancelar",
             style: TextStyle(
                 color: _colorPalette.text, fontWeight: FontWeight.w600)),
@@ -395,14 +393,15 @@ class _SignInState extends State<SignIn> {
         minWidth: 126.0,
         color: _colorPalette.lightBlue,
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
         child: Text("Aceptar",
             style: TextStyle(
                 color: _colorPalette.text, fontWeight: FontWeight.w600)),
         onPressed: () {
-          if (_nameController.text.isNotEmpty && _salaCodeController.text.isNotEmpty) {
-            _guestProvider.SingIn(_salaCodeController.text, _salaPasswordController.text,
-                _nameController.text, context);
+          if (_nameController.text.isNotEmpty &&
+              _salaCodeController.text.isNotEmpty) {
+            _guestProvider.SingIn(_salaCodeController.text,
+                _salaPasswordController.text, _nameController.text, context);
           } else {
             setState(() {
               _salaCodeController.text = "";

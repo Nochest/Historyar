@@ -65,6 +65,7 @@ class _CreateHistoryState extends State<CreateHistory> {
   List<ARHitTestResult> hitTestResults = [];
   List<ARNode> nodes = [];
   List<ARAnchor> anchors = [];
+  final controller = TextEditingController();
 
   Future<void> startRecord({required String fileName}) async {
     try {
@@ -156,6 +157,7 @@ class _CreateHistoryState extends State<CreateHistory> {
                     ),
                   ),
                   child: TextField(
+                    controller: controller,
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -194,7 +196,7 @@ class _CreateHistoryState extends State<CreateHistory> {
                                   widget.salaName,
                                   widget.asistenciaId,
                                   "aer",
-                                  "descripcion",
+                                  controller.text,
                                   video,
                                   widget.caso,
                                   context);
