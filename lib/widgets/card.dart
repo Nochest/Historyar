@@ -35,7 +35,7 @@ class _VerticalCardItemState extends State<VerticalCardItem> {
                 ),
               ),
               ListTile(
-                  title: Text(' ${widget.foros[widget.id].title}',
+                  title: Text('${widget.foros[widget.id].title}',
                       style: TextStyle(
                           color: _colorPalette.white,
                           fontWeight: FontWeight.w700,

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:historyar_app/pages/main_menu_pages/home_holder.dart';
 import 'package:historyar_app/pages/sign_in_pages/sign_in.dart';
 import 'package:historyar_app/providers/user_provider.dart';
 import 'package:historyar_app/utils/alert.dart';
@@ -15,21 +16,12 @@ class TeacherRegister extends StatefulWidget {
 }
 
 class _TeacherRegisterState extends State<TeacherRegister> {
-  final snackBar = SnackBar(content: Text('Password must match'));
+  final snackBar = SnackBar(content: Text('Las contraseñas no coinciden'));
   final privacy =
-      SnackBar(content: Text('You mus accept terms and conditions'));
+      SnackBar(content: Text('Debes aceptar las politicas de privacidad'));
 
-  final lorem_ipsum =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do '
-      'eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, '
-      'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. '
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
-      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est '
-      'laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do '
-      'eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, '
-      'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. '
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
-      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+  var lorem_ipsum =
+      'Es política de la Universidad Peruana de Ciencias Aplicadas (UPC) respetar su privacidad con respecto a cualquier información que podamos recopilar de usted a través de nuestra aplicación, HistoryAR\n\nSolo solicitamos información personal cuando realmente la necesitamos para brindarle un servicio. La recopilamos por medios justos y legales, con su conocimiento y consentimiento. También le informamos por qué lo recopilamos y cómo se utilizará. Los datos que almacenamos, los protegeremos dentro de los medios comercialmente aceptables para evitar pérdidas y robos, así como el acceso, divulgación, copia, uso o modificación no autorizados.\n\nDada la naturaleza del proyecto presentado, es importante recopilar el correo electrónico personal del usuario proporcionado por él para analizar sus interacciones con las funcionalidades que ofrece HistoryAR. Estos datos serán utilizados únicamente para el proceso de validación de la tesis “Aplicación móvil para creación de historias con storytelling y realidad aumentada”.\n\nNo compartimos ninguna información de identificación personal públicamente o con terceros, excepto cuando lo exija la ley.Usted es libre de rechazar nuestra solicitud de su información personal, en el entendimiento de que es posible que no podamos brindarle algunos de los servicios que desea.\n\nSu uso continuado de nuestra aplicación se considerará como la aceptación de nuestras prácticas en materia de privacidad e información personal. Si tiene alguna pregunta sobre cómo manejamos los datos de los usuarios y la información personal, no dude en contactarnos.\n\n\nEsta política es efectiva a partir del 1 de enero de 2022.';
 
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
@@ -203,23 +195,24 @@ class _TeacherRegisterState extends State<TeacherRegister> {
               Row(
                 children: [
                   Checkbox(
-                      value: this.value,
-                      onChanged: (value) {
+                      value: value,
+                      onChanged: (v) {
                         setState(() {
-                          this.value = value!;
+                          this.value = v!;
+                          inspect(this.value);
                         });
                       }),
                   Expanded(
                     child: Text.rich(
                       TextSpan(
-                          text: 'Yo acepto los ',
+                          text: 'Yo acepto las ',
                           style: TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.w400,
                               color: _colorPalette.text),
                           children: [
                             TextSpan(
-                                text: 'términos y condiciones ',
+                                text: 'politicas de privacidad ',
                                 style: TextStyle(
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.w600,
@@ -228,38 +221,17 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                                   ..onTap = () {
                                     _alert.createAlert(
                                         context,
-                                        'Términos y Condiciones',
+                                        'Politica de privacidad',
                                         lorem_ipsum.toString(),
                                         'Cerrar');
                                   }),
                             TextSpan(
-                                text: 'de \nuso y la ',
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: _colorPalette.text),
-                                children: [
-                                  TextSpan(
-                                      text: 'privacidad y políticas ',
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: _colorPalette.yellow),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          _alert.createAlert(
-                                              context,
-                                              'Privacidad y Políticas',
-                                              lorem_ipsum.toString(),
-                                              'Cerrar');
-                                        }),
-                                  TextSpan(
-                                      text: 'de este sitio',
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w400,
-                                          color: _colorPalette.text))
-                                ])
+                              text: 'de \nuso de está aplicación ',
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: _colorPalette.text),
+                            )
                           ]),
                     ),
                   )
@@ -285,7 +257,7 @@ class _TeacherRegisterState extends State<TeacherRegister> {
           child: Text('Continuar',
               style: TextStyle(
                   color: _colorPalette.yellow, fontWeight: FontWeight.bold)),
-          onPressed: () {
+          onPressed: () async {
             if (value &&
                 _nameController.text.isNotEmpty &&
                 _surnameController.text.isNotEmpty &&
@@ -296,7 +268,7 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                 _passwordController.text.isNotEmpty &&
                 _passwordConfirmController.text.isNotEmpty &&
                 (_passwordController.text == _passwordConfirmController.text)) {
-              _usuarioProvider.registerDocente(
+              await _usuarioProvider.registerDocente(
                   _mobileController.text,
                   _schoolController.text,
                   _nameController.text,
@@ -305,9 +277,6 @@ class _TeacherRegisterState extends State<TeacherRegister> {
                   _passwordController.text,
                   _birthFrontDateController.text,
                   context);
-              inspect(_birthDateController.text);
-              //Navigator.of(context).push(MaterialPageRoute(
-              //  builder: (BuildContext context) => HomeHolder()));
             } else {
               setState(() {
                 if (_nameController.text.isEmpty) names = true;
@@ -381,20 +350,19 @@ class _TeacherRegisterState extends State<TeacherRegister> {
     }
 
     if (picked != null && picked != selectedDate) {
-
-      if(calculateAge(picked) >= 18) {
-
+      if (calculateAge(picked) >= 18) {
         setState(() {
           selectedDate = picked;
           _birthDateController.text = formatterFront.format(picked);
           _birthFrontDateController.text = formatter.format(picked);
         });
-
       } else {
-        _alert.createAlert(context, 'Alerta', 'Debes tener más de 18 años para registrarte en el app como docente', "Aceptar");
+        _alert.createAlert(
+            context,
+            'Alerta',
+            'Debes tener más de 18 años para registrarte en el app como docente',
+            "Aceptar");
       }
-
     }
   }
-
 }

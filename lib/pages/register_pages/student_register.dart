@@ -14,21 +14,12 @@ class StudentRegister extends StatefulWidget {
 }
 
 class _StudentRegisterState extends State<StudentRegister> {
-  final snackBar = SnackBar(content: Text('Password must match'));
+  final snackBar = SnackBar(content: Text('Las contraseñas no coinciden'));
   final privacy =
-      SnackBar(content: Text('You mus accept terms and conditions'));
+      SnackBar(content: Text('Debes aceptar las politicas de privacidad'));
 
   var lorem_ipsum =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do '
-      'eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, '
-      'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. '
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
-      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est '
-      'laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do '
-      'eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, '
-      'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. '
-      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. '
-      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+      'Es política de la Universidad Peruana de Ciencias Aplicadas (UPC) respetar su privacidad con respecto a cualquier información que podamos recopilar de usted a través de nuestra aplicación, HistoryAR\n\nSolo solicitamos información personal cuando realmente la necesitamos para brindarle un servicio. La recopilamos por medios justos y legales, con su conocimiento y consentimiento. También le informamos por qué lo recopilamos y cómo se utilizará. Los datos que almacenamos, los protegeremos dentro de los medios comercialmente aceptables para evitar pérdidas y robos, así como el acceso, divulgación, copia, uso o modificación no autorizados.\n\nDada la naturaleza del proyecto presentado, es importante recopilar el correo electrónico personal del usuario proporcionado por él para analizar sus interacciones con las funcionalidades que ofrece HistoryAR. Estos datos serán utilizados únicamente para el proceso de validación de la tesis “Aplicación móvil para creación de historias con storytelling y realidad aumentada”.\n\nNo compartimos ninguna información de identificación personal públicamente o con terceros, excepto cuando lo exija la ley.Usted es libre de rechazar nuestra solicitud de su información personal, en el entendimiento de que es posible que no podamos brindarle algunos de los servicios que desea.\n\nSu uso continuado de nuestra aplicación se considerará como la aceptación de nuestras prácticas en materia de privacidad e información personal. Si tiene alguna pregunta sobre cómo manejamos los datos de los usuarios y la información personal, no dude en contactarnos.\n\n\nEsta política es efectiva a partir del 1 de enero de 2022.';
 
   ColorPalette _colorPalette = ColorPalette();
   InputText _inputText = InputText();
@@ -177,22 +168,22 @@ class _StudentRegisterState extends State<StudentRegister> {
                 children: [
                   Checkbox(
                       value: value,
-                      onChanged: (m) {
+                      onChanged: (v) {
                         setState(() {
-                          value = m!;
+                          this.value = v!;
                         });
                       }),
                   Expanded(
                     child: Text.rich(
                       TextSpan(
-                          text: 'Yo acepto los ',
+                          text: 'Yo acepto las ',
                           style: TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.w400,
                               color: _colorPalette.text),
                           children: [
                             TextSpan(
-                                text: 'términos y condiciones ',
+                                text: 'politicas de privacidad ',
                                 style: TextStyle(
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.w600,
@@ -201,38 +192,17 @@ class _StudentRegisterState extends State<StudentRegister> {
                                   ..onTap = () {
                                     _alert.createAlert(
                                         context,
-                                        'Términos y Condiciones',
+                                        'Politica de privacidad',
                                         lorem_ipsum.toString(),
                                         'Cerrar');
                                   }),
                             TextSpan(
-                                text: 'de \nuso y la ',
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: _colorPalette.text),
-                                children: [
-                                  TextSpan(
-                                      text: 'privacidad y políticas ',
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: _colorPalette.yellow),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          _alert.createAlert(
-                                              context,
-                                              'Privacidad y Políticas',
-                                              lorem_ipsum.toString(),
-                                              'Cerrar');
-                                        }),
-                                  TextSpan(
-                                      text: 'de este sitio',
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w400,
-                                          color: _colorPalette.text))
-                                ])
+                              text: 'de \nuso de está aplicación ',
+                              style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w400,
+                                  color: _colorPalette.text),
+                            )
                           ]),
                     ),
                   )
@@ -350,17 +320,18 @@ class _StudentRegisterState extends State<StudentRegister> {
     }
 
     if (picked != null && picked != selectedDate) {
-
-      if(calculateAge(picked) >= 10) {
-
+      if (calculateAge(picked) >= 10) {
         setState(() {
           selectedDate = picked;
           _birthDateController.text = formatterFront.format(picked);
           _birthFrontDateController.text = formatter.format(picked);
         });
-
       } else {
-        _alert.createAlert(context, 'Alerta', 'Debes tener de 10 años a más para registrarte en el app como estudiante', "Aceptar");
+        _alert.createAlert(
+            context,
+            'Alerta',
+            'Debes tener de 10 años a más para registrarte en el app como estudiante',
+            "Aceptar");
       }
     }
   }
