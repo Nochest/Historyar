@@ -118,7 +118,7 @@ class _LoungeGuestState extends State<LoungeGuest> {
                               color: _colorPalette.lightBlue,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(100.0)),
-                              child: Text("Subir Historia",
+                              child: Text("Crear Historia",
                                   style: TextStyle(
                                       color: _colorPalette.text,
                                       fontWeight: FontWeight.w600)),
