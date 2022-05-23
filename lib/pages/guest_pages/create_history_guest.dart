@@ -176,22 +176,6 @@ class _CreateHistoryGuestState extends State<CreateHistoryGuest> {
                 child: Column(
                   children: [
                     IconButton(
-                      onPressed: () async {
-                        File video = File(route.toString());
-                        /*
-                        _storyProvider.registerS3(
-                            widget.id,
-                            widget.salaId,
-                            "aer",
-                            "descripcion",
-                            video,
-                            context);*/
-                        print(route);
-                      },
-                      icon: Icon(Icons.save),
-                    ),
-                    const SizedBox(height: 8),
-                    IconButton(
                       onPressed: () {
                         startRecord(fileName: 'PRUEBA01');
                         setState(() {

@@ -244,7 +244,7 @@ class _ForumDetailState extends State<ForumDetail> {
 
       if (response.statusCode == 201) {
         setState(() {
-
+          _controller.text = "";
         });
       } else {
         _alert.createAlert(context, "Algo salió mal",
