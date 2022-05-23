@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:isolate';
 import 'dart:math';
 import 'dart:ui';
@@ -17,9 +18,11 @@ class StoryDetail extends StatefulWidget {
   final int historiaId;
   final int type;
 
-  const StoryDetail({required this.id,
-    required this.historiaId,
-    required this.type, Key? key})
+  const StoryDetail(
+      {required this.id,
+      required this.historiaId,
+      required this.type,
+      Key? key})
       : super(key: key);
 
   @override
@@ -36,7 +39,8 @@ class _StoryDetailState extends State<StoryDetail> {
 
   @override
   void initState() {
-    IsolateNameServer.registerPortWithName(receivePort.sendPort, "donwloadingvideo");
+    IsolateNameServer.registerPortWithName(
+        receivePort.sendPort, "donwloadingvideo");
 
     receivePort.listen((message) {
       setState(() {
@@ -55,17 +59,15 @@ class _StoryDetailState extends State<StoryDetail> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: _colorPalette.lightBlue,
-        centerTitle: true,
-        elevation: 0,
-        title: Text(
-          'Detalle Historia',
-          style: TextStyle(color: _colorPalette.yellow),
-        )
-      ),
+          backgroundColor: _colorPalette.lightBlue,
+          centerTitle: true,
+          elevation: 0,
+          title: Text(
+            'Detalle Historia',
+            style: TextStyle(color: _colorPalette.yellow),
+          )),
       backgroundColor: _colorPalette.cream,
       body: FutureBuilder(
         future: _storyProvider.getById(widget.historiaId),
@@ -73,6 +75,7 @@ class _StoryDetailState extends State<StoryDetail> {
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           } else {
+            inspect(snapshot.data!.url);
             return SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(24),
@@ -80,11 +83,12 @@ class _StoryDetailState extends State<StoryDetail> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(
-                            MaterialPageRoute(builder: (BuildContext context) => StoryVisualizer(id: widget.id, historiaId: widget.historiaId,
-                                url:  snapshot.data!.url, type: widget.type)
-                            )
-                        );
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) => StoryVisualizer(
+                                id: widget.id,
+                                historiaId: widget.historiaId,
+                                url: snapshot.data!.url,
+                                type: widget.type)));
                       }, // Image tapped
                       child: Image.asset(
                         'assets/video.png',
@@ -125,8 +129,7 @@ class _StoryDetailState extends State<StoryDetail> {
                                         color: _colorPalette.text,
                                         fontSize: 14.0,
                                         fontWeight: FontWeight.w400)),
-                                Text(
-                                    snapshot.data!.nombre,
+                                Text(snapshot.data!.nombre,
                                     style: TextStyle(
                                         color: _colorPalette.yellow,
                                         fontSize: 16.0,
@@ -145,13 +148,12 @@ class _StoryDetailState extends State<StoryDetail> {
                               ],
                             ),
                           ),
-                        )
-                    ),
-                    IconButton(onPressed: () async{
-
-                      await Share.share(snapshot.data!.url);
-
-                    }, icon: Icon(Icons.share)),
+                        )),
+                    IconButton(
+                        onPressed: () async {
+                          await Share.share(snapshot.data!.url);
+                        },
+                        icon: Icon(Icons.share)),
                     Padding(
                         padding: EdgeInsets.only(top: 10.0, bottom: 50.0),
                         child: _descargarButton(context, snapshot.data!.url)),
@@ -179,22 +181,24 @@ class _StoryDetailState extends State<StoryDetail> {
           onPressed: () async {
             final stasus = await Permission.storage.request();
 
-            const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+            const _chars =
+                'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
             Random _rnd = Random();
 
-            String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
-                length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+            String getRandomString(int length) =>
+                String.fromCharCodes(Iterable.generate(length,
+                    (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
-            if(stasus.isGranted) {
+            if (stasus.isGranted) {
               final baseStorage = await getExternalStorageDirectory();
-              
-              await FlutterDownloader.enqueue(url: url,
+
+              await FlutterDownloader.enqueue(
+                  url: url,
                   savedDir: baseStorage!.path,
                   fileName: getRandomString(5) + ".mp4",
                   showNotification: true,
                   openFileFromNotification: false,
                   saveInPublicStorage: true);
-
             } else {
               print("Nel");
             }

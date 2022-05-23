@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:historyar_app/helpers/constant_helpers.dart';
 import 'package:historyar_app/model/alternatives.dart';
 import 'package:historyar_app/model/question.dart';
@@ -19,10 +21,9 @@ class QuizProvider {
     var response = await http
         .get(Uri.parse("${Constants.URL}/api/cuestionarios/sala/${id}"));
 
-    var jsonData =
-        json.decode(Utf8Decoder().convert(response.bodyBytes).toString());
-
     if (response.statusCode == 200) {
+      var jsonData =
+          json.decode(Utf8Decoder().convert(response.bodyBytes).toString());
       Cuestionario cuestionario = Cuestionario(
           jsonData["id"], jsonData["tema"], jsonData["descripcion"]);
 
@@ -158,22 +159,13 @@ class QuizProvider {
     }
   }
 
-  responder(
-      int id,
-      List<int> respuestas,
-      int usuarioId,
-      int type,
-      int salaId,
-      String salaName,
-      int asistenciaId,
-      BuildContext context) async {
+  responder(int id, List<int> respuestas, int usuarioId, int type, int salaId,
+      String salaName, int asistenciaId, BuildContext context) async {
+    var getAsistente = await http
+        .get(Uri.parse("${Constants.URL}/api/asistencias/${asistenciaId}"));
 
-    var getAsistente = await http.get(
-        Uri.parse("${Constants.URL}/api/asistencias/${asistenciaId}"));
-
-    var dataAsistente = json.decode(
-        Utf8Decoder().convert(getAsistente.bodyBytes).toString()
-    );
+    var dataAsistente =
+        json.decode(Utf8Decoder().convert(getAsistente.bodyBytes).toString());
 
     double nota = 0;
 
@@ -181,21 +173,20 @@ class QuizProvider {
         .get(Uri.parse("${Constants.URL}/api/preguntas/cuestionario/${id}"));
 
     var jsonData =
-    json.decode(Utf8Decoder().convert(response.bodyBytes).toString());
+        json.decode(Utf8Decoder().convert(response.bodyBytes).toString());
 
     List<Alternativa> alternativas = [];
 
     for (var aux in jsonData) {
       for (var aux2 in aux["alternativas"]) {
-        alternativas.add(
-            Alternativa(aux2["id"], aux["puntaje"].toString(), aux2["correcto"]));
+        alternativas.add(Alternativa(
+            aux2["id"], aux["puntaje"].toString(), aux2["correcto"]));
       }
     }
 
     for (var aux in alternativas) {
-      if(respuestas.contains(aux.id) && aux.correcto == true)
+      if (respuestas.contains(aux.id) && aux.correcto == true)
         nota += double.parse(aux.descripcion);
-
     }
     print(nota);
 
@@ -214,17 +205,15 @@ class QuizProvider {
     if (editar.statusCode == 200) {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) => LoungeParticipant(
-            id: usuarioId,
-            type: type,
-            salaName: salaName,
-            salaId: salaId,
-            asistenciaId: asistenciaId,
-          )));
+                id: usuarioId,
+                type: type,
+                salaName: salaName,
+                salaId: salaId,
+                asistenciaId: asistenciaId,
+              )));
     } else {
       _alert.createAlert(context, "Algo salió mal",
           "No se ha responder el cuestionario.", "aceptar");
     }
   }
-
-
 }

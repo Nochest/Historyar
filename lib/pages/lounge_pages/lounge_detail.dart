@@ -1,12 +1,14 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
-import 'dart:math';
+import 'dart:math' hide log;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_elegant_number_button/flutter_elegant_number_button.dart';
 import 'package:historyar_app/helpers/constant_helpers.dart';
+import 'package:historyar_app/main.dart';
 import 'package:historyar_app/model/attendance.dart';
 import 'package:historyar_app/model/lounge.dart';
 import 'package:historyar_app/model/story.dart';
@@ -49,10 +51,61 @@ class LoungeDetail extends StatefulWidget {
 }
 
 class _LoungeDetailState extends State<LoungeDetail> {
+  ValueNotifier<bool> isLoading = ValueNotifier(true);
+
   ReceivePort receivePort = ReceivePort();
   int progress = 0;
   int _numberController = 2;
   int maxGrupo = 1;
+
+  String? pathStorage;
+  String? fileName;
+  Future<String?> getDownloadPath() async {
+    Directory? directory;
+    try {
+      if (Platform.isIOS) {
+        directory = await getApplicationDocumentsDirectory();
+      } else {
+        directory = Directory('/storage/emulated/0/Download');
+        if (!await directory.exists()) {
+          directory = await getExternalStorageDirectory();
+        }
+      }
+    } catch (err, _) {
+      log("Cannot get download folder path");
+    }
+    return directory?.path;
+  }
+
+  getPath() async {
+    pathStorage = await getDownloadPath();
+    setState(() {});
+  }
+
+  Future _requestDownload(String link, String fileName) async {
+    inspect('${widget.salaName}_$fileName');
+    await FlutterDownloader.enqueue(
+      url: link,
+      savedDir: '$pathStorage/',
+      fileName: '${widget.salaName}_$fileName',
+      showNotification: true,
+      openFileFromNotification: false,
+      saveInPublicStorage: true,
+    );
+  }
+
+  String getDocName() {
+    String doc = '';
+    const _chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+    Random _rnd = Random();
+
+    String getRandomString(int length) =>
+        String.fromCharCodes(Iterable.generate(
+            length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+    doc = getRandomString(5) + '.xlsx';
+    return doc;
+  }
 
   @override
   void initState() {
@@ -64,8 +117,9 @@ class _LoungeDetailState extends State<LoungeDetail> {
         progress = message;
       });
     });
-
     FlutterDownloader.registerCallback(downloadCallback);
+    fileName = getDocName();
+    getPath().then((value) => isLoading.value = false);
     super.initState();
   }
 
@@ -75,10 +129,16 @@ class _LoungeDetailState extends State<LoungeDetail> {
   }
 
   Widget _buildIcon(int index, String name, int grupo) {
+    List colors = [
+      Colors.black,
+      Colors.brown,
+      Colors.amber,
+      Colors.blueAccent,
+      Colors.cyan,
+      Colors.purple
+    ];
 
-    List colors = [Colors.black, Colors.brown, Colors.amber, Colors.blueAccent, Colors.cyan, Colors.purple];
-
-    if(grupo > maxGrupo){
+    if (grupo > maxGrupo) {
       maxGrupo = grupo;
     }
 
@@ -89,13 +149,15 @@ class _LoungeDetailState extends State<LoungeDetail> {
         children: [
           Center(
               child: Text(
-                "G${grupo}",
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12.0),
-              )),
+            "G${grupo}",
+            style: TextStyle(fontWeight: FontWeight.w700, fontSize: 12.0),
+          )),
           GestureDetector(
             child: Icon(
-              Icons.attribution_rounded, size: 60.0,
-              color: colors[grupo],),
+              Icons.attribution_rounded,
+              size: 60.0,
+              color: colors[grupo],
+            ),
             onTap: () {
               createAlert(index, name, context);
             },
@@ -120,6 +182,12 @@ class _LoungeDetailState extends State<LoungeDetail> {
   var _atencionProvider = AttendanceProvider();
   var _cuestionarioProvider = QuizProvider();
   var _storyProvider = StoryProvider();
+
+  @override
+  void dispose() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -149,408 +217,410 @@ class _LoungeDetailState extends State<LoungeDetail> {
               },
             ),
           ),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Credenciales',
-                        style: TextStyle(
-                            color: _colorPalette.yellow,
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.w700),
-                        textAlign: TextAlign.left,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  FutureBuilder(
-                      future: _salaProvider.getById(widget.salaId),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<Sala?> snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
-                        } else {
-                          return
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Código: ${snapshot.data?.codigo}',
-                                  style: TextStyle(
-                                      color: _colorPalette.darkBlue,
-                                      fontSize: 17.0,
-                                      fontWeight: FontWeight.w700),
-                                  textAlign: TextAlign.left,
-                                ),
-                                Text(
-                                  'Contraseña: ${snapshot.data?.password}',
-                                  style: TextStyle(
-                                      color: _colorPalette.darkBlue,
-                                      fontSize: 17.0,
-                                      fontWeight: FontWeight.w700),
-                                  textAlign: TextAlign.left,
-                                ),
-                              ],
-                            );
-                        }
-                      }
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Mi Historia',
-                        style: TextStyle(
-                            color: _colorPalette.yellow,
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.w700),
-                        textAlign: TextAlign.left,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  FutureBuilder(
-                      future: _storyProvider.getByUserIdAndLoungeId(
-                          widget.id, widget.salaId),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<Historia?> snapshot) {
-                        print(widget.id);
-                        print(widget.salaId);
-
-                        if (!snapshot.hasData) {
-                          return MaterialButton(
-                              height: 30.0,
-                              minWidth: 100.0,
-                              color: _colorPalette.lightBlue,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100.0)),
-                              child: Text("Subir Historia",
-                                  style: TextStyle(
-                                      color: _colorPalette.text,
-                                      fontWeight: FontWeight.w600)),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          CreateHistory(
-                                            id: widget.id,
-                                            type: widget.type,
-                                            salaId: widget.salaId,
-                                            caso: Constants.MI_SALA,
-                                            salaName: widget.salaName,
-                                          )),
-                                );
-                              });
-                        } else {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      StoryVisualizer(
-                                          id: widget.id,
-                                          historiaId: snapshot.data!.id,
-                                          url: snapshot.data!.url,
-                                          type: widget.type)));
-                            }, // Image tapped
-                            child: Image.asset(
-                              'assets/video.png',
-                              fit: BoxFit.cover, // Fixes border issues
+          body: ValueListenableBuilder<bool>(
+            valueListenable: isLoading,
+            builder: (context, value, _) {
+              if (value) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Credenciales',
+                              style: TextStyle(
+                                  color: _colorPalette.yellow,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.left,
                             ),
-                          );
-                        }
-                      }
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Historias',
-                        style: TextStyle(
-                            color: _colorPalette.yellow,
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.w700),
-                        textAlign: TextAlign.left,
-                      ),
-                      MaterialButton(
-                          height: 30.0,
-                          minWidth: 100.0,
-                          color: _colorPalette.lightBlue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100.0)),
-                          child: Text("Ver",
-                              style: TextStyle(
-                                  color: _colorPalette.text,
-                                  fontWeight: FontWeight.w600)),
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      LoungeStoryList(
-                                          id: widget.id,
-                                          type: widget.type,
-                                          salaId: widget.salaId,
-                                          salaName: widget.salaName)),
-                            );
-                          })
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Participantes',
-                        style: TextStyle(
-                            color: _colorPalette.yellow,
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.w700),
-                        textAlign: TextAlign.left,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  FutureBuilder(
-                      future: _atencionProvider
-                          .getAttendancesByLoungeId(widget.salaId),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<Asistencia>> snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
-                        } else {
-                          return Container(
-                              child: Wrap(
-                            direction: Axis.horizontal,
-                            spacing: 5.0,
-                            runSpacing: 5.0,
-                            children: snapshot.data!
-                                .map((e) => _buildIcon(e.id, e.nombres, e.numeroGrupo))
-                                .toList(),
-                          ));
-                        }
-                      }),
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                        },
-                        child: ElegantNumberButton(
-                          initialValue: _numberController,
-                          buttonSizeWidth: 30,
-                          buttonSizeHeight: 25,
-                          color: _colorPalette.lightBlue,
-                          minValue: 1,
-                          maxValue: 5,
-                          step: 1,
-                          decimalPlaces: 0,
-                          onChanged: (value){
-                            setState(() {
-                              _numberController = value.toInt();
-                            });
-                          },
+                          ],
                         ),
-                      ),
-                      MaterialButton(
-                          height: 30.0,
-                          minWidth: 100.0,
-                          color: _colorPalette.lightBlue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100.0)),
-                          child: Text("Partir",
-                              style: TextStyle(
-                                  color: _colorPalette.text,
-                                  fontWeight: FontWeight.w600)),
-                          onPressed: () {
-                            partir(widget.salaId, _numberController, context);
-                          })
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Cuestionario',
-                        style: TextStyle(
-                            color: _colorPalette.yellow,
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.w700),
-                        textAlign: TextAlign.left,
-                      ),
-                      FutureBuilder(
-                          future: _cuestionarioProvider
-                              .getQuizByLoungeId(widget.salaId),
-                          builder:
-                              (BuildContext context, AsyncSnapshot snapshot) {
-                            if (snapshot.data == null) {
-                              return MaterialButton(
-                                  height: 30.0,
-                                  minWidth: 100.0,
-                                  color: _colorPalette.lightBlue,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(100.0)),
-                                  child: Text("Crear",
+                        const SizedBox(height: 24),
+                        FutureBuilder(
+                            future: _salaProvider.getById(widget.salaId),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<Sala?> snapshot) {
+                              if (!snapshot.hasData) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Código: ${snapshot.data?.codigo}',
                                       style: TextStyle(
-                                          color: _colorPalette.text,
-                                          fontWeight: FontWeight.w600)),
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              QuizCreation(
+                                          color: _colorPalette.darkBlue,
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.w700),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                    Text(
+                                      'Contraseña: ${snapshot.data?.password}',
+                                      style: TextStyle(
+                                          color: _colorPalette.darkBlue,
+                                          fontSize: 17.0,
+                                          fontWeight: FontWeight.w700),
+                                      textAlign: TextAlign.left,
+                                    ),
+                                  ],
+                                );
+                              }
+                            }),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Mi Historia',
+                              style: TextStyle(
+                                  color: _colorPalette.yellow,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.left,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        FutureBuilder(
+                            future: _storyProvider.getByUserIdAndLoungeId(
+                                widget.id, widget.salaId),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<Historia?> snapshot) {
+                              print(widget.id);
+                              print(widget.salaId);
+
+                              if (!snapshot.hasData) {
+                                return MaterialButton(
+                                    height: 30.0,
+                                    minWidth: 100.0,
+                                    color: _colorPalette.lightBlue,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(100.0)),
+                                    child: Text("Subir Historia",
+                                        style: TextStyle(
+                                            color: _colorPalette.text,
+                                            fontWeight: FontWeight.w600)),
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                CreateHistory(
                                                   id: widget.id,
                                                   type: widget.type,
                                                   salaId: widget.salaId,
-                                                  salaName: widget.salaName)),
-                                    );
-                                  });
-                            } else {
-                              return MaterialButton(
-                                  height: 30.0,
-                                  minWidth: 100.0,
-                                  color: _colorPalette.lightBlue,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(100.0)),
-                                  child: Text("Ver",
-                                      style: TextStyle(
-                                          color: _colorPalette.text,
-                                          fontWeight: FontWeight.w600)),
-                                  onPressed: () {
+                                                  caso: Constants.MI_SALA,
+                                                  salaName: widget.salaName,
+                                                )),
+                                      );
+                                    });
+                              } else {
+                                return GestureDetector(
+                                  onTap: () {
                                     Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              QuizDetail(
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                StoryVisualizer(
+                                                    id: widget.id,
+                                                    historiaId:
+                                                        snapshot.data!.id,
+                                                    url: snapshot.data!.url,
+                                                    type: widget.type)));
+                                  }, // Image tapped
+                                  child: Image.asset(
+                                    'assets/video.png',
+                                    fit: BoxFit.cover, // Fixes border issues
+                                  ),
+                                );
+                              }
+                            }),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Historias',
+                              style: TextStyle(
+                                  color: _colorPalette.yellow,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.left,
+                            ),
+                            MaterialButton(
+                                height: 30.0,
+                                minWidth: 100.0,
+                                color: _colorPalette.lightBlue,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100.0)),
+                                child: Text("Ver",
+                                    style: TextStyle(
+                                        color: _colorPalette.text,
+                                        fontWeight: FontWeight.w600)),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            LoungeStoryList(
                                                 id: widget.id,
                                                 type: widget.type,
                                                 salaId: widget.salaId,
-                                                salaName: widget.salaName,
-                                              )),
-                                    );
-                                  });
-                            }
-                          }),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Descargar Notas',
-                        style: TextStyle(
-                            color: _colorPalette.yellow,
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.w700),
-                        textAlign: TextAlign.left,
-                      ),
-                      IconButton(
-                          onPressed: () async {
-                            final stasus = await Permission.storage.request();
-
-                            const _chars =
-                                'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-                            Random _rnd = Random();
-
-                            String getRandomString(int length) =>
-                                String.fromCharCodes(Iterable.generate(
-                                    length,
-                                    (_) => _chars.codeUnitAt(
-                                        _rnd.nextInt(_chars.length))));
-
-                            if (stasus.isGranted) {
-                              final baseStorage =
-                                  await getExternalStorageDirectory();
-
-                              await FlutterDownloader.enqueue(
-                                  url:
-                                      "http://historyarapi10-env.eba-5jcfb6i8.us-east-1.elasticbeanstalk.com/api/salas/asistencias/${widget.salaId}",
-                                  savedDir: baseStorage!.path,
-                                  fileName: getRandomString(5) + ".xlsx",
-                                  showNotification: true,
-                                  openFileFromNotification: false,
-                                  saveInPublicStorage: true);
-                            } else {
-                              print("Nel");
-                            }
-                          },
-                          icon: Icon(
-                            Icons.file_download,
-                            color: Colors.green,
-                          ))
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Notificar',
-                        style: TextStyle(
-                            color: _colorPalette.yellow,
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.w700),
-                        textAlign: TextAlign.left,
-                      ),
-                      MaterialButton(
-                          height: 30.0,
-                          minWidth: 100.0,
-                          color: _colorPalette.lightBlue,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100.0)),
-                          child: Text("Ir",
+                                                salaName: widget.salaName)),
+                                  );
+                                })
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Participantes',
                               style: TextStyle(
-                                  color: _colorPalette.text,
-                                  fontWeight: FontWeight.w600)),
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      LoungeSendMail(
-                                          id: widget.id,
-                                          type: widget.type,
-                                          salaId: widget.salaId,
-                                          salaName: widget.salaName)),
-                            );
-                          })
-                    ],
-                  )
-                ],
-              ),
-            ),
+                                  color: _colorPalette.yellow,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.left,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        FutureBuilder(
+                            future: _atencionProvider
+                                .getAttendancesByLoungeId(widget.salaId),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Asistencia>> snapshot) {
+                              if (!snapshot.hasData) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else {
+                                return Container(
+                                    child: Wrap(
+                                  direction: Axis.horizontal,
+                                  spacing: 5.0,
+                                  runSpacing: 5.0,
+                                  children: snapshot.data!
+                                      .map((e) => _buildIcon(
+                                          e.id, e.nombres, e.numeroGrupo))
+                                      .toList(),
+                                ));
+                              }
+                            }),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton(
+                              onPressed: () {},
+                              child: ElegantNumberButton(
+                                initialValue: _numberController,
+                                buttonSizeWidth: 30,
+                                buttonSizeHeight: 25,
+                                color: _colorPalette.lightBlue,
+                                minValue: 1,
+                                maxValue: 5,
+                                step: 1,
+                                decimalPlaces: 0,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _numberController = value.toInt();
+                                  });
+                                },
+                              ),
+                            ),
+                            MaterialButton(
+                                height: 30.0,
+                                minWidth: 100.0,
+                                color: _colorPalette.lightBlue,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100.0)),
+                                child: Text("Partir",
+                                    style: TextStyle(
+                                        color: _colorPalette.text,
+                                        fontWeight: FontWeight.w600)),
+                                onPressed: () {
+                                  partir(widget.salaId, _numberController,
+                                      context);
+                                })
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Cuestionario',
+                              style: TextStyle(
+                                  color: _colorPalette.yellow,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.left,
+                            ),
+                            FutureBuilder(
+                                future: _cuestionarioProvider
+                                    .getQuizByLoungeId(widget.salaId),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot snapshot) {
+                                  if (snapshot.data == null) {
+                                    return MaterialButton(
+                                        height: 30.0,
+                                        minWidth: 100.0,
+                                        color: _colorPalette.lightBlue,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(100.0)),
+                                        child: Text("Crear",
+                                            style: TextStyle(
+                                                color: _colorPalette.text,
+                                                fontWeight: FontWeight.w600)),
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        QuizCreation(
+                                                            id: widget.id,
+                                                            type: widget.type,
+                                                            salaId:
+                                                                widget.salaId,
+                                                            salaName: widget
+                                                                .salaName)),
+                                          );
+                                        });
+                                  } else {
+                                    return MaterialButton(
+                                        height: 30.0,
+                                        minWidth: 100.0,
+                                        color: _colorPalette.lightBlue,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(100.0)),
+                                        child: Text("Ver",
+                                            style: TextStyle(
+                                                color: _colorPalette.text,
+                                                fontWeight: FontWeight.w600)),
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        QuizDetail(
+                                                          id: widget.id,
+                                                          type: widget.type,
+                                                          salaId: widget.salaId,
+                                                          salaName:
+                                                              widget.salaName,
+                                                        )),
+                                          );
+                                        });
+                                  }
+                                }),
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Descargar Notas',
+                              style: TextStyle(
+                                  color: _colorPalette.yellow,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.left,
+                            ),
+                            IconButton(
+                                onPressed: () async {
+                                  final stasus =
+                                      await Permission.storage.request();
+
+                                  if (stasus.isGranted) {
+                                    _requestDownload(
+                                      'http://historyarapi10-env.eba-5jcfb6i8.us-east-1.elasticbeanstalk.com/api/salas/asistencias/${widget.salaId}',
+                                      getDocName(),
+                                    );
+                                  } else {
+                                    print("Nel");
+                                  }
+                                },
+                                icon: Icon(
+                                  Icons.file_download,
+                                  color: Colors.green,
+                                ))
+                          ],
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Notificar',
+                              style: TextStyle(
+                                  color: _colorPalette.yellow,
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.left,
+                            ),
+                            MaterialButton(
+                                height: 30.0,
+                                minWidth: 100.0,
+                                color: _colorPalette.lightBlue,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100.0)),
+                                child: Text("Ir",
+                                    style: TextStyle(
+                                        color: _colorPalette.text,
+                                        fontWeight: FontWeight.w600)),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            LoungeSendMail(
+                                                id: widget.id,
+                                                type: widget.type,
+                                                salaId: widget.salaId,
+                                                salaName: widget.salaName)),
+                                  );
+                                })
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }
+            },
           )),
     );
   }
 
   partir(int id, int cantidad, BuildContext context) async {
-
     var response = await http.put(
-        Uri.parse("${Constants.URL}/api/asistencias/sala/grupos/${id}?cantidad=${cantidad}"),
+        Uri.parse(
+            "${Constants.URL}/api/asistencias/sala/grupos/${id}?cantidad=${cantidad}"),
         headers: {"Content-Type": "application/json"});
 
     if (response.statusCode == 200) {
       Navigator.of(context).push(
         MaterialPageRoute(
-            builder: (BuildContext context) =>
-                LoungeDetail(
-                  id: widget.id,
-                  type: widget.type,
-                  salaId: widget.salaId,
-                  salaName: widget.salaName
-                )),
+            builder: (BuildContext context) => LoungeDetail(
+                id: widget.id,
+                type: widget.type,
+                salaId: widget.salaId,
+                salaName: widget.salaName)),
       );
     } else {
-      _alert.createAlert(
-          context, "Algo salió mal", "No se ha podido partir las salas.", "Aceptar");
+      _alert.createAlert(context, "Algo salió mal",
+          "No se ha podido partir las salas.", "Aceptar");
     }
   }
 
@@ -598,25 +668,23 @@ class _LoungeDetailState extends State<LoungeDetail> {
   }
 
   mover(int id, int grupo, BuildContext context) async {
-
     var response = await http.put(
-        Uri.parse("${Constants.URL}/api/asistencias/grupo/${id}?grupo=${grupo}"),
+        Uri.parse(
+            "${Constants.URL}/api/asistencias/grupo/${id}?grupo=${grupo}"),
         headers: {"Content-Type": "application/json"});
 
     if (response.statusCode == 200) {
       Navigator.of(context).push(
         MaterialPageRoute(
-            builder: (BuildContext context) =>
-                LoungeDetail(
-                    id: widget.id,
-                    type: widget.type,
-                    salaId: widget.salaId,
-                    salaName: widget.salaName
-                )),
+            builder: (BuildContext context) => LoungeDetail(
+                id: widget.id,
+                type: widget.type,
+                salaId: widget.salaId,
+                salaName: widget.salaName)),
       );
     } else {
-      _alert.createAlert(
-          context, "Algo salió mal", "No se ha podido partir las salas.", "Aceptar");
+      _alert.createAlert(context, "Algo salió mal",
+          "No se ha podido partir las salas.", "Aceptar");
     }
   }
 }
