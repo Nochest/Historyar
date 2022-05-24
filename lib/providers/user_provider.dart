@@ -37,6 +37,7 @@ class UserProvider {
     if (response.statusCode == 200) {
       user = LoginResponse.fromJson(response.body);
       localStorage.setInt('user_type', user.tipoUsuario);
+      localStorage.setInt('user_id', user.id);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (BuildContext context) =>

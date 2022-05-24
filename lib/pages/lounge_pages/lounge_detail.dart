@@ -540,17 +540,30 @@ class _LoungeDetailState extends State<LoungeDetail> {
                             ),
                             IconButton(
                                 onPressed: () async {
-                                  final stasus =
-                                      await Permission.storage.request();
+                                  inspect(widget.salaId);
+                                  await _salaProvider
+                                      .updateExcelAssitance(widget.salaId)
+                                      .then((value) async {
+                                    if (value == 200) {
+                                      final stasus =
+                                          await Permission.storage.request();
 
-                                  if (stasus.isGranted) {
-                                    _requestDownload(
-                                      'http://historyarapi10-env.eba-5jcfb6i8.us-east-1.elasticbeanstalk.com/api/salas/asistencias/${widget.salaId}',
-                                      getDocName(),
-                                    );
-                                  } else {
-                                    print("Nel");
-                                  }
+                                      if (stasus.isGranted) {
+                                        _requestDownload(
+                                          'https://historyar-bucket.s3.amazonaws.com/archivos/${widget.salaId}.xlsx',
+                                          getDocName(),
+                                        );
+                                      } else {
+                                        print("Nel");
+                                      }
+                                    } else {
+                                      _alert.createAlert(
+                                          context,
+                                          'Error',
+                                          'No se ha podido descargar las notas',
+                                          'Ok');
+                                    }
+                                  });
                                 },
                                 icon: Icon(
                                   Icons.file_download,

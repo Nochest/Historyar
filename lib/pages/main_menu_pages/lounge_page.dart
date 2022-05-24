@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:historyar_app/main.dart';
 import 'package:historyar_app/model/lounge.dart';
+import 'package:historyar_app/model/lounge_models/lounge_stats_model.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_creation.dart';
 import 'package:historyar_app/pages/lounge_pages/my_lounges.dart';
 import 'package:historyar_app/providers/lounge_provider.dart';
@@ -20,7 +24,6 @@ class Lounge extends StatefulWidget {
 }
 
 class _LoungeState extends State<Lounge> {
-
   ColorPalette _colorPalette = ColorPalette();
   var _salaProvider = LoungeProvider();
   InputText _inputText = InputText();
@@ -33,9 +36,20 @@ class _LoungeState extends State<Lounge> {
 
   TextEditingController _codeController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  LoungeStatsModel? stats;
+  Future getStats() async {
+    stats = await _salaProvider.getStats();
+  }
+
+  @override
+  void initState() {
+    getStats();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    inspect(localStorage.getInt('user_id'));
 
     return Scaffold(
       appBar: AppBar(
@@ -110,9 +124,8 @@ class _LoungeState extends State<Lounge> {
                         ),
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder:
-                                  (BuildContext context) => MyLounges(id: widget.id, type: widget.type)
-                          ));
+                              builder: (BuildContext context) =>
+                                  MyLounges(id: widget.id, type: widget.type)));
                         },
                       ),
                     ),
@@ -140,9 +153,8 @@ class _LoungeState extends State<Lounge> {
                         ),
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder:
-                                  (BuildContext context) => LoungeCreation(id: widget.id, type: widget.type)
-                          ));
+                              builder: (BuildContext context) => LoungeCreation(
+                                  id: widget.id, type: widget.type)));
                         },
                       ),
                     ),
@@ -176,7 +188,8 @@ class _LoungeState extends State<Lounge> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       'Salas creadas',
@@ -187,9 +200,8 @@ class _LoungeState extends State<Lounge> {
                                       textAlign: TextAlign.left,
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                      },
-                                      child: Text('25',
+                                      onPressed: () {},
+                                      child: Text(stats!.salas!,
                                           style: TextStyle(
                                               color: _colorPalette.yellow,
                                               fontSize: 15.0,
@@ -199,7 +211,8 @@ class _LoungeState extends State<Lounge> {
                                 ),
                                 SizedBox(height: 8.0),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       'Exámenes generados',
@@ -210,9 +223,8 @@ class _LoungeState extends State<Lounge> {
                                       textAlign: TextAlign.left,
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                      },
-                                      child: Text('10',
+                                      onPressed: () {},
+                                      child: Text(stats!.examenes!,
                                           style: TextStyle(
                                               color: _colorPalette.yellow,
                                               fontSize: 15.0,
@@ -222,7 +234,8 @@ class _LoungeState extends State<Lounge> {
                                 ),
                                 SizedBox(height: 8.0),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       'Historias Creadas',
@@ -233,9 +246,8 @@ class _LoungeState extends State<Lounge> {
                                       textAlign: TextAlign.left,
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                      },
-                                      child: Text('100',
+                                      onPressed: () {},
+                                      child: Text(stats!.historias!,
                                           style: TextStyle(
                                               color: _colorPalette.yellow,
                                               fontSize: 15.0,
@@ -245,7 +257,8 @@ class _LoungeState extends State<Lounge> {
                                 ),
                                 SizedBox(height: 8.0),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       'Promedio de Notas',
@@ -256,9 +269,8 @@ class _LoungeState extends State<Lounge> {
                                       textAlign: TextAlign.left,
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                      },
-                                      child: Text('18.5',
+                                      onPressed: () {},
+                                      child: Text(stats!.promedio!,
                                           style: TextStyle(
                                               color: _colorPalette.yellow,
                                               fontSize: 18.0,
@@ -269,8 +281,7 @@ class _LoungeState extends State<Lounge> {
                               ],
                             ),
                           ),
-                        )
-                    ),
+                        )),
                   ],
                 ),
               ),
@@ -278,7 +289,8 @@ class _LoungeState extends State<Lounge> {
           }
         },
       ),
-      floatingActionButton: historyarButtonApp(context, false, widget.id, widget.type),
+      floatingActionButton:
+          historyarButtonApp(context, false, widget.id, widget.type),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: historyarBottomAppBar(
           context, false, true, false, false, widget.id, widget.type),
@@ -286,7 +298,6 @@ class _LoungeState extends State<Lounge> {
   }
 
   void createAlert(BuildContext context) {
-
     _codeController.text = "";
     _passwordController.text = "";
 
@@ -353,7 +364,7 @@ class _LoungeState extends State<Lounge> {
         minWidth: 126.0,
         color: _colorPalette.lightBlue,
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
         child: Text("Cancelar",
             style: TextStyle(
                 color: _colorPalette.text, fontWeight: FontWeight.w600)),
@@ -372,14 +383,14 @@ class _LoungeState extends State<Lounge> {
         minWidth: 126.0,
         color: _colorPalette.lightBlue,
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
         child: Text("Aceptar",
             style: TextStyle(
                 color: _colorPalette.text, fontWeight: FontWeight.w600)),
         onPressed: () {
           if (_codeController.text.isNotEmpty) {
-            _salaProvider.getByCode(_codeController.text, _passwordController.text,
-                widget.id, widget.type, context);
+            _salaProvider.getByCode(_codeController.text,
+                _passwordController.text, widget.id, widget.type, context);
           } else {
             setState(() {
               _codeController.text = "";

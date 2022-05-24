@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:historyar_app/helpers/constant_helpers.dart';
+import 'package:historyar_app/main.dart';
 import 'package:historyar_app/model/lounge.dart';
+import 'package:historyar_app/model/lounge_models/lounge_stats_model.dart';
 import 'package:historyar_app/pages/lounge_pages/lounge_participants.dart';
 import 'package:historyar_app/pages/main_menu_pages/lounge_page.dart';
 import 'package:historyar_app/utils/alert.dart';
@@ -62,7 +64,6 @@ class LoungeProvider {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (BuildContext context) =>
               Lounge(id: usuarioId, type: type)));
-
     } else {
       _alert.createAlert(
           context, "Algo salió mal", "No se ha podido publicar.", "aceptar");
@@ -141,12 +142,11 @@ class LoungeProvider {
   }
 
   Future<Sala?> getById(int salaId) async {
-    var response = await http.get(
-        Uri.parse("${Constants.URL}/api/salas/${salaId}"));
+    var response =
+        await http.get(Uri.parse("${Constants.URL}/api/salas/${salaId}"));
 
-    var jsonData = json.decode(
-        Utf8Decoder().convert(response.bodyBytes).toString()
-    );
+    var jsonData =
+        json.decode(Utf8Decoder().convert(response.bodyBytes).toString());
 
     if (response.statusCode == 200) {
       Sala sala = Sala(
@@ -164,4 +164,21 @@ class LoungeProvider {
     }
   }
 
+  Future<LoungeStatsModel> getStats() async {
+    String id = localStorage.getInt('user_id').toString();
+    var response = await http
+        .get(Uri.parse("${Constants.URL}/api/salas/estadisticas/$id"));
+
+    if (response.statusCode == 200) {
+      return LoungeStatsModel.fromJson(response.body);
+    } else {
+      throw Exception('Failed to load lounge stats');
+    }
+  }
+
+  Future<int> updateExcelAssitance(int salaId) async {
+    var response = await http
+        .get(Uri.parse("${Constants.URL}/api/salas/asistencias/$salaId"));
+    return response.statusCode;
+  }
 }
