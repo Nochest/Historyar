@@ -297,6 +297,14 @@ class _CreateHistoryState extends State<CreateHistory> {
                 showDialog(context: context, builder: (context) => _sceneCase())
                     .then((value) => Navigator.pop(context));
               }),
+          DefaultButton(
+              text: 'Astronomia',
+              onPressed: () {
+                showDialog(
+                        context: context,
+                        builder: (context) => _astronomyCase())
+                    .then((value) => Navigator.pop(context));
+              }),
         ],
       ),
     );
@@ -425,6 +433,72 @@ class _CreateHistoryState extends State<CreateHistory> {
             ),
           ),
           //TODO: HACER MAS MODELOS
+        ],
+      ),
+    );
+  }
+
+  Widget _astronomyCase() {
+    return AlertDialog(
+      backgroundColor: palette.cream,
+      title: Text('Modelos de Escenario'),
+      content: Wrap(
+        spacing: 16,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: GestureDetector(
+              child: Image.asset(
+                'assets/3d_icons/earth_icon.png',
+                width: 24,
+                height: 24,
+              ),
+              onTap: () async {
+                await showCard(
+                  'Tierra',
+                  'assets/3d_icons/earth_icon.png',
+                  'El planeta tierra es el tercer planeta de nuestro sistema solar',
+                  getEarth,
+                ).then((value) => Navigator.pop(context));
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: GestureDetector(
+              child: Image.asset(
+                'assets/3d_icons/moon_icon.png',
+                width: 24,
+                height: 24,
+              ),
+              onTap: () async {
+                await showCard(
+                  'La Luna',
+                  'assets/3d_icons/moon_icon.png',
+                  'La luna es el unico satelite que posee el planeta tierra. Fue pisada por primera vez el 20 de Junio de 1969.',
+                  getMoon,
+                ).then((value) => Navigator.pop(context));
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: GestureDetector(
+              child: Image.asset(
+                'assets/3d_icons/sun_icon.png',
+                width: 24,
+                height: 24,
+              ),
+              onTap: () async {
+                await showCard(
+                  'El sol',
+                  'assets/3d_icons/sun_icon.png',
+                  'El sol es la estrella del sistema solar da calor a la vida en la tierra y mantiene el sistema solar unido.',
+                  getSun,
+                ).then((value) => Navigator.pop(context));
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -626,6 +700,96 @@ class _CreateHistoryState extends State<CreateHistory> {
             uri:
                 "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Lantern/glTF-Binary/Lantern.glb",
             scale: Vector3(0.2, 0.2, 0.2),
+            position: Vector3(0.0, 0.0, 0.0),
+            rotation: Vector4(1.0, 0.0, 0.0, 0.0));
+        bool? didAddNodeToAnchor = await this
+            .arObjectManager!
+            .addNode(newNode, planeAnchor: newAnchor);
+        if (didAddNodeToAnchor!) {
+          this.nodes.add(newNode);
+        } else {
+          this.arSessionManager!.onError("Adding Node to Anchor failed");
+        }
+      } else {
+        this.arSessionManager!.onError("Adding Anchor failed");
+      }
+    }
+  }
+
+  Future<void> getEarth(List<ARHitTestResult> hitTestResults) async {
+    var singleHitTestResult = hitTestResults.firstWhere(
+        (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
+    if (singleHitTestResult != null) {
+      var newAnchor =
+          ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
+      bool? didAddAnchor = await this.arAnchorManager!.addAnchor(newAnchor);
+      if (didAddAnchor!) {
+        this.anchors.add(newAnchor);
+        // Add note to anchor
+        var newNode = ARNode(
+            type: NodeType.webGLB,
+            uri: "https://github.com/HenryP22/a/raw/main/tierra.glb",
+            scale: Vector3(0.3, 0.3, 0.3),
+            position: Vector3(0.0, 0.0, 0.0),
+            rotation: Vector4(1.0, 0.0, 0.0, 0.0));
+        bool? didAddNodeToAnchor = await this
+            .arObjectManager!
+            .addNode(newNode, planeAnchor: newAnchor);
+        if (didAddNodeToAnchor!) {
+          this.nodes.add(newNode);
+        } else {
+          this.arSessionManager!.onError("Adding Node to Anchor failed");
+        }
+      } else {
+        this.arSessionManager!.onError("Adding Anchor failed");
+      }
+    }
+  }
+
+  Future<void> getMoon(List<ARHitTestResult> hitTestResults) async {
+    var singleHitTestResult = hitTestResults.firstWhere(
+        (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
+    if (singleHitTestResult != null) {
+      var newAnchor =
+          ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
+      bool? didAddAnchor = await this.arAnchorManager!.addAnchor(newAnchor);
+      if (didAddAnchor!) {
+        this.anchors.add(newAnchor);
+        // Add note to anchor
+        var newNode = ARNode(
+            type: NodeType.webGLB,
+            uri: "https://github.com/HenryP22/a/raw/main/luna.glb",
+            scale: Vector3(0.1, 0.1, 0.1),
+            position: Vector3(0.0, 0.0, 0.0),
+            rotation: Vector4(1.0, 0.0, 0.0, 0.0));
+        bool? didAddNodeToAnchor = await this
+            .arObjectManager!
+            .addNode(newNode, planeAnchor: newAnchor);
+        if (didAddNodeToAnchor!) {
+          this.nodes.add(newNode);
+        } else {
+          this.arSessionManager!.onError("Adding Node to Anchor failed");
+        }
+      } else {
+        this.arSessionManager!.onError("Adding Anchor failed");
+      }
+    }
+  }
+
+  Future<void> getSun(List<ARHitTestResult> hitTestResults) async {
+    var singleHitTestResult = hitTestResults.firstWhere(
+        (hitTestResult) => hitTestResult.type == ARHitTestResultType.plane);
+    if (singleHitTestResult != null) {
+      var newAnchor =
+          ARPlaneAnchor(transformation: singleHitTestResult.worldTransform);
+      bool? didAddAnchor = await this.arAnchorManager!.addAnchor(newAnchor);
+      if (didAddAnchor!) {
+        this.anchors.add(newAnchor);
+        // Add note to anchor
+        var newNode = ARNode(
+            type: NodeType.webGLB,
+            uri: "https://github.com/HenryP22/a/raw/main/sol.glb",
+            scale: Vector3(0.5, 0.5, 0.5),
             position: Vector3(0.0, 0.0, 0.0),
             rotation: Vector4(1.0, 0.0, 0.0, 0.0));
         bool? didAddNodeToAnchor = await this
